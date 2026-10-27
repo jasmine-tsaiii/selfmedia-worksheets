@@ -75,11 +75,17 @@ details.card .body{padding:0 16px 14px}
 details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:6px}
 details.more>summary{cursor:pointer;color:var(--accent);font-size:.9rem;padding:6px 0}
 ul.clean{margin:6px 0;padding-left:1.2em}
+.topnav{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:center;justify-content:space-between;font-size:.9rem;margin-bottom:12px}
+.topnav:empty{display:none}
+.topnav.bottom{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--line)}
+.topnav a{color:var(--accent);text-decoration:none;padding:6px 0;min-height:32px}
+.topnav a:hover,.topnav a:focus-visible{text-decoration:underline}
 </style>
 </head>
 <body>
 
 <div class="wrap">
+  <nav class="topnav" id="topnav" aria-label="課程導覽"></nav>
   <header>
     <h1 id="title"></h1>
     <p id="subtitle"></p>
@@ -112,12 +118,14 @@ ul.clean{margin:6px 0;padding-left:1.2em}
 
   <nav class="tabs" id="tabs" role="tablist" aria-label="學習單分頁"></nav>
   <main id="panels"></main>
+  <nav class="topnav bottom" id="botnav" aria-label="課程導覽"></nav>
 </div>
 <script>
 /* 課程內容都在這個 COURSE 物件裡。
    欄位類型 type：text 單行 / area 多行 / radio 單選 / check 多選。 */
 const COURSE = {
   key: 'smcourse-lesson2-v1',
+  nav: { home: '../', prev: { label: '第 1 堂', href: '../lesson1/' } },
   title: '第 2 堂課：受眾與修正定位',
   subtitle: '三個月自媒體陪跑・第 2 週學習單',
   prefill: [
@@ -379,14 +387,38 @@ function countedFields(part) {
   }
   return out;
 }
+function saveOverall(pct) {
+  try {
+    const k = 'smcourse-progress';
+    const o = JSON.parse(localStorage.getItem(k) || '{}');
+    o[COURSE.key] = { pct, at: Date.now() };
+    localStorage.setItem(k, JSON.stringify(o));
+  } catch (e) {}
+}
+function renderNav() {
+  const n = COURSE.nav;
+  if (!n) return;
+  ['topnav', 'botnav'].forEach(id => {
+    const box = $('#' + id);
+    if (!box) return;
+    box.replaceChildren();
+    const left = el('span', null, el('a', { href: n.home, text: '← 回到總覽' }));
+    if (n.prev) left.append('　', el('a', { href: n.prev.href, text: '‹ ' + n.prev.label }));
+    box.append(left);
+    if (n.next) box.append(el('a', { href: n.next.href, text: n.next.label + ' ›' }));
+  });
+}
 function updateProgress() {
+  let totalAll = 0, doneAll = 0;
   COURSE.parts.forEach(p => {
     const list = countedFields(p);
     const done = list.filter(x => isFilled(state.values[x.id])).length;
+    totalAll += list.length; doneAll += done;
     const pct = list.length ? Math.round(done / list.length * 100) : 0;
     const node = $(`#tab_${p.id} .pct`);
     if (node) node.textContent = list.length ? pct + '%' : '';
   });
+  saveOverall(totalAll ? Math.round(doneAll / totalAll * 100) : 0);
 }
 
 function renderPart(p) {
@@ -423,6 +455,7 @@ function renderPart(p) {
 }
 
 function build() {
+  renderNav();
   $('#title').textContent = COURSE.title;
   $('#subtitle').textContent = COURSE.subtitle;
   const tabs = $('#tabs'), panels = $('#panels');
