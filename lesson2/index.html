@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>第 2 堂課學習單</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* 版面概念：單欄學習單，分頁切換，卡片只用在需要圈出來的地方。 */
+:root{
+  --bg:#faf8fc; --card:#ffffff; --ink:#2b2833; --muted:#6a6577; --line:#e3deec;
+  --accent:#6a55c9; --accent-ink:#ffffff; --accent-soft:#eeeafb; --warn:#a35f00; --warn-soft:#fff1d6;
+  --radius:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16141b; --card:#201d28; --ink:#ece9f2; --muted:#a8a3b5; --line:#37323f;
+    --accent:#a898f2; --accent-ink:#17141f; --accent-soft:#2b2640; --warn:#f0b14d; --warn-soft:#3a2f18;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16141b; --card:#201d28; --ink:#ece9f2; --muted:#a8a3b5; --line:#37323f;
+  --accent:#a898f2; --accent-ink:#17141f; --accent-soft:#2b2640; --warn:#f0b14d; --warn-soft:#3a2f18;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:780px;margin:0 auto;padding-block:24px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header h1{font-size:1.6rem;line-height:1.3;margin:0 0 4px;text-wrap:balance}
+header p{margin:0;color:var(--muted)}
+.notice{background:var(--accent-soft);border-radius:var(--radius);padding:12px 14px;margin:16px 0;font-size:.92rem}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+button{font:inherit;font-size:.9rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:40px}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button.danger{color:var(--warn)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#status{font-size:.82rem;color:var(--muted);min-height:1.4em;margin:4px 2px 0}
+.confirm,.exportbox{background:var(--warn-soft);border-radius:var(--radius);padding:12px 14px;margin:10px 0}
+.confirm p,.exportbox p{margin:0 0 8px}
+.confirm .row{display:flex;gap:8px;flex-wrap:wrap}
+.exportbox textarea{min-height:200px;font-size:.9rem}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:12px 0 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--line)}
+.tab{white-space:nowrap;border-radius:10px;display:flex;gap:6px;align-items:center}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tab .pct{font-size:.75rem;opacity:.85}
+.panel{display:none;padding-top:16px}
+.panel.active{display:block}
+.when{display:inline-block;font-size:.8rem;background:var(--warn-soft);color:var(--warn);padding:2px 10px;border-radius:999px;margin-bottom:6px}
+.panel h2{font-size:1.3rem;margin:4px 0 6px;text-wrap:balance}
+.intro{color:var(--muted);margin:0 0 12px}
+.group{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:14px 0}
+.group h3{font-size:1.05rem;margin:0 0 4px}
+.group .gintro{color:var(--muted);font-size:.9rem;margin:0 0 10px}
+.field{margin:14px 0}
+.field>label,.field>fieldset>legend{display:block;font-weight:600;font-size:.95rem;margin-bottom:4px;padding:0}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+.hint{font-weight:400;color:var(--muted);font-size:.85rem}
+.opt{font-weight:400;color:var(--muted);font-size:.8rem;margin-left:4px}
+input[type=text],textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+textarea{resize:vertical;min-height:84px}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;min-height:44px;background:var(--bg)}
+.choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.choice input{width:18px;height:18px;accent-color:var(--accent)}
+details.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin:12px 0;padding:0}
+details.card>summary{cursor:pointer;padding:14px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"＋";color:var(--muted)}
+details.card[open]>summary::after{content:"－"}
+details.card .body{padding:0 16px 14px}
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:6px}
+details.more>summary{cursor:pointer;color:var(--accent);font-size:.9rem;padding:6px 0}
+ul.clean{margin:6px 0;padding-left:1.2em}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1 id="title"></h1>
+    <p id="subtitle"></p>
+  </header>
+
+  <div class="notice">
+    你填的內容<strong>只存在這台裝置的瀏覽器裡，不會上傳到任何地方</strong>，要用同一個瀏覽器打開才會看到。換裝置或清除瀏覽資料就會消失，請定期按「下載備份」。會談前，也可以按「複製全部文字」或「下載文字檔」傳給老師。
+  </div>
+
+  <div class="toolbar">
+    <button class="primary" id="btnCopy">複製全部文字</button>
+    <button id="btnMd">下載文字檔（.md）</button>
+    <button id="btnJson">下載備份（.json）</button>
+    <button id="btnImport">匯入備份</button>
+    <button class="danger" id="btnReset">清除全部</button>
+    <input type="file" id="fileIn" accept=".json,application/json" hidden>
+  </div>
+
+  <div class="confirm" id="confirmBar" role="alertdialog" aria-labelledby="confirmMsg" hidden>
+    <p id="confirmMsg"></p>
+    <div class="row"><button class="danger" id="confirmYes"></button><button id="confirmNo">取消</button></div>
+  </div>
+  <div class="exportbox" id="exportBox" hidden>
+    <p id="exportMsg"></p>
+    <textarea id="exportText" readonly aria-label="匯出內容"></textarea>
+    <button id="exportClose">關閉</button>
+  </div>
+
+  <div id="status" role="status" aria-live="polite"></div>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="學習單分頁"></nav>
+  <main id="panels"></main>
+</div>
+<script>
+/* 課程內容都在這個 COURSE 物件裡。
+   欄位類型 type：text 單行 / area 多行 / radio 單選 / check 多選。 */
+const COURSE = {
+  key: 'smcourse-lesson2-v1',
+  title: '第 2 堂課：受眾與修正定位',
+  subtitle: '三個月自媒體陪跑・第 2 週學習單',
+  prefill: [
+    { from: 'smcourse-lesson1-v1', fromId: 'l4', to: 'v0' },
+    { from: 'smcourse-lesson1-v1', fromId: 'l4', to: 'p_v0' },
+    { from: 'smcourse-lesson1-v1', fromId: 'l1', to: 'a_state' },
+    { from: 'smcourse-lesson1-v1', fromId: 'st1', to: 'st0' },
+  ],
+
+  parts: [
+    {
+      id: 'q1', tab: '① 作業回顧', when: '會談前先想一想',
+      title: '上週的作業回顧',
+      intro: '如果你用同一個瀏覽器填過第 1 堂，上週的定位和故事會自動帶進來。',
+      groups: [
+        { title: '看完對標帳號之後', fields: [
+          { id: 'rv1', type: 'area', label: '5 個帳號裡，我最想學誰？學他什麼？' },
+          { id: 'rv2', type: 'area', label: '有沒有哪一個，我看完覺得「我不想變成這樣」？為什麼？' },
+          { id: 'rv3', type: 'area', label: '差異化那三題，哪一題最難寫？為什麼？' },
+        ]},
+        { title: '上週寫的東西', fields: [
+          { id: 'v0', type: 'area', label: '我的一句話定位 v0' },
+          { id: 'st0', type: 'area', label: '我的故事草稿（5 句話）', optional: true },
+        ]},
+      ],
+    },
+    {
+      id: 'q2', tab: '② 受眾輪廓', when: '會談中一起填',
+      title: '受眾輪廓：把「卡住的狀態」變成一個人',
+      intro: '受眾不是一群人，是一個具體的人。這個人不一定真的存在，但要夠具體，讓你寫內容時，覺得是在跟他說話。',
+      groups: [
+        { title: '他是誰', gintro: '不知道他是誰？從「一年前的自己」開始：那時候你在想什麼、搜尋什麼、滑什麼？', fields: [
+          { id: 'a_name', type: 'text', label: '暱稱', hint: '不用真名' },
+          { id: 'a_age', type: 'text', label: '年齡、職業', hint: '大概就好' },
+          { id: 'a_state', type: 'area', label: '他現在卡在什麼狀態', hint: '對應定位裡的「誰」' },
+          { id: 'a_day', type: 'area', label: '他一天的樣子', hint: '早上怎麼過？下班後在做什麼？那個時間，他在想什麼？' },
+          { id: 'a_phone', type: 'text', label: '他每天花多少時間滑手機？在哪些平台？' },
+          { id: 'a_say', type: 'area', label: '他怎麼形容自己的處境', hint: '寫一句他會對朋友說的話' },
+        ]},
+      ],
+    },
+    {
+      id: 'q3', tab: '③ 10 個煩惱', when: '會談中一起填',
+      title: '10 個煩惱：他的內心世界',
+      intro: '從四個方向想，湊滿 10 個。盡量寫具體的情境，不要只寫抽象的詞。',
+      groups: [
+        { title: '他現在最困擾的（至少 3 個）', fields: [
+          { id: 'c1', type: 'text', label: '煩惱 1' },
+          { id: 'c2', type: 'text', label: '煩惱 2' },
+          { id: 'c3', type: 'text', label: '煩惱 3' },
+        ]},
+        { title: '他最想要的（至少 2 個）', fields: [
+          { id: 'c4', type: 'text', label: '渴望 1' },
+          { id: 'c5', type: 'text', label: '渴望 2' },
+        ]},
+        { title: '他最怕發生的（至少 2 個）', fields: [
+          { id: 'c6', type: 'text', label: '害怕 1' },
+          { id: 'c7', type: 'text', label: '害怕 2' },
+        ]},
+        { title: '他已經試過、但沒用的（至少 2 個）', gintro: '這一類最容易被忽略，卻最有用：它告訴你，你的方法和市面上哪裡不一樣。', fields: [
+          { id: 'c8', type: 'text', label: '試過 1' },
+          { id: 'c9', type: 'text', label: '試過 2' },
+        ]},
+        { title: '再補一個，任何類別都可以', fields: [
+          { id: 'c10', type: 'text', label: '第 10 個' },
+          { id: 'c_top', type: 'area', label: '最痛的 3 個是哪三個？', hint: '請圈出來' },
+        ]},
+      ],
+    },
+    {
+      id: 'q4', tab: '④ 語言庫', when: '會談中寫 10 條，作業補到 20 條',
+      title: '受眾語言庫：他自己怎麼說',
+      intro: '寫他會說的「原話」，不要寫成標題。原話通常比較碎、比較口語，有場景，也有情緒。例如不是「個人品牌定位模糊」，而是「我不知道我要發什麼」。',
+      groups: [
+        { title: '會談中：前 10 條', gintro: '從你剛剛寫的煩惱、受眾輪廓裡挑，改寫成他會說的話。', fields: [1,2,3,4,5,6,7,8,9,10].map(n => ({ id: 'lg' + n, type: 'text', label: `第 ${n} 條` })) },
+        { title: '作業：再補 10 條，標出處', gintro: '去對標帳號的留言區、社團、Threads 討論裡，找別人真的說過的話。寫完在後面用括號註明出處，例如（對標帳號留言）、（社團）、（訪談）。', fields: [11,12,13,14,15,16,17,18,19,20].map(n => ({ id: 'lg' + n, type: 'text', label: `第 ${n} 條`, hint: '原話＋（出處）' })) },
+      ],
+    },
+    {
+      id: 'q5', tab: '⑤ 定位 v1', when: '會談中改寫',
+      title: '定位 v0 → v1',
+      intro: '用今天累積的受眾輪廓、煩惱和語言，把第一版改成更貼近真實的一版。定位本來就要改，每次改都因為你知道得更多。',
+      groups: [
+        { title: '對照', fields: [
+          { id: 'p_v0', type: 'area', label: '上週的 v0', hint: '可以貼上上週的版本，也可以不填' },
+        ]},
+        { title: '改寫成 v1', gintro: '公式：我幫［具體狀態的人］，從［現在的狀態］到［想要的結果］，因為我［經歷過什麼］。', fields: [
+          { id: 'n1', type: 'area', label: '我幫…（具體狀態的人）', hint: '最好帶一句受眾語言' },
+          { id: 'n2', type: 'area', label: '從…（現在的狀態）到…（想要的結果）' },
+          { id: 'n3', type: 'area', label: '因為我…（經歷過什麼）', hint: '寫經歷，不寫頭銜' },
+          { id: 'n4', type: 'area', label: '合起來的 v1，寫成一句話' },
+        ]},
+        { title: '三個測試', fields: [
+          { id: 't1', type: 'text', label: '3 秒測試：我唸給誰聽？他說我是在幫誰、幫什麼？', optional: true },
+          { id: 't2', type: 'radio', label: '語言測試：v1 裡有沒有至少一句受眾語言？', options: ['有', '沒有'] },
+          { id: 't3', type: 'radio', label: '經歷測試：「因為我」寫的是經歷，不是頭銜？', options: ['是', '還不是'] },
+        ]},
+      ],
+    },
+    {
+      id: 'q6', tab: '⑥ 個人故事', when: '作業：寫 300 字',
+      title: '個人故事：300 字',
+      intro: '四格：起點、轉折、現在、所以我幫你。不用寫得精彩，寫真實的就好。不是所有經歷都要公開，哪些寫進正式內容，之後再決定。',
+      groups: [
+        { title: '四格結構', fields: [
+          { id: 'sy1', type: 'area', counter: 80, label: '起點', hint: '之前的我，卡在哪裡？最好有一個具體的場景或一句話' },
+          { id: 'sy2', type: 'area', counter: 80, label: '轉折', hint: '發生了什麼事，讓我開始改變？一個小事件就夠了' },
+          { id: 'sy3', type: 'area', counter: 70, label: '現在', hint: '我現在的樣子' },
+          { id: 'sy4', type: 'area', counter: 70, label: '所以我幫你', hint: '為什麼我想幫你這群人？' },
+        ]},
+      ],
+    },
+    {
+      id: 'q7', tab: '⑦ 本週作業', when: '做完再傳給老師',
+      title: '本週作業',
+      intro: '不訂統一的交件日，請自己和老師約哪一天能交。訪談只記對方的原話與狀態，不記姓名或聯絡方式，並且要先取得對方同意。',
+      tipsTitle: '本週要完成',
+      tips: [
+        '個人故事 300 字（上下 50 字都可以）',
+        '語言庫補到 20 條，並標出處',
+        '週日回報',
+        '選做：訪談 1–3 位真實受眾（每位 15–20 分鐘）',
+        '選做：受眾地圖',
+      ],
+      groups: [
+        { title: '選做：受眾地圖', fields: [
+          { id: 'mp1', type: 'text', label: '他常用的平台', optional: true },
+          { id: 'mp2', type: 'area', label: '他追蹤的帳號（3 個）', optional: true },
+          { id: 'mp3', type: 'area', label: '他可能在的社團或社群', optional: true },
+        ]},
+      ],
+      repeat: {
+        count: 3, cardTitle: '選做：訪談', fullCount: 3, basicFields: 5,
+        fields: [
+          { id: 'state', type: 'text', label: '他的狀態（一句話）', optional: true },
+          { id: 'recent', type: 'area', label: '最近一次卡住，發生了什麼', optional: true },
+          { id: 'words', type: 'area', label: '他說的原話（至少 3 句）', optional: true },
+          { id: 'tried', type: 'area', label: '他試過什麼方法', optional: true },
+          { id: 'surprise', type: 'area', label: '讓我意外的一件事', optional: true },
+        ],
+      },
+    },
+    {
+      id: 'q8', tab: '⑧ 週日回報', when: '每週日晚上，3 分鐘',
+      title: '週日回報',
+      intro: '每週日填一次。下週開始新的一份之前，先下載備份。',
+      groups: [
+        { title: '這週的我', fields: [
+          { id: 'w1', type: 'area', label: '這週做了什麼？', hint: '完成的作業、發的內容' },
+          { id: 'w2', type: 'text', label: '這週實際花了幾小時？', hint: '和你預估的差多少？' },
+          { id: 'w3', type: 'area', label: '這週最卡的是什麼？' },
+          { id: 'w4', type: 'area', label: '這週有什麼讓你驚喜或有成就感的事？' },
+          { id: 'w5', type: 'area', label: '下週我要完成…' },
+          { id: 'w6', type: 'scale', label: '心情溫度', hint: '1 很低，5 很好' },
+          { id: 'w7', type: 'area', label: '想補充的', optional: true },
+        ]},
+      ],
+    },
+  ],
+};
+
+/* ============================ 程式 ============================ */
+const $ = (s, r = document) => r.querySelector(s);
+let state = { values: {}, tab: 'p1' };
+let saveTimer = null;
+let dlCap = null;
+let pendingYes = null;
+
+function loadState() {
+  try { const s = localStorage.getItem(COURSE.key); if (s) state = Object.assign(state, JSON.parse(s)); } catch (e) {}
+}
+function setStatus(t) { $('#status').textContent = t; }
+function saveNow() {
+  try { localStorage.setItem(COURSE.key, JSON.stringify(state)); setStatus('已自動儲存在這台裝置　' + new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })); }
+  catch (e) { setStatus('這個瀏覽器無法自動儲存，請用「複製全部文字」或「下載備份」保存'); }
+}
+function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 400); }
+function setVal(id, v) { state.values[id] = v; scheduleSave(); updateProgress(); }
+function isFilled(v) { return Array.isArray(v) ? v.length > 0 : (typeof v === 'boolean' ? v : !!(v && String(v).trim())); }
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    if (k === 'class') e.className = attrs[k];
+    else if (k === 'text') e.textContent = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  }
+  kids.flat().forEach(c => c != null && e.append(c));
+  return e;
+}
+
+function labelNode(f) {
+  const frag = document.createDocumentFragment();
+  frag.append(f.label);
+  if (f.optional) frag.append(el('span', { class: 'opt', text: '（選填）' }));
+  if (f.hint) frag.append(' ', el('span', { class: 'hint', text: f.hint }));
+  return frag;
+}
+
+function renderField(f, idOverride) {
+  const id = idOverride || f.id;
+  const wrap = el('div', { class: 'field' });
+  const v = state.values[id];
+  if (f.type === 'text' || f.type === 'area') {
+    wrap.append(el('label', { for: 'f_' + id }, labelNode(f)));
+    const inp = f.type === 'text' ? el('input', { type: 'text', id: 'f_' + id }) : el('textarea', { id: 'f_' + id });
+    if (f.placeholder) inp.setAttribute('placeholder', f.placeholder);
+    inp.value = v || '';
+    inp.addEventListener('input', () => { setVal(id, inp.value); if (f.type === 'area') fit(inp); });
+    wrap.append(inp);
+    if (f.type === 'area') setTimeout(() => fit(inp), 0);
+    if (f.counter) {
+      const cnt = el('p', { class: 'hint' });
+      const upd = () => { cnt.textContent = `${[...(inp.value || '').replace(/\s/g, '')].length} / 約 ${f.counter} 字`; };
+      inp.addEventListener('input', upd); upd(); wrap.append(cnt);
+    }
+  } else if (f.type === 'radio' || f.type === 'scale') {
+    const opts = f.type === 'scale' ? ['1', '2', '3', '4', '5'] : f.options;
+    const fs = el('fieldset', null, el('legend', null, labelNode(f)));
+    const box = el('div', { class: 'choices' });
+    opts.forEach(o => {
+      const r = el('input', { type: 'radio', name: 'f_' + id, value: o });
+      r.checked = v === o;
+      r.addEventListener('change', () => setVal(id, o));
+      box.append(el('label', { class: 'choice' }, r, o));
+    });
+    fs.append(box); wrap.append(fs);
+  } else if (f.type === 'check') {
+    const fs = el('fieldset', null, el('legend', null, labelNode(f)));
+    const box = el('div', { class: 'choices' });
+    f.options.forEach(o => {
+      const c = el('input', { type: 'checkbox', value: o });
+      c.checked = Array.isArray(v) && v.includes(o);
+      c.addEventListener('change', () => {
+        const cur = new Set(state.values[id] || []);
+        c.checked ? cur.add(o) : cur.delete(o);
+        setVal(id, f.options.filter(x => cur.has(x)));
+      });
+      box.append(el('label', { class: 'choice' }, c, o));
+    });
+    fs.append(box); wrap.append(fs);
+  }
+  return wrap;
+}
+function fit(t) { t.style.height = 'auto'; t.style.height = Math.max(84, t.scrollHeight + 2) + 'px'; }
+
+function countedFields(part) {
+  const out = [];
+  (part.groups || []).forEach(g => g.fields.forEach(f => { if (!f.optional) out.push({ id: f.id, f }); }));
+  if (part.repeat) {
+    const r = part.repeat;
+    for (let n = 1; n <= r.count; n++) {
+      r.fields.forEach((f, i) => {
+        const basicOnly = n > r.fullCount;
+        if (f.optional) return;
+        if (!basicOnly || i < r.basicFields) out.push({ id: `${part.id}_${n}_${f.id}`, f });
+      });
+    }
+  }
+  return out;
+}
+function updateProgress() {
+  COURSE.parts.forEach(p => {
+    const list = countedFields(p);
+    const done = list.filter(x => isFilled(state.values[x.id])).length;
+    const pct = list.length ? Math.round(done / list.length * 100) : 0;
+    const node = $(`#tab_${p.id} .pct`);
+    if (node) node.textContent = list.length ? pct + '%' : '';
+  });
+}
+
+function renderPart(p) {
+  const panel = el('section', { class: 'panel', id: 'panel_' + p.id, role: 'tabpanel', 'aria-labelledby': 'tab_' + p.id });
+  panel.append(el('span', { class: 'when', text: p.when }), el('h2', { text: p.title }), el('p', { class: 'intro', text: p.intro }));
+  if (p.tips) {
+    const ul = el('ul', { class: 'clean' }); p.tips.forEach(t => ul.append(el('li', { text: t })));
+    panel.append(el('div', { class: 'group' }, el('h3', { text: p.tipsTitle || '怎麼找' }), ul));
+  }
+  (p.groups || []).forEach(g => {
+    const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
+    if (g.gintro) box.append(el('p', { class: 'gintro', text: g.gintro }));
+    g.fields.forEach(f => box.append(renderField(f)));
+    panel.append(box);
+  });
+  if (p.repeat) {
+    const r = p.repeat;
+    for (let n = 1; n <= r.count; n++) {
+      const full = n <= r.fullCount;
+      const d = el('details', { class: 'card' });
+      if (n === 1) d.setAttribute('open', '');
+      d.append(el('summary', null, el('span', { text: `${r.cardTitle} ${n}` }), el('span', { class: 'hint', text: full ? '完整拆解' : '基本資料即可' })));
+      const body = el('div', { class: 'body' });
+      const more = el('details', { class: 'more' }, el('summary', { text: '展開完整拆解欄位（選填）' }));
+      r.fields.forEach((f, i) => {
+        const node = renderField(f, `${p.id}_${n}_${f.id}`);
+        (full || i < r.basicFields ? body : more).append(node);
+      });
+      if (!full) body.append(more);
+      d.append(body); panel.append(d);
+    }
+  }
+  return panel;
+}
+
+function build() {
+  $('#title').textContent = COURSE.title;
+  $('#subtitle').textContent = COURSE.subtitle;
+  const tabs = $('#tabs'), panels = $('#panels');
+  tabs.replaceChildren(); panels.replaceChildren();
+  COURSE.parts.forEach(p => {
+    const b = el('button', { class: 'tab', id: 'tab_' + p.id, role: 'tab', 'aria-selected': 'false' }, p.tab, el('span', { class: 'pct', text: '0%' }));
+    b.addEventListener('click', () => select(p.id));
+    tabs.append(b);
+    panels.append(renderPart(p));
+  });
+  select(COURSE.parts.some(p => p.id === state.tab) ? state.tab : COURSE.parts[0].id, true);
+  updateProgress();
+}
+function select(id, silent) {
+  state.tab = id;
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.id === 'tab_' + id ? 'true' : 'false'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel_' + id));
+  document.querySelectorAll('#panel_' + id + ' textarea').forEach(fit);
+  if (!silent) { scheduleSave(); window.scrollTo({ top: 0 }); }
+}
+
+/* ---------- 匯出 ---------- */
+function valText(f, v) {
+  const s = Array.isArray(v) ? v.join('、') : (v || '').toString().trim();
+  return `**${f.label}**\n\n${s || '（未填）'}`;
+}
+function toMarkdown() {
+  const d = new Date().toLocaleDateString('zh-TW');
+  let md = `# ${COURSE.title}：我的學習單\n\n> 匯出日期：${d}\n\n`;
+  COURSE.parts.forEach(p => {
+    md += `## ${p.title}\n\n`;
+    (p.groups || []).forEach(g => {
+      md += `### ${g.title}\n\n`;
+      g.fields.forEach(f => { md += valText(f, state.values[f.id]) + '\n\n'; });
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        md += `### ${p.repeat.cardTitle} ${n}\n\n`;
+        p.repeat.fields.forEach(f => { md += valText(f, state.values[`${p.id}_${n}_${f.id}`]) + '\n\n'; });
+      }
+    }
+  });
+  return md;
+}
+function stamp() { const d = new Date(); return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`; }
+
+function showExport(text, msg) {
+  $('#exportMsg').textContent = msg;
+  const ta = $('#exportText'); ta.value = text;
+  $('#exportBox').hidden = false;
+  ta.focus(); ta.select();
+}
+const inArtifact = !!(window.claude && window.claude.use);
+function saveViaLink(name, text) {
+  const type = name.endsWith('.json') ? 'application/json' : 'text/markdown';
+  const blob = new Blob([text], { type: type + ';charset=utf-8' });
+  const a = el('a', { href: URL.createObjectURL(blob), download: name });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function offerFile(name, text, okMsg) {
+  if (dlCap) {
+    try { await dlCap.save({ filename: name, data: text }); setStatus(okMsg); return; }
+    catch (e) {
+      if (e && e.code === 'declined') { setStatus('已取消下載'); return; }
+    }
+  } else if (!inArtifact) {
+    saveViaLink(name, text); setStatus(okMsg); return;
+  }
+  showExport(text, '這個環境無法直接下載，請把下面的文字全部複製，貼到自己的筆記或訊息裡保存。');
+}
+async function copyAll() {
+  const t = toMarkdown();
+  try { await navigator.clipboard.writeText(t); setStatus('已複製，可以貼到 Notion、LINE 或 Email'); }
+  catch (e) { showExport(t, '無法自動複製，請把下面的文字全部選取後自己複製。'); }
+}
+function askConfirm(msg, yesLabel, onYes) {
+  $('#confirmMsg').textContent = msg; $('#confirmYes').textContent = yesLabel;
+  pendingYes = onYes; $('#confirmBar').hidden = false; $('#confirmNo').focus();
+}
+
+$('#btnCopy').addEventListener('click', copyAll);
+$('#btnMd').addEventListener('click', () => offerFile(`第1堂課學習單-${stamp()}.md`, toMarkdown(), '已下載文字檔'));
+$('#btnJson').addEventListener('click', () => offerFile(`第1堂課備份-${stamp()}.json`, JSON.stringify({ key: COURSE.key, values: state.values }, null, 2), '已下載備份，之後可用「匯入備份」還原'));
+$('#btnImport').addEventListener('click', () => $('#fileIn').click());
+$('#fileIn').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const j = JSON.parse(rd.result);
+      if (j.key !== COURSE.key || typeof j.values !== 'object' || !j.values) throw 0;
+      askConfirm('匯入會取代目前畫面上的內容。', '確定匯入', () => { state.values = j.values; saveNow(); build(); setStatus('已匯入備份'); });
+    } catch (err) { setStatus('這不是這份學習單的備份檔'); }
+  };
+  rd.readAsText(f); e.target.value = '';
+});
+$('#btnReset').addEventListener('click', () => askConfirm('會清除所有已填內容，且無法復原。建議先按「下載備份」。', '確定清除', () => { state.values = {}; saveNow(); build(); setStatus('已清除'); }));
+$('#confirmYes').addEventListener('click', () => { $('#confirmBar').hidden = true; const f = pendingYes; pendingYes = null; if (f) f(); });
+$('#confirmNo').addEventListener('click', () => { $('#confirmBar').hidden = true; pendingYes = null; });
+$('#exportClose').addEventListener('click', () => { $('#exportBox').hidden = true; });
+
+function applyPrefill() {
+  state.pf = state.pf || {};
+  (COURSE.prefill || []).forEach(p => {
+    if (state.pf[p.to] || isFilled(state.values[p.to])) return;
+    try {
+      const s = JSON.parse(localStorage.getItem(p.from) || 'null');
+      const v = s && s.values && s.values[p.fromId];
+      if (v) { state.values[p.to] = v; state.pf[p.to] = true; }
+    } catch (e) {}
+  });
+}
+loadState();
+applyPrefill();
+build();
+(async () => {
+  try { dlCap = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null; } catch (e) { dlCap = null; }
+})();
+</script>
+</body>
+</html>

@@ -15,3 +15,4 @@ https://jasmine-tsaiii.github.io/selfmedia-worksheets/
 | 資料夾 | 主題 |
 |---|---|
 | `lesson1/` | 第 1 堂課：起點、市場觀察與定位 |
+| `lesson2/` | 第 2 堂課：受眾與修正定位（會自動帶入第 1 堂寫的定位 v0，需用同一個瀏覽器） |

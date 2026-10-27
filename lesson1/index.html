@@ -299,6 +299,11 @@ function renderField(f, idOverride) {
     inp.addEventListener('input', () => { setVal(id, inp.value); if (f.type === 'area') fit(inp); });
     wrap.append(inp);
     if (f.type === 'area') setTimeout(() => fit(inp), 0);
+    if (f.counter) {
+      const cnt = el('p', { class: 'hint' });
+      const upd = () => { cnt.textContent = `${[...(inp.value || '').replace(/\s/g, '')].length} / 約 ${f.counter} 字`; };
+      inp.addEventListener('input', upd); upd(); wrap.append(cnt);
+    }
   } else if (f.type === 'radio' || f.type === 'scale') {
     const opts = f.type === 'scale' ? ['1', '2', '3', '4', '5'] : f.options;
     const fs = el('fieldset', null, el('legend', null, labelNode(f)));
@@ -337,6 +342,7 @@ function countedFields(part) {
     for (let n = 1; n <= r.count; n++) {
       r.fields.forEach((f, i) => {
         const basicOnly = n > r.fullCount;
+        if (f.optional) return;
         if (!basicOnly || i < r.basicFields) out.push({ id: `${part.id}_${n}_${f.id}`, f });
       });
     }
@@ -349,23 +355,23 @@ function updateProgress() {
     const done = list.filter(x => isFilled(state.values[x.id])).length;
     const pct = list.length ? Math.round(done / list.length * 100) : 0;
     const node = $(`#tab_${p.id} .pct`);
-    if (node) node.textContent = pct + '%';
+    if (node) node.textContent = list.length ? pct + '%' : '';
   });
 }
 
 function renderPart(p) {
   const panel = el('section', { class: 'panel', id: 'panel_' + p.id, role: 'tabpanel', 'aria-labelledby': 'tab_' + p.id });
   panel.append(el('span', { class: 'when', text: p.when }), el('h2', { text: p.title }), el('p', { class: 'intro', text: p.intro }));
+  if (p.tips) {
+    const ul = el('ul', { class: 'clean' }); p.tips.forEach(t => ul.append(el('li', { text: t })));
+    panel.append(el('div', { class: 'group' }, el('h3', { text: p.tipsTitle || '怎麼找' }), ul));
+  }
   (p.groups || []).forEach(g => {
     const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
     if (g.gintro) box.append(el('p', { class: 'gintro', text: g.gintro }));
     g.fields.forEach(f => box.append(renderField(f)));
     panel.append(box);
   });
-  if (p.tips) {
-    const ul = el('ul', { class: 'clean' }); p.tips.forEach(t => ul.append(el('li', { text: t })));
-    panel.append(el('div', { class: 'group' }, el('h3', { text: '怎麼找' }), ul));
-  }
   if (p.repeat) {
     const r = p.repeat;
     for (let n = 1; n <= r.count; n++) {
@@ -489,7 +495,19 @@ $('#confirmYes').addEventListener('click', () => { $('#confirmBar').hidden = tru
 $('#confirmNo').addEventListener('click', () => { $('#confirmBar').hidden = true; pendingYes = null; });
 $('#exportClose').addEventListener('click', () => { $('#exportBox').hidden = true; });
 
+function applyPrefill() {
+  state.pf = state.pf || {};
+  (COURSE.prefill || []).forEach(p => {
+    if (state.pf[p.to] || isFilled(state.values[p.to])) return;
+    try {
+      const s = JSON.parse(localStorage.getItem(p.from) || 'null');
+      const v = s && s.values && s.values[p.fromId];
+      if (v) { state.values[p.to] = v; state.pf[p.to] = true; }
+    } catch (e) {}
+  });
+}
 loadState();
+applyPrefill();
 build();
 (async () => {
   try { dlCap = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null; } catch (e) { dlCap = null; }
