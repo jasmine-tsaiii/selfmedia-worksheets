@@ -80,6 +80,22 @@ ul.clean{margin:6px 0;padding-left:1.2em}
 .topnav.bottom{margin:32px 0 0;padding-top:16px;border-top:1px solid var(--line)}
 .topnav a{color:var(--accent);text-decoration:none;padding:6px 0;min-height:32px}
 .topnav a:hover,.topnav a:focus-visible{text-decoration:underline}
+#printView{display:none}
+@page{size:A4;margin:16mm}
+@media print{
+  html,body{background:#fff!important;color:#000!important}
+  body::before{display:none}
+  .wrap{display:none!important}
+  #printView{display:block;font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000}
+  #printView h1{font-size:20pt;margin:0 0 4pt}
+  #printView .pv-sub{color:#555;font-size:10pt;margin:0 0 14pt}
+  #printView h2{font-size:14pt;margin:18pt 0 6pt;padding-bottom:3pt;border-bottom:1px solid #999;break-after:avoid}
+  #printView h3{font-size:11.5pt;margin:12pt 0 4pt;color:#333;break-after:avoid}
+  #printView .pv-f{margin:0 0 7pt;break-inside:avoid}
+  #printView .pv-l{font-weight:700;font-size:10pt;color:#333}
+  #printView .pv-v{white-space:pre-wrap;word-break:break-word;border:1px solid #bbb;border-radius:4pt;padding:5pt 7pt;min-height:16pt}
+  #printView .pv-v.empty{color:#888}
+}
 </style>
 </head>
 <body>
@@ -97,6 +113,7 @@ ul.clean{margin:6px 0;padding-left:1.2em}
 
   <div class="toolbar">
     <button class="primary" id="btnCopy">複製全部文字</button>
+    <button id="btnPdf">下載 PDF</button>
     <button id="btnMd">下載文字檔（.md）</button>
     <button id="btnJson">下載備份（.json）</button>
     <button id="btnImport">匯入備份</button>
@@ -120,6 +137,7 @@ ul.clean{margin:6px 0;padding-left:1.2em}
   <main id="panels"></main>
   <nav class="topnav bottom" id="botnav" aria-label="課程導覽"></nav>
 </div>
+<div id="printView" aria-hidden="true"></div>
 <script>
 /* 課程內容都在這個 COURSE 物件裡。
    欄位類型 type：text 單行 / area 多行 / radio 單選 / check 多選。 */
@@ -536,6 +554,43 @@ function askConfirm(msg, yesLabel, onYes) {
   $('#confirmMsg').textContent = msg; $('#confirmYes').textContent = yesLabel;
   pendingYes = onYes; $('#confirmBar').hidden = false; $('#confirmNo').focus();
 }
+
+/* ---------- 下載 PDF：用瀏覽器的列印功能，選「另存為 PDF」 ---------- */
+function pvField(label, v) {
+  const s = Array.isArray(v) ? v.join('、') : (v == null ? '' : String(v)).trim();
+  return el('div', { class: 'pv-f' }, el('div', { class: 'pv-l', text: label }), el('div', { class: s ? 'pv-v' : 'pv-v empty', text: s || '（未填）' }));
+}
+function buildPrintView() {
+  const pv = $('#printView');
+  pv.replaceChildren();
+  pv.append(el('h1', { text: COURSE.title }), el('p', { class: 'pv-sub', text: COURSE.subtitle + '　匯出日期：' + new Date().toLocaleDateString('zh-TW') }));
+  COURSE.parts.forEach(p => {
+    pv.append(el('h2', { text: p.title }));
+    (p.groups || []).forEach(g => {
+      pv.append(el('h3', { text: g.title }));
+      g.fields.forEach(f => pv.append(pvField(f.label, state.values[f.id])));
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        const fields = p.repeat.fields.map(f => ({ f, v: state.values[`${p.id}_${n}_${f.id}`] }));
+        if (!fields.some(x => isFilled(x.v))) continue;
+        pv.append(el('h3', { text: `${p.repeat.cardTitle} ${n}` }));
+        fields.forEach(x => pv.append(pvField(x.f.label, x.v)));
+      }
+    }
+  });
+}
+function downloadPdf() {
+  buildPrintView();
+  const old = document.title;
+  document.title = COURSE.title.split('：')[0].replace(/\s/g, '') + '學習單-' + stamp();
+  const restore = () => { document.title = old; window.removeEventListener('afterprint', restore); };
+  window.addEventListener('afterprint', restore);
+  setStatus('在跳出的列印視窗，目的地選「另存為 PDF」，按儲存就會下載成 PDF');
+  setTimeout(() => window.print(), 80);
+}
+$('#btnPdf').addEventListener('click', downloadPdf);
+if (inArtifact) $('#btnPdf').hidden = true;
 
 $('#btnCopy').addEventListener('click', copyAll);
 $('#btnMd').addEventListener('click', () => offerFile(`第1堂課學習單-${stamp()}.md`, toMarkdown(), '已下載文字檔'));
