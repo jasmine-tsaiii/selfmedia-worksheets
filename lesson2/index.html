@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>第 2 堂課學習單</title>
+<title>第 1 堂課學習單</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* 版面概念：單欄學習單，分頁切換，卡片只用在需要圈出來的地方。 */
@@ -46,6 +46,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-vi
 .exportbox .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .exportbox ol.steps{margin:6px 0 8px;padding-left:1.4em}
 .exportbox ol.steps li{margin:4px 0}
+.submitbox{border:2px solid var(--accent);background:var(--card);border-radius:var(--radius);padding:12px 14px;margin:12px 0}
+.submitbox .who{margin:0;font-weight:600}
+.submitbox .hint{margin:4px 0 10px}
+.submitbox.bad{border-color:var(--warn)}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:12px 0 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--line)}
 .tab{white-space:nowrap;border-radius:10px;display:flex;gap:6px;align-items:center}
 .tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
@@ -113,8 +117,14 @@ ul.clean{margin:6px 0;padding-left:1.2em}
     <p id="subtitle"></p>
   </header>
 
-  <div class="notice">
+  <div class="notice" id="notice">
     你填的內容<strong>只存在這台裝置的瀏覽器裡，不會上傳到任何地方</strong>，要用同一個瀏覽器打開才會看到。換裝置或清除瀏覽資料就會消失，請定期按「下載備份」。會談前，也可以按「複製全部文字」或「下載文字檔」傳給老師。
+  </div>
+
+  <div class="submitbox" id="submitBox" hidden>
+    <p class="who" id="submitWho"></p>
+    <p class="hint" id="submitInfo"></p>
+    <div class="row"><button class="primary" id="btnSubmit">提交給老師</button></div>
   </div>
 
   <div class="toolbar">
@@ -159,6 +169,7 @@ ul.clean{margin:6px 0;padding-left:1.2em}
 </div>
 <div id="printView" class="pv" aria-hidden="true"></div>
 <div id="pdfHost" aria-hidden="true"><div id="pdfRoot" class="pv"></div></div>
+<script src="../config.js"></script>
 <script>
 /* 課程內容都在這個 COURSE 物件裡。
    欄位類型 type：text 單行 / area 多行 / radio 單選 / check 多選。 */
@@ -441,10 +452,10 @@ function renderNav() {
     const box = $('#' + id);
     if (!box) return;
     box.replaceChildren();
-    const left = el('span', null, el('a', { href: n.home, text: '← 回到總覽' }));
-    if (n.prev) left.append('　', el('a', { href: n.prev.href, text: '‹ ' + n.prev.label }));
+    const left = el('span', null, el('a', { href: withCode(n.home), text: '← 回到總覽' }));
+    if (n.prev) left.append('　', el('a', { href: withCode(n.prev.href), text: '‹ ' + n.prev.label }));
     box.append(left);
-    if (n.next) box.append(el('a', { href: n.next.href, text: n.next.label + ' ›' }));
+    if (n.next) box.append(el('a', { href: withCode(n.next.href), text: n.next.label + ' ›' }));
   });
 }
 function updateProgress() {
@@ -576,6 +587,101 @@ function askConfirm(msg, yesLabel, onYes) {
   pendingYes = onYes; $('#confirmBar').hidden = false; $('#confirmNo').focus();
 }
 
+/* ---------- 專屬連結與「提交給老師」 ---------- */
+// 網址帶 ?s=代碼 就代表這是老師發的專屬連結。代碼存起來，之後在總覽、各堂之間跳轉都會帶著。
+const SUBMIT_URL = ((window.SMCOURSE_CONFIG || {}).submitUrl || '').trim();
+function readCode() {
+  let c = '';
+  try { c = new URLSearchParams(location.search).get('s') || ''; } catch (e) {}
+  if (/^[A-Za-z0-9]{4,32}$/.test(c)) { try { localStorage.setItem('smcourse-student', c); } catch (e) {} return c; }
+  try { c = localStorage.getItem('smcourse-student') || ''; } catch (e) { c = ''; }
+  return /^[A-Za-z0-9]{4,32}$/.test(c) ? c : '';
+}
+const STUDENT = SUBMIT_URL ? readCode() : '';
+function withCode(href) { return STUDENT ? href + (href.includes('?') ? '&' : '?') + 's=' + STUDENT : href; }
+function lessonNo() { const m = /lesson(\d+)/.exec(COURSE.key); return m ? Number(m[1]) : 0; }
+function valString(v) { return Array.isArray(v) ? v.join('、') : (v == null ? '' : String(v)).trim(); }
+function buildBlocks() {
+  const out = [];
+  COURSE.parts.forEach(p => {
+    out.push({ t: 'h2', x: p.title });
+    (p.groups || []).forEach(g => {
+      out.push({ t: 'h3', x: g.title });
+      g.fields.forEach(f => out.push({ t: 'q', l: f.label, v: valString(state.values[f.id]) }));
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        const fs = p.repeat.fields.map(f => ({ f, v: valString(state.values[`${p.id}_${n}_${f.id}`]) }));
+        if (!fs.some(x => x.v)) continue;
+        out.push({ t: 'h3', x: `${p.repeat.cardTitle} ${n}` });
+        fs.forEach(x => out.push({ t: 'q', l: x.f.label, v: x.v }));
+      }
+    }
+  });
+  return out;
+}
+function progressNumbers() {
+  let total = 0, done = 0;
+  COURSE.parts.forEach(p => { const l = countedFields(p); total += l.length; done += l.filter(x => isFilled(state.values[x.id])).length; });
+  return { total, done, pct: total ? Math.round(done / total * 100) : 0 };
+}
+let prevSubmit = null;
+function setSubmitInfo(t, bad) { $('#submitInfo').textContent = t; $('#submitBox').classList.toggle('bad', !!bad); }
+async function loadSubmitStatus() {
+  const q = new URLSearchParams({ action: 'status', s: STUDENT, lesson: String(lessonNo()) });
+  try {
+    const r = await (await fetch(SUBMIT_URL + '?' + q)).json();
+    if (!r.ok) { $('#submitWho').textContent = '這個連結的代碼不正確'; setSubmitInfo('請向老師索取你的專屬連結。', true); $('#btnSubmit').disabled = true; return; }
+    $('#submitWho').textContent = r.name + '，這是你的專屬學習單';
+    prevSubmit = r.submitted;
+    setSubmitInfo(r.submitted
+      ? `這一堂你已在 ${r.submitted.last} 提交過（第 ${r.submitted.count} 次）。再提交一次只會更新同一份文件，老師看到的是最新版。`
+      : '填好之後按「提交給老師」。之後想修改，可以再提交一次，不會產生重複的文件。');
+  } catch (e) {
+    $('#submitWho').textContent = '專屬學習單';
+    setSubmitInfo('目前連不上老師的接收端。你填的內容還在這台裝置上，等一下再按「提交給老師」試試。', true);
+  }
+}
+async function doSubmit() {
+  const n = progressNumbers();
+  const btn = $('#btnSubmit');
+  btn.disabled = true; setStatus('正在提交…');
+  try {
+    const body = { s: STUDENT, lesson: lessonNo(), title: COURSE.title, filled: n.done, total: n.total, pct: n.pct, blocks: buildBlocks() };
+    const r = await (await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })).json();
+    if (r.ok) {
+      setStatus(`已提交給老師（第 ${r.count} 次）　${r.at}`);
+      prevSubmit = { count: r.count, last: r.at, filled: n.done };
+      setSubmitInfo(`這一堂最近一次提交：${r.at}（第 ${r.count} 次）。再提交只會更新同一份文件。`);
+    } else {
+      const msg = { empty: '還沒有填任何必填欄位，所以沒有送出，免得蓋掉你之前提交的內容。', invalid: '這個連結的代碼不正確，請向老師索取專屬連結。', busy: '老師的接收端正忙，請稍後再按一次。' }[r.error] || '提交失敗，請稍後再試。你填的內容還在這台裝置上。';
+      setStatus(msg); setSubmitInfo(msg, true);
+    }
+  } catch (e) {
+    const msg = '提交失敗（網路或接收端連不上）。你填的內容還在這台裝置上，請稍後再試。';
+    setStatus(msg); setSubmitInfo(msg, true);
+  } finally { btn.disabled = false; }
+}
+function startSubmit() {
+  const n = progressNumbers();
+  if (n.done <= 0) { setStatus('還沒有填任何必填欄位，先填一些再提交。'); return; }
+  const pf = prevSubmit && prevSubmit.filled || 0;
+  if (pf >= 5 && n.done < pf * 0.6) {
+    askConfirm(`這次只填了 ${n.done} 題，你上次提交時是 ${pf} 題。提交會用現在的內容取代上次那一堂。如果你換了瀏覽器或裝置，請先按「匯入備份」還原再提交。確定要送出嗎？`, '確定送出', doSubmit);
+    return;
+  }
+  doSubmit();
+}
+function setupSubmit() {
+  if (!STUDENT) return;
+  $('#notice').innerHTML = '你填的內容會先<strong>存在這台裝置的瀏覽器裡</strong>。按「提交給老師」才會送給老師；提交之後想改，可以再提交一次，老師看到的永遠是最新版。換裝置或清除瀏覽資料前，請先「下載備份」。';
+  $('#submitBox').hidden = false;
+  $('#submitWho').textContent = '專屬學習單';
+  setSubmitInfo('正在確認你的專屬連結…');
+  $('#btnSubmit').addEventListener('click', startSubmit);
+  loadSubmitStatus();
+}
+
 /* ---------- 下載 PDF：直接產生 PDF 檔，檔名由頁面自己決定 ---------- */
 function pvField(label, v) {
   const s = Array.isArray(v) ? v.join('、') : (v == null ? '' : String(v)).trim();
@@ -694,9 +800,8 @@ function applyPrefill() {
 loadState();
 applyPrefill();
 build();
+setupSubmit();
 (async () => {
   try { dlCap = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null; } catch (e) { dlCap = null; }
 })();
 </script>
-</body>
-</html>

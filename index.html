@@ -116,6 +116,21 @@ h2{font-size:1.2rem;margin:40px 0 4px}
   </section>
 </div>
 </main>
+<script src="config.js"></script>
+<script>
+/* 老師發的專屬連結（?s=代碼）：記住代碼，並讓各堂入口都帶著它 */
+(function () {
+  if (!((window.SMCOURSE_CONFIG || {}).submitUrl)) return;
+  var c = '';
+  try { c = new URLSearchParams(location.search).get('s') || ''; } catch (e) {}
+  if (/^[A-Za-z0-9]{4,32}$/.test(c)) { try { localStorage.setItem('smcourse-student', c); } catch (e) {} }
+  else { try { c = localStorage.getItem('smcourse-student') || ''; } catch (e) { c = ''; } }
+  if (!/^[A-Za-z0-9]{4,32}$/.test(c)) return;
+  document.querySelectorAll('a[href^="lesson"]').forEach(function (a) {
+    a.setAttribute('href', a.getAttribute('href') + '?s=' + c);
+  });
+})();
+</script>
 <script>
 (function () {
   var data = {};
