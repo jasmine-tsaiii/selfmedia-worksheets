@@ -43,6 +43,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-vi
 .confirm p,.exportbox p{margin:0 0 8px}
 .confirm .row{display:flex;gap:8px;flex-wrap:wrap}
 .exportbox textarea{min-height:200px;font-size:.9rem}
+.exportbox .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.exportbox ol.steps{margin:6px 0 8px;padding-left:1.4em}
+.exportbox ol.steps li{margin:4px 0}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:12px 0 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--line)}
 .tab{white-space:nowrap;border-radius:10px;display:flex;gap:6px;align-items:center}
 .tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
@@ -117,6 +120,7 @@ ul.clean{margin:6px 0;padding-left:1.2em}
   <div class="toolbar">
     <button class="primary" id="btnCopy">複製全部文字</button>
     <button id="btnPdf">下載 PDF</button>
+    <button id="btnPrint">列印成 PDF（可複製文字）</button>
     <button id="btnMd">下載文字檔（.md）</button>
     <button id="btnJson">下載備份（.json）</button>
     <button id="btnImport">匯入備份</button>
@@ -127,6 +131,19 @@ ul.clean{margin:6px 0;padding-left:1.2em}
   <div class="confirm" id="confirmBar" role="alertdialog" aria-labelledby="confirmMsg" hidden>
     <p id="confirmMsg"></p>
     <div class="row"><button class="danger" id="confirmYes"></button><button id="confirmNo">取消</button></div>
+  </div>
+  <div class="exportbox" id="printGuide" hidden>
+    <p><strong>列印成 PDF：文字可以選取複製，檔案也比較小</strong></p>
+    <p id="printName"></p>
+    <ol class="steps">
+      <li>按下面的「開啟列印視窗」。</li>
+      <li><strong>電腦（Chrome、Edge）：</strong>「目的地」選「另存為 PDF」，按「儲存」。</li>
+      <li><strong>Mac 的 Safari：</strong>左下角的「PDF」選單選「儲存為 PDF」。</li>
+      <li><strong>iPhone、iPad：</strong>在預覽縮圖上用兩指放大，再按分享，選「儲存到檔案」。</li>
+      <li><strong>Android 的 Chrome：</strong>「選擇印表機」選「儲存為 PDF」，再按下載圖示。</li>
+    </ol>
+    <p class="hint">如果你是在 LINE、IG 或 Claude 這類 App 裡面開的，可能沒有列印功能，或檔名會不對。請改用 Chrome 或 Safari 打開，或改按「下載 PDF」。</p>
+    <div class="row"><button class="primary" id="btnPrintGo">開啟列印視窗</button><button id="printClose">關閉</button></div>
   </div>
   <div class="exportbox" id="exportBox" hidden>
     <p id="exportMsg"></p>
@@ -593,14 +610,19 @@ function loadScript(src) {
     document.head.append(s);
   });
 }
-function printFallback(name) {
+function startPrint(name, msg) {
   buildPrintView($('#printView'));
   const old = document.title;
   document.title = name.replace(/\.pdf$/, '');
   const restore = () => { document.title = old; window.removeEventListener('afterprint', restore); };
   window.addEventListener('afterprint', restore);
-  setStatus('無法直接產生 PDF，改用列印：目的地選「另存為 PDF」');
+  setStatus(msg);
   setTimeout(() => window.print(), 80);
+}
+function printFallback(name) {
+  $('#printName').textContent = '建議檔名：' + name;
+  $('#printGuide').hidden = false;
+  startPrint(name, '無法直接產生 PDF，改用列印：目的地選「另存為 PDF」');
 }
 async function downloadPdf() {
   const name = pdfName();
@@ -628,7 +650,14 @@ async function downloadPdf() {
   }
 }
 $('#btnPdf').addEventListener('click', downloadPdf);
-if (inArtifact) $('#btnPdf').hidden = true;
+$('#btnPrint').addEventListener('click', () => {
+  $('#printName').textContent = '建議檔名：' + pdfName();
+  $('#printGuide').hidden = false;
+  $('#printGuide').scrollIntoView({ block: 'nearest' });
+});
+$('#btnPrintGo').addEventListener('click', () => startPrint(pdfName(), '在列印視窗：目的地選「另存為 PDF」，按儲存'));
+$('#printClose').addEventListener('click', () => { $('#printGuide').hidden = true; });
+if (inArtifact) { $('#btnPdf').hidden = true; $('#btnPrint').hidden = true; }
 
 $('#btnCopy').addEventListener('click', copyAll);
 $('#btnMd').addEventListener('click', () => offerFile(`${lessonLabel()}學習單-${stamp()}.md`, toMarkdown(), '已下載文字檔'));
