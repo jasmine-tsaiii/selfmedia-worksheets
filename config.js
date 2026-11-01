@@ -3,5 +3,5 @@
    貼上 Apps Script 網頁應用程式的網址（以 /exec 結尾）後，帶有專屬連結（?s=代碼）的學員
    就會看到「提交給老師」。沒有專屬連結的人看不到，也不會被影響。 */
 window.SMCOURSE_CONFIG = {
-  submitUrl: ''
+  submitUrl: 'https://script.google.com/macros/s/AKfycbz-FMTC7cikTmv22s-M07dBG5soXPsNxECygRr2L7ShHNFcBgEvINi7tLHTKt1lFr-EEg/exec'
 };
