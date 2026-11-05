@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>第 1 堂課學習單</title>
+<title>第 2 堂課學習單</title>
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -167,6 +167,19 @@ ul.clean{margin:8px 0 0;padding-left:1.2em}
 ul.clean li{margin:4px 0}
 ul.clean li::marker{color:var(--gold)}
 
+
+/* 用 AI 試試 */
+details.card.ai>summary .hint{margin-left:auto}
+.aiwarn{margin:8px 0;padding:8px 12px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-size:.88rem;font-weight:600}
+ol.steps{margin:8px 0 12px;padding-left:1.4em}
+ol.steps li{margin:4px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.promptpre{white-space:pre-wrap;word-break:break-word;font:.85rem/1.65 ui-monospace,SFMono-Regular,Menlo,"PingFang TC",monospace;background:var(--field);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;max-height:340px;overflow:auto;margin:8px 0 0}
+.tablewrap{overflow-x:auto;margin:6px 0 4px}
+table.frame{border-collapse:collapse;width:100%;font-size:.9rem;min-width:420px}
+table.frame th,table.frame td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+table.frame th{background:var(--accent-soft);color:var(--accent-deep);font-weight:700}
+
 /* 列印與 PDF（維持純白、黑字） */
 .pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
 .pv h1{font-size:20pt;margin:0 0 4pt}
@@ -267,7 +280,7 @@ ul.clean li::marker{color:var(--gold)}
    欄位類型 type：text 單行 / area 多行 / radio 單選 / check 多選。 */
 const COURSE = {
   key: 'smcourse-lesson2-v1',
-  nav: { home: '../', prev: { label: '第 1 堂', href: '../lesson1/' } },
+  nav: { home: '../', prev: { label: '第 1 堂', href: '../lesson1/' }, next: { label: '第 3 堂', href: '../lesson3/' } },
   title: '第 2 堂課：受眾與修正定位',
   subtitle: '三個月自媒體陪跑・第 2 週學習單',
   prefill: [
@@ -429,6 +442,7 @@ const COURSE = {
   ],
 };
 
+
 /* ============================ 程式 ============================ */
 const $ = (s, r = document) => r.querySelector(s);
 let state = { values: {}, tab: 'p1' };
@@ -567,6 +581,64 @@ function updateProgress() {
   if (hp) hp.textContent = overall === 0 ? '尚未開始' : (overall >= 100 ? '全部完成 🎉' : '已完成 ' + overall + '%');
 }
 
+
+/* ---------- 「用 AI 試試」：把學習單材料和 prompt 一起複製 ---------- */
+// 材料來源：self＝這一堂，其他＝同一個瀏覽器裡別堂的 localStorage key（例如 smcourse-lesson2-v1）
+function otherState(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
+function matValue(src, id) {
+  const s = src === 'self' ? state : otherState(src);
+  return valString(s && s.values && s.values[id]);
+}
+function fillTokens(text) {
+  return text.replace(/\{\{(\w+)(?:\|([^}]*))?\}\}/g, (m, id, fb) => matValue('self', id) || fb || '（未填）');
+}
+function buildPromptText(pr, withMaterials) {
+  let out = fillTokens(pr.body).trim();
+  const missing = [];
+  if (withMaterials && pr.materials && pr.materials.length) {
+    const parts = [];
+    pr.materials.forEach(m => {
+      const vals = m.ids.map(id => matValue(m.src || 'self', id)).filter(Boolean);
+      if (!vals.length) { missing.push(m.label); return; }
+      const body = m.numbered ? vals.map((v, i) => (i + 1) + '. ' + v).join('\n') : vals.join('\n');
+      parts.push('## ' + m.label + '\n' + body);
+    });
+    out += '\n\n【我的材料】\n' + (parts.length ? parts.join('\n\n') : '（目前學習單裡還沒有填寫的材料）');
+  }
+  return { text: out, missing };
+}
+async function copyPrompt(pr, withMaterials) {
+  const r = buildPromptText(pr, withMaterials);
+  const tail = withMaterials && r.missing.length ? '　還沒有這些材料：' + r.missing.join('、') + '（AI 會先問你；第 2 堂的內容要在同一個瀏覽器才讀得到）' : '';
+  try { await navigator.clipboard.writeText(r.text); setStatus('已複製「' + pr.title + '」，去貼到 AI 吧。' + tail); }
+  catch (e) { showExport(r.text, '無法自動複製，請把下面的文字全部選取後自己複製，再貼到 AI。'); }
+}
+function renderPrompt(pr) {
+  const d = el('details', { class: 'card ai' });
+  d.append(el('summary', null, el('span', { text: pr.title }), el('span', { class: 'hint', text: pr.when || '' })));
+  const body = el('div', { class: 'body' });
+  if (pr.purpose) body.append(el('p', { class: 'intro', text: pr.purpose }));
+  if (pr.warn) body.append(el('p', { class: 'aiwarn', text: pr.warn }));
+  if (pr.steps) { const ol = el('ol', { class: 'steps' }); pr.steps.forEach(s => ol.append(el('li', { text: s }))); body.append(ol); }
+  const row = el('div', { class: 'row' });
+  const hasMat = !!(pr.materials && pr.materials.length);
+  const b1 = el('button', { class: 'primary', type: 'button', text: hasMat ? '複製 prompt（已帶入我的內容）' : '複製 prompt' });
+  b1.addEventListener('click', () => copyPrompt(pr, true));
+  row.append(b1);
+  if (hasMat) {
+    const b2 = el('button', { type: 'button', text: '只複製 prompt（不含材料）' });
+    b2.addEventListener('click', () => copyPrompt(pr, false));
+    row.append(b2);
+  }
+  body.append(row);
+  const pv = el('details', { class: 'more' }, el('summary', { text: '看 prompt 全文' }));
+  const pre = el('pre', { class: 'promptpre' });
+  pv.addEventListener('toggle', () => { if (pv.open) pre.textContent = buildPromptText(pr, true).text; });
+  pv.append(pre); body.append(pv);
+  d.append(body);
+  return d;
+}
+
 function renderPart(p) {
   const panel = el('section', { class: 'panel', id: 'panel_' + p.id, role: 'tabpanel', 'aria-labelledby': 'tab_' + p.id });
   panel.append(el('span', { class: 'when', text: p.when }), el('h2', { text: p.title }), el('p', { class: 'intro', text: p.intro }));
@@ -574,6 +646,19 @@ function renderPart(p) {
     const ul = el('ul', { class: 'clean' }); p.tips.forEach(t => ul.append(el('li', { text: t })));
     panel.append(el('div', { class: 'group' }, el('h3', { text: p.tipsTitle || '怎麼找' }), ul));
   }
+  (p.cards || []).forEach(c => {
+    const box = el('div', { class: 'group' }, el('h3', { text: c.title }));
+    if (c.intro) box.append(el('p', { class: 'gintro', text: c.intro }));
+    if (c.table) {
+      const t = el('table', { class: 'frame' });
+      c.table.forEach((row, i) => t.append(el('tr', null, ...row.map(x => el(i === 0 ? 'th' : 'td', { text: x })))));
+      box.append(el('div', { class: 'tablewrap' }, t));
+    }
+    if (c.items) { const ul = el('ul', { class: 'clean' }); c.items.forEach(t => ul.append(el('li', { text: t }))); box.append(ul); }
+    if (c.note) box.append(el('p', { class: 'hint', text: c.note }));
+    panel.append(box);
+  });
+  (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
   (p.groups || []).forEach(g => {
     const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
     if (g.gintro) box.append(el('p', { class: 'gintro', text: g.gintro }));

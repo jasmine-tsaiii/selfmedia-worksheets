@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>第 3 堂課學習單</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="theme-color" content="#4b3a9e">
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* 設計概念：像一本溫暖的手帳。奶油色紙張、紫色主色（跟小圖示一致）、金色只用在「重點」和「進度」。
+   卡片用柔和陰影取代粗框線，主要按鈕只有一個，其餘收進「更多」。 */
+:root{
+  --bg:#fbf8f3; --card:#ffffff; --ink:#2a2433; --muted:#6b6478; --line:#e9e2d9;
+  --field:#fbf8f3;
+  --accent:#6a55c9; --accent-deep:#4b3a9e; --accent-ink:#ffffff; --accent-soft:#f0ecfc;
+  --gold:#f2b84b; --gold-ink:#7a4e00; --gold-soft:#fff3d9;
+  --warn:#a35f00; --warn-soft:#fff1d6;
+  --hero:linear-gradient(135deg,#4b3a9e 0%,#6a55c9 58%,#8f72dc 100%);
+  --hero-ink:#ffffff;
+  --shadow:0 1px 2px rgba(42,36,51,.05),0 10px 28px -14px rgba(75,58,158,.28);
+  --radius:16px; --radius-sm:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15131a; --card:#1e1b26; --ink:#efecf5; --muted:#aaa5b8; --line:#352f40; --field:#16131d;
+    --accent:#a898f2; --accent-deep:#a898f2; --accent-ink:#17141f; --accent-soft:#2a2442;
+    --gold:#f2c46b; --gold-ink:#f2c46b; --gold-soft:#3a2f18;
+    --warn:#f0b14d; --warn-soft:#3a2f18;
+    --hero:linear-gradient(135deg,#2a2150 0%,#43348d 60%,#5b45b3 100%);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15131a; --card:#1e1b26; --ink:#efecf5; --muted:#aaa5b8; --line:#352f40; --field:#16131d;
+  --accent:#a898f2; --accent-deep:#a898f2; --accent-ink:#17141f; --accent-soft:#2a2442;
+  --gold:#f2c46b; --gold-ink:#f2c46b; --gold-soft:#3a2f18;
+  --warn:#f0b14d; --warn-soft:#3a2f18;
+  --hero:linear-gradient(135deg,#2a2150 0%,#43348d 60%,#5b45b3 100%);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:780px;margin:0 auto;padding-block:16px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* 上方導覽 */
+.topnav{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:center;justify-content:space-between;font-size:.88rem;margin-bottom:10px}
+.topnav:empty{display:none}
+.topnav.bottom{margin:36px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+.topnav a{color:var(--accent-deep);text-decoration:none;padding:6px 10px;margin-left:-10px;border-radius:999px;min-height:32px;font-weight:600;transition:background .15s}
+.topnav a:hover,.topnav a:focus-visible{background:var(--accent-soft)}
+
+/* 頂部主視覺 */
+.hero{position:relative;overflow:hidden;background:var(--hero);color:var(--hero-ink);border-radius:24px;padding:26px 22px 20px;box-shadow:var(--shadow)}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero::before{width:220px;height:220px;right:-70px;top:-90px;background:radial-gradient(circle,rgba(242,184,75,.55),rgba(242,184,75,0) 68%)}
+.hero::after{width:260px;height:260px;left:-120px;bottom:-170px;background:radial-gradient(circle,rgba(255,255,255,.18),rgba(255,255,255,0) 70%)}
+.hero>*{position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;letter-spacing:.08em;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin:0 0 10px}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.hero h1{font-size:1.75rem;line-height:1.3;margin:0 0 6px;font-weight:800;letter-spacing:.01em;text-wrap:pretty}
+@media (max-width:520px){.hero{padding:22px 18px 18px;border-radius:20px}.hero h1{font-size:1.5rem}.notice{font-size:.86rem}}
+.hero h1 .lno{display:block;font-size:.95rem;font-weight:700;letter-spacing:.06em;color:var(--gold);margin-bottom:2px}
+.hero p#subtitle{margin:0;color:rgba(255,255,255,.82);font-size:.95rem}
+.heroprog{display:flex;align-items:center;gap:12px;margin-top:18px;font-size:.82rem;color:rgba(255,255,255,.88)}
+.heroprog .track{flex:1;height:8px;background:rgba(255,255,255,.22);border-radius:999px;overflow:hidden}
+.heroprog .fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffd98a);border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.heroprog .pct{min-width:5.5em;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+
+/* 說明、提交、按鈕列 */
+.notice{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--radius-sm);padding:12px 14px;margin:16px 0;font-size:.9rem;color:var(--muted);box-shadow:var(--shadow)}
+.notice::before{content:"🔒";flex:none;line-height:1.7}
+.notice strong{color:var(--ink)}
+.submitbox{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:center;background:var(--card);border:1.5px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin:14px 0;box-shadow:var(--shadow)}
+.submitbox::before{content:"✉";grid-row:1 / 3;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--accent-soft);color:var(--accent-deep);font-size:1.2rem}
+.submitbox .who{margin:0;font-weight:700;grid-column:2}
+.submitbox .hint{margin:0;grid-column:2}
+.submitbox .row{grid-column:3;grid-row:1 / 3}
+.submitbox.bad{border-color:var(--warn)}
+.submitbox.bad::before{background:var(--warn-soft);color:var(--warn)}
+@media (max-width:520px){
+  .submitbox{grid-template-columns:auto 1fr}
+  .submitbox .row{grid-column:1 / -1;grid-row:auto;margin-top:10px}
+  .submitbox .row button{width:100%}
+}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;align-items:center}
+button{font:inherit;font-size:.9rem;font-weight:600;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:42px;transition:transform .12s,box-shadow .15s,border-color .15s,background .15s}
+button:hover{border-color:var(--accent);box-shadow:0 4px 14px -8px rgba(75,58,158,.5)}
+button:active{transform:translateY(1px)}
+button.primary{background:var(--accent-deep);color:var(--accent-ink);border-color:var(--accent-deep)}
+button.primary:hover{background:var(--accent);border-color:var(--accent)}
+button.danger{color:var(--warn)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+details.tools{position:relative}
+details.tools>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;min-height:42px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:.9rem;font-weight:600;color:var(--ink)}
+details.tools>summary::-webkit-details-marker{display:none}
+details.tools>summary::after{content:"▾";font-size:.8em;color:var(--muted)}
+details.tools[open]>summary{border-color:var(--accent)}
+details.tools .menu{position:absolute;z-index:6;top:calc(100% + 8px);left:0;display:grid;gap:6px;min-width:230px;padding:10px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:0 18px 40px -16px rgba(42,36,51,.45)}
+@media (max-width:520px){.toolbar{position:relative}details.tools{position:static}details.tools .menu{left:0;right:0;min-width:0}}
+details.tools .menu button{text-align:left;border-radius:10px;border-color:transparent;background:transparent;font-weight:500}
+details.tools .menu button:hover{background:var(--accent-soft);box-shadow:none}
+details.tools .menu hr{border:0;border-top:1px solid var(--line);margin:2px 0;width:100%}
+#status{font-size:.82rem;color:var(--muted);min-height:1.4em;margin:6px 4px 0}
+.confirm,.exportbox{background:var(--warn-soft);border-radius:var(--radius-sm);padding:14px 16px;margin:12px 0;border:1px solid rgba(163,95,0,.18)}
+.confirm p,.exportbox p{margin:0 0 8px}
+.confirm .row{display:flex;gap:8px;flex-wrap:wrap}
+.exportbox textarea{min-height:200px;font-size:.9rem}
+.exportbox .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.exportbox ol.steps{margin:6px 0 8px;padding-left:1.4em}
+.exportbox ol.steps li{margin:4px 0}
+
+/* 分頁 */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 2px;margin:14px -2px 0;position:sticky;top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:5;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;border-radius:999px;display:flex;gap:8px;align-items:center;padding:7px 14px;font-weight:600;color:var(--muted);background:var(--card)}
+.tab[aria-selected="true"]{background:var(--accent-deep);color:var(--accent-ink);border-color:var(--accent-deep);box-shadow:0 8px 18px -10px rgba(75,58,158,.8)}
+.tab .pct{font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--accent-soft);color:var(--accent-deep);font-variant-numeric:tabular-nums}
+.tab[aria-selected="true"] .pct{background:rgba(255,255,255,.22);color:inherit}
+.tab .pct:empty{display:none}
+
+/* 內容 */
+.panel{display:none;padding-top:20px}
+.panel.active{display:block;animation:rise .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.panel.active{animation:none}html{scroll-behavior:auto}*{transition:none!important}}
+.when{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;background:var(--gold-soft);color:var(--gold-ink);padding:3px 12px;border-radius:999px;margin-bottom:8px}
+.when::before{content:"◔";font-size:1em}
+.panel h2{font-size:1.45rem;line-height:1.35;margin:2px 0 6px;font-weight:800;text-wrap:balance}
+.intro{color:var(--muted);margin:0 0 14px}
+.group{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;margin:16px 0;box-shadow:var(--shadow)}
+.group h3{font-size:1.08rem;margin:0 0 4px;display:flex;align-items:center;gap:10px;font-weight:800}
+.group h3::before{content:"";flex:none;width:5px;height:1.1em;border-radius:3px;background:linear-gradient(var(--gold),var(--accent))}
+.group .gintro{color:var(--muted);font-size:.9rem;margin:0 0 6px}
+.field{margin:18px 0 0}
+.field>label,.field>fieldset>legend{display:block;font-weight:700;font-size:.96rem;margin-bottom:6px;padding:0}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+.hint{font-weight:400;color:var(--muted);font-size:.85rem}
+.opt{font-weight:500;color:var(--muted);font-size:.78rem;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--accent-soft)}
+input[type=text],textarea{width:100%;font:inherit;padding:11px 14px;border:1.5px solid var(--line);border-radius:var(--radius-sm);background:var(--field);color:var(--ink);transition:border-color .15s,box-shadow .15s,background .15s}
+input[type=text]::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--muted) 70%,transparent)}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--accent);background:var(--card);box-shadow:0 0 0 4px var(--accent-soft)}
+textarea{resize:vertical;min-height:84px;line-height:1.7}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:7px 16px 7px 12px;cursor:pointer;min-height:44px;background:var(--field);transition:border-color .15s,background .15s}
+.choice:hover{border-color:var(--accent)}
+.choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft);font-weight:700;color:var(--accent-deep)}
+.choice input{width:18px;height:18px;accent-color:var(--accent)}
+details.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin:12px 0;padding:0;box-shadow:var(--shadow);overflow:hidden}
+details.card>summary{cursor:pointer;padding:15px 18px;font-weight:800;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"＋";display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent-deep);font-weight:700}
+details.card[open]>summary::after{content:"－"}
+details.card>summary .hint{margin-left:auto;font-weight:500}
+details.card[open]>summary{border-bottom:1px solid var(--line)}
+details.card .body{padding:2px 18px 18px}
+details.more{margin-top:14px;border-top:1px dashed var(--line);padding-top:6px}
+details.more>summary{cursor:pointer;color:var(--accent-deep);font-size:.9rem;font-weight:600;padding:8px 0}
+ul.clean{margin:8px 0 0;padding-left:1.2em}
+ul.clean li{margin:4px 0}
+ul.clean li::marker{color:var(--gold)}
+
+
+/* 用 AI 試試 */
+details.card.ai>summary .hint{margin-left:auto}
+.aiwarn{margin:8px 0;padding:8px 12px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-size:.88rem;font-weight:600}
+ol.steps{margin:8px 0 12px;padding-left:1.4em}
+ol.steps li{margin:4px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.promptpre{white-space:pre-wrap;word-break:break-word;font:.85rem/1.65 ui-monospace,SFMono-Regular,Menlo,"PingFang TC",monospace;background:var(--field);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;max-height:340px;overflow:auto;margin:8px 0 0}
+.tablewrap{overflow-x:auto;margin:6px 0 4px}
+table.frame{border-collapse:collapse;width:100%;font-size:.9rem;min-width:420px}
+table.frame th,table.frame td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+table.frame th{background:var(--accent-soft);color:var(--accent-deep);font-weight:700}
+
+/* 列印與 PDF（維持純白、黑字） */
+.pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
+.pv h1{font-size:20pt;margin:0 0 4pt}
+.pv .pv-sub{color:#555;font-size:10pt;margin:0 0 14pt}
+.pv h2{font-size:14pt;margin:18pt 0 6pt;padding-bottom:3pt;border-bottom:1px solid #999;break-after:avoid}
+.pv h3{font-size:11.5pt;margin:12pt 0 4pt;color:#333;break-after:avoid}
+.pv .pv-f{margin:0 0 7pt;break-inside:avoid}
+.pv .pv-l{font-weight:700;font-size:10pt;color:#333}
+.pv .pv-v{white-space:pre-wrap;word-break:break-word;border:1px solid #bbb;border-radius:4pt;padding:5pt 7pt;min-height:16pt}
+.pv .pv-v.empty{color:#888}
+#printView{display:none}
+#pdfHost{position:fixed;left:-10000px;top:0;width:700px}
+@page{size:A4;margin:16mm}
+@media print{
+  html,body{background:#fff!important;color:#000!important}
+  body::before{display:none}
+  .wrap{display:none!important}
+  #pdfHost{display:none}
+  #printView{display:block}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="topnav" id="topnav" aria-label="課程導覽"></nav>
+  <header class="hero">
+    <p class="eyebrow">自媒體陪跑　學習單</p>
+    <h1 id="title"></h1>
+    <p id="subtitle"></p>
+    <div class="heroprog" aria-label="這一堂的填寫進度">
+      <div class="track"><div class="fill" id="heroFill"></div></div>
+      <span class="pct" id="heroPct">尚未開始</span>
+    </div>
+  </header>
+
+  <div class="notice" id="notice">
+    <span>你填的內容<strong>只存在這台裝置的瀏覽器裡，不會上傳到任何地方</strong>，要用同一個瀏覽器打開才會看到。換裝置或清除瀏覽資料就會消失，請定期按「下載備份」。會談前，也可以按「複製全部文字」或「下載文字檔」傳給老師。</span>
+  </div>
+
+  <div class="submitbox" id="submitBox" hidden>
+    <p class="who" id="submitWho"></p>
+    <p class="hint" id="submitInfo"></p>
+    <div class="row"><button class="primary" id="btnSubmit">提交給老師</button></div>
+  </div>
+
+  <div class="toolbar">
+    <button class="primary" id="btnCopy">複製全部文字</button>
+    <button id="btnPdf">下載 PDF</button>
+    <details class="tools" id="moreTools">
+      <summary>更多</summary>
+      <div class="menu">
+        <button id="btnPrint">列印成 PDF（可複製文字）</button>
+        <button id="btnMd">下載文字檔（.md）</button>
+        <button id="btnJson">下載備份（.json）</button>
+        <button id="btnImport">匯入備份</button>
+        <hr>
+        <button class="danger" id="btnReset">清除全部</button>
+      </div>
+    </details>
+    <input type="file" id="fileIn" accept=".json,application/json" hidden>
+  </div>
+
+  <div class="confirm" id="confirmBar" role="alertdialog" aria-labelledby="confirmMsg" hidden>
+    <p id="confirmMsg"></p>
+    <div class="row"><button class="danger" id="confirmYes"></button><button id="confirmNo">取消</button></div>
+  </div>
+  <div class="exportbox" id="printGuide" hidden>
+    <p><strong>列印成 PDF：文字可以選取複製，檔案也比較小</strong></p>
+    <p id="printName"></p>
+    <ol class="steps">
+      <li>按下面的「開啟列印視窗」。</li>
+      <li><strong>電腦（Chrome、Edge）：</strong>「目的地」選「另存為 PDF」，按「儲存」。</li>
+      <li><strong>Mac 的 Safari：</strong>左下角的「PDF」選單選「儲存為 PDF」。</li>
+      <li><strong>iPhone、iPad：</strong>在預覽縮圖上用兩指放大，再按分享，選「儲存到檔案」。</li>
+      <li><strong>Android 的 Chrome：</strong>「選擇印表機」選「儲存為 PDF」，再按下載圖示。</li>
+    </ol>
+    <p class="hint">如果你是在 LINE、IG 或 Claude 這類 App 裡面開的，可能沒有列印功能，或檔名會不對。請改用 Chrome 或 Safari 打開，或改按「下載 PDF」。</p>
+    <div class="row"><button class="primary" id="btnPrintGo">開啟列印視窗</button><button id="printClose">關閉</button></div>
+  </div>
+  <div class="exportbox" id="exportBox" hidden>
+    <p id="exportMsg"></p>
+    <textarea id="exportText" readonly aria-label="匯出內容"></textarea>
+    <button id="exportClose">關閉</button>
+  </div>
+
+  <div id="status" role="status" aria-live="polite"></div>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="學習單分頁"></nav>
+  <main id="panels"></main>
+  <nav class="topnav bottom" id="botnav" aria-label="課程導覽"></nav>
+</div>
+<div id="printView" class="pv" aria-hidden="true"></div>
+<div id="pdfHost" aria-hidden="true"><div id="pdfRoot" class="pv"></div></div>
+<script src="../config.js"></script>
+<script>
+const L2 = 'smcourse-lesson2-v1';
+const lgIds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(n => 'lg' + n);
+const COURSE = {
+  key: 'smcourse-lesson3-v1',
+  nav: { home: '../', prev: { label: '第 2 堂', href: '../lesson2/' } },
+  title: '第 3 堂課：人設與帳號門面',
+  subtitle: '三個月自媒體陪跑・第 3 週學習單',
+  prefill: [
+    { from: L2, fromId: 'n4', to: 'v1' },
+  ],
+
+  parts: [
+    {
+      id: 'r1', tab: '① 上週回顧', when: '會談前先想一想',
+      title: '上週回顧：今天要用的材料',
+      intro: '今天不是從零開始寫，而是把前兩週的材料放進一個 3 秒就讀完的地方。如果你用同一個瀏覽器填過第 2 堂，定位 v1 會自動帶進來。',
+      groups: [
+        { title: '上週寫的東西', fields: [
+          { id: 'v1', type: 'area', label: '我的定位 v1' },
+          { id: 'st_fav', type: 'area', label: '我的故事裡，最喜歡的一句', hint: '這句常常可以放進簡介' },
+          { id: 'lg_fav', type: 'area', label: '語言庫裡，最像我的 3 條', hint: '或是看了會笑、有點被戳到的' },
+        ]},
+        { title: '曝光決定（第 1 堂寫的）', gintro: '名稱、頭像、簡介都會碰到這個決定。它不是永遠的，先選 3 個月。', fields: [
+          { id: 'ex', type: 'area', label: '我的曝光決定', hint: '露臉或不露臉、本名或化名、有沒有「絕對不想讓人知道」的事' },
+          { id: 'ex_chg', type: 'radio', label: '這三週過去，我想不想改？', options: ['不改', '想改一點', '想大改'] },
+          { id: 'ex_why', type: 'area', label: '如果想改，為什麼？', optional: true },
+        ]},
+      ],
+    },
+    {
+      id: 'r2', tab: '② 看別人的門面', when: '會談中一起做',
+      title: '看別人的門面：3 秒測試',
+      intro: '每個帳號只看 5 秒，然後蓋起來再回答。你要練的是「陌生人的眼睛」，之後才看得懂自己的主頁。',
+      groups: [1, 2, 3].map(n => ({
+        title: `帳號 ${n}`, fields: [
+          { id: `ac${n}`, type: 'text', label: '帳號', hint: '寫名稱就好，不用貼連結', optional: true },
+          { id: `ac${n}_who`, type: 'area', label: '我 5 秒看到的：他在幫誰？幫什麼？' },
+          { id: `ac${n}_follow`, type: 'text', label: '我會追蹤嗎？為什麼？' },
+          { id: `ac${n}_key`, type: 'text', label: '讓我 3 秒就懂的是哪一句？', hint: '如果看不懂，就寫「看不懂」' },
+        ],
+      })).concat([
+        { title: '看完之後', fields: [
+          { id: 'fnd', type: 'area', label: '好的門面有什麼共同點？', hint: '至少寫 2 個' },
+        ]},
+      ]),
+    },
+    {
+      id: 'r3', tab: '③ 名稱與頭像', when: '會談中做決定',
+      title: '名稱與頭像：先選一個用 3 個月',
+      intro: '不求完美，先選一個。改名之後舊追蹤者會認不出你，所以這 3 個月先固定，第 6 週期中檢查時再評估。頭像的任務是「被辨認」，不是好看。',
+      groups: [
+        { title: '帳號名稱', gintro: '帳號 ID：短、好念、好打，各平台盡量一致。顯示名稱：「名字＋我做什麼」，讓人光看名稱就知道方向。', fields: [
+          { id: 'id_c', type: 'area', label: '帳號 ID 候選', hint: '寫 3 個，念出聲' },
+          { id: 'id_pick', type: 'text', label: '我選的帳號 ID' },
+          { id: 'nm_c', type: 'area', label: '顯示名稱候選', hint: '寫 2 個，格式：名字＋我做什麼' },
+          { id: 'nm_show', type: 'text', label: '我選的顯示名稱' },
+        ]},
+        { title: '頭像', gintro: '縮到手機上拇指大，還認得出來嗎？', fields: [
+          { id: 'av_type', type: 'radio', label: '頭像的做法', options: ['露臉照', '半露臉／背影／剪影', '插畫／手繪／物件', '字標（名字或一個字）', '還沒決定'] },
+          { id: 'av_desc', type: 'area', label: '我要用的圖片或做法', hint: '照片：是哪一張？插畫或字標：長什麼樣子、什麼顏色？' },
+        ]},
+        { title: '隱私快速檢查', fields: [
+          { id: 'pv', type: 'radio', label: '名稱與頭像有沒有透露住處、公司、家人？', options: ['沒有', '有，要改'] },
+          { id: 'pv_note', type: 'area', label: '要改的地方', optional: true },
+        ]},
+      ],
+    },
+    {
+      id: 'r4', tab: '④ 簡介', when: '會談中先自己寫',
+      title: '主頁簡介：三行',
+      intro: '先自己寫主版，之後才請 AI 給不同角度。用前兩週的材料，用受眾的話，只寫真的有的東西。',
+      cards: [
+        { title: '三行結構', items: [
+          '第 1 行：我幫誰做什麼（定位 v1 的短版，最好有一句受眾語言）',
+          '第 2 行：為什麼可以信我（一個真實的經歷，不是頭銜）',
+          '第 3 行：追蹤的理由或下一步',
+        ], note: '寫完先砍一半。不寫保證結果（「保證」「月入多少」），不暗示療效；還沒有的東西（案例、人數）不要寫。' },
+      ],
+      groups: [
+        { title: '平台', fields: [
+          { id: 'platform', type: 'text', label: '我的主平台', hint: '例如 Threads、Instagram' },
+          { id: 'limit', type: 'text', label: '簡介字數上限', hint: '以平台實際為準；不確定就先寫 150' },
+        ]},
+        { title: '主版', fields: [
+          { id: 'bio1', type: 'area', label: '第 1 行：我幫誰做什麼', hint: '帶一句受眾語言' },
+          { id: 'bio2', type: 'area', label: '第 2 行：為什麼可以信我', hint: '一個真實的經歷' },
+          { id: 'bio3', type: 'area', label: '第 3 行：追蹤理由或下一步' },
+          { id: 'bio_n', type: 'text', label: '總字數', optional: true },
+        ]},
+        { title: '備用版', gintro: '換一個角度寫，之後可以測試哪一版比較好。', fields: [
+          { id: 'alt', type: 'area', label: '備用版全文', optional: true },
+        ]},
+        { title: '檢查', fields: [
+          { id: 'ck1', type: 'radio', label: '第 1 行，我前兩週寫的那個人看到，會覺得「這是在說我」嗎？', options: ['會', '不確定', '不會'] },
+          { id: 'ck2', type: 'radio', label: '每一句都是真的、沒有放大？', options: ['是', '還不是'] },
+          { id: 'ck3', type: 'radio', label: '沒有保證結果或療效的用語？', options: ['沒有', '有，要改'] },
+        ]},
+      ],
+    },
+    {
+      id: 'r5', tab: '⑤ 語氣指南', when: '會談中寫第一版',
+      title: '語氣指南：你說話的方式',
+      intro: '語氣是你說話的方式，不是你要變成的人。從你的語言庫和平常說話的方式找，不要套模板。念出來連自己都覺得彆扭，就是太用力了。',
+      groups: [
+        { title: '四條滑桿', fields: [
+          { id: 'sl1', type: 'radio', label: '像朋友 ←→ 像老師', options: ['偏像朋友', '中間', '偏像老師'] },
+          { id: 'sl2', type: 'radio', label: '溫柔 ←→ 直接', options: ['偏溫柔', '中間', '偏直接'] },
+          { id: 'sl3', type: 'radio', label: '幽默 ←→ 認真', options: ['偏幽默', '中間', '偏認真'] },
+          { id: 'sl4', type: 'radio', label: '口語 ←→ 書面', options: ['偏口語', '中間', '偏書面'] },
+        ]},
+        { title: '我會這樣說（5 個詞或句型）', gintro: '寫詞和句型，不要寫形容詞。從語言庫、平常說話挑。', fields: [1, 2, 3, 4, 5].map(n => ({ id: 'say' + n, type: 'text', label: `第 ${n} 個` })) },
+        { title: '我不會這樣說（5 個詞或句型）', gintro: '例如「賦能」「底層邏輯」「一定要」。', fields: [1, 2, 3, 4, 5].map(n => ({ id: 'no' + n, type: 'text', label: `第 ${n} 個` })) },
+        { title: '示範與樣本', fields: [
+          { id: 'tone_demo', type: 'area', label: '用我的語氣，把簡介第 2 行改寫一次' },
+          { id: 'tone_sample', type: 'area', label: '我平常傳給朋友的一則訊息，或我貼過的一則貼文', hint: '之後給 AI 看，讓它知道你實際怎麼說話', optional: true },
+        ]},
+      ],
+    },
+    {
+      id: 'r6', tab: '⑥ 用 AI 試試', when: '非同步做（會談只示範 3 秒測試）',
+      title: '用 AI 試試：把你的材料變成草稿',
+      intro: 'AI 是輔助工具，不是代筆。順序是：先自己寫，再給 AI，最後念出聲、改成你的話。你的材料越具體，AI 越寫得像你，越看不出 AI 味。',
+      cards: [
+        { title: '自己會寫 prompt：五格框架', intro: '每個 prompt 都是這樣拼出來的。學會這五格，你可以自己改寫任何一個。',
+          table: [
+            ['格', '寫什麼', '本堂例子'],
+            ['① 角色', 'AI 現在是誰', '「你是我的自媒體陪跑助理，像教練，不是代筆」'],
+            ['② 我的材料', '把你已經寫好的貼進去', '定位 v1、語言庫、故事'],
+            ['③ 任務', '這次只要它做一件事', '「寫 3 版主頁簡介，三個角度」'],
+            ['④ 限制', '不准做什麼、一定要做什麼', '「只用我的材料；不寫保證結果；不要排比」'],
+            ['⑤ 輸出格式', '要什麼形狀', '「表格，每版一列，標出用了哪段材料」'],
+          ],
+          note: '限制要寫得具體：「不要太 AI」沒用，「不要用『賦能』，不要三個一組的排比」才有用。材料放前面、任務放後面。一次只做一件事。' },
+        { title: '「AI 味」檢查表', intro: 'AI 味不是 AI 寫的，而是材料空、沒場景、不是你的話。拿到輸出後逐項問自己：', items: [
+          '有沒有「賦能」「底層邏輯」「在這個快速變化的時代」這種你不會講的詞？',
+          '每一段開頭、結尾的句型是不是都一樣？',
+          '有沒有三個一組的排比（「更自信、更自在、更成功」）？',
+          '有沒有空泛的結尾，像「讓我們一起成為更好的自己」？',
+          '有沒有一句，是你自己都不確定是不是真的？',
+          '念出聲，有哪一句卡住？（卡住就是不像你，換成你平常會說的話）',
+          '把它放在你平常的貼文旁邊，會不會突然像換了一個人？',
+        ], note: '貼給 AI 之前，請刪掉真名、公司、客戶或別人的個資。免費版 AI 可能拿對話改進模型，不想被使用，請到工具的設定裡確認與關閉。' },
+      ],
+      prompts: [
+        {
+          title: 'Prompt ① 主頁簡介：3 版', when: '先自己寫完主版再用',
+          purpose: '用你前兩週的材料，請 AI 從三個角度各寫一版簡介，並標出每一句用了你的哪一段材料。',
+          steps: ['先在「④ 簡介」寫好你的主版。', '按下面「複製 prompt（已帶入我的內容）」，到 AI 貼上。', '每一行找出對應的材料，找不到的就刪或改；念出聲，彆扭的換成你的話。', '三版可以混著用，並在下面的「AI 使用紀錄」記下你選了哪一版、改了什麼。'],
+          materials: [
+            { label: '我的定位 v1', ids: ['v1'] },
+            { label: '受眾輪廓', src: L2, ids: ['a_name', 'a_age', 'a_state', 'a_say'] },
+            { label: '語言庫', src: L2, ids: lgIds, numbered: true },
+            { label: '個人故事', src: L2, ids: ['sy1', 'sy2', 'sy3', 'sy4'] },
+            { label: '故事裡我最喜歡的一句', ids: ['st_fav'] },
+            { label: '語言庫裡最像我的 3 條', ids: ['lg_fav'] },
+            { label: '我的曝光決定', ids: ['ex'] },
+            { label: '我手寫的簡介主版', ids: ['bio1', 'bio2', 'bio3'] },
+            { label: '我會這樣說', ids: ['say1', 'say2', 'say3', 'say4', 'say5'] },
+            { label: '我不會這樣說', ids: ['no1', 'no2', 'no3', 'no4', 'no5'] },
+          ],
+          body: `你是我的自媒體陪跑助理，像教練，不是代筆。你的工作是把我「已經寫好的材料」整理成主頁簡介，不是替我編故事。
+
+【規則】
+1. 只能使用我的材料裡有的內容。沒寫的經歷、數字、案例、頭銜，一律不要加。
+2. 簡介第 1 行要用到我語言庫裡的一句話（用原話或幾乎原話）。
+3. 不寫保證結果（例如「保證」「一定」「月入多少」），不暗示療效或醫療效果（例如「治好」「改善疾病」）。
+4. 先檢查材料：如果缺少「定位」「語言庫」「故事」其中一項，先問我最多 3 個問題，等我回答再寫。
+5. 語氣依照我的語氣；沒有的話，用口語、不說教。
+6. 不要出現「賦能」「底層邏輯」「在這個快速變化的時代」這類我不會說的詞；不要三段排比；不要空泛的結尾（例如「一起成為更好的自己」）。
+
+【任務】
+寫 3 版主頁簡介，每版 3 行，總字數 {{limit|150}} 字以內。我的平台是 {{platform|（我使用的平台）}}。三版從不同角度切入：
+- 版本 A：從「我幫誰」切入
+- 版本 B：從「我的經歷」切入
+- 版本 C：從「受眾心裡的那句話」切入
+三行結構：第 1 行＝我幫誰做什麼；第 2 行＝為什麼可以信我（一個真實經歷）；第 3 行＝追蹤理由或下一步。
+我已經手寫了一個主版，請你把它當參考，不是照抄，也不是推翻。
+
+【輸出格式】
+用表格，每版一列：簡介全文｜第 1 行用了我的哪一段材料｜第 2 行用了哪一段｜字數。
+寫完先自己檢查一次有沒有「AI 味」（空話、排比、我不會說的詞），有就改掉再給我。
+最後用兩句話告訴我：哪一版最像我的語氣？哪一版離我的材料最遠、需要我確認是不是真的？`,
+        },
+        {
+          title: 'Prompt ② 我的語氣＋助理設定（參考）', when: '非同步，助理設定是選做',
+          purpose: '一次做兩件事：整理你「實際怎麼說話」，並草擬一份 AI 助理設定給你參考。助理設定不是必做，之後想要專屬助理時再用。',
+          steps: ['按下面「複製 prompt（已帶入我的內容）」，到 AI 貼上。', '語氣整理：對照「⑤ 語氣指南」，以你自己的感覺為準。AI 的「我可能不會這樣說」是推測，請自己補。', '助理設定：當成參考，可以貼進 Claude Project 或 ChatGPT 的自訂指令試一次，也可以先放著。', '如果它說材料不夠，多貼一段你平常傳給朋友的訊息，再重新複製。'],
+          materials: [
+            { label: '個人故事', src: L2, ids: ['sy1', 'sy2', 'sy3', 'sy4'] },
+            { label: '語言庫', src: L2, ids: lgIds, numbered: true },
+            { label: '我的定位 v1', ids: ['v1'] },
+            { label: '受眾輪廓', src: L2, ids: ['a_name', 'a_age', 'a_state', 'a_say'] },
+            { label: '受眾最痛的 3 個煩惱', src: L2, ids: ['c_top'] },
+            { label: '我平常傳給朋友的一則訊息或貼文', ids: ['tone_sample'] },
+            { label: '我已填的四條滑桿', ids: ['sl1', 'sl2', 'sl3', 'sl4'] },
+            { label: '我會這樣說', ids: ['say1', 'say2', 'say3', 'say4', 'say5'] },
+            { label: '我不會這樣說', ids: ['no1', 'no2', 'no3', 'no4', 'no5'] },
+            { label: '用我的語氣寫的簡介第 2 行', ids: ['tone_demo'] },
+          ],
+          body: `你是語氣觀察員，也是我的設定助手。請只根據我自己寫的文字，做兩件事。
+
+【規則】
+- 每個語氣結論都要引用我文字裡的原句當證據（用「」標出）。找不到證據的，就不要寫。
+- 不要用形容詞當結論（例如「真誠」「溫暖」「專業」），要寫「詞」和「句型」。
+- 不要美化，不要推薦「更好」的語氣，只描述我實際怎麼說。
+- 如果我給的文字少於 300 字，先告訴我材料不夠，再問我要不要多貼一段平常的訊息。
+
+【任務一：整理我的語氣】
+1. 四條滑桿的位置，每條各附 1 句原文證據：
+   像朋友 ←→ 像老師／溫柔 ←→ 直接／幽默 ←→ 認真／口語 ←→ 書面
+2. 「我會這樣說」：8 個我愛用的詞或句型（附原句）
+3. 「我可能不會這樣說」：5 個和我文字風格相反的說法（請標明這是推測）
+
+【任務二：草擬一份「AI 助理設定」給我參考】
+用任務一的結果與我的材料，寫成可以貼到 AI「自訂指令」的一段文字，包含：
+- 關於我（定位、曝光決定、故事精簡版，約 100 字）
+- 我的受眾（他是誰、他常說的話 5–10 條、最痛的煩惱）
+- 我的語氣（滑桿、會說、不會說）
+- 工作規則：先問我一個問題再給初稿；只用我給的材料、不編經歷與數字；受眾語言優先放開頭與標題；不寫保證結果與療效；凡是你自己加的句子用【請確認】標出來；材料不夠就說不夠；預設繁體中文、口語、不說教、不要有 AI 味的空話與排比
+這份只是參考，請在最後加一句：「這份是依你現有的材料草擬的，你可以刪減、改寫，或之後材料更多再重新產生。」`,
+        },
+        {
+          title: 'Prompt ③ 3 秒測試（陌生訪客）', when: '會談中示範，約 3 分鐘',
+          purpose: '請 AI 當一個完全不認識你的陌生人，只看你的名稱和簡介前兩行，說出他看到什麼。它比真人客氣，所以只是前測，真人測試仍然要做。',
+          warn: '一定要開新的對話，不能先貼過任何你的材料，否則 AI 會「知道」答案。',
+          steps: ['先在「③ 名稱與頭像」填好顯示名稱，在「④ 簡介」填好前兩行。', '開一個全新的 AI 對話。', '按「複製 prompt（已帶入我的內容）」貼上。', '對照：AI 說的「在幫誰」，和你想的一樣嗎？說得很籠統，就是第 1 行太抽象，回語言庫找一句。'],
+          materials: [
+            { label: '顯示名稱', ids: ['nm_show'] },
+            { label: '簡介前兩行', ids: ['bio1', 'bio2'] },
+          ],
+          body: `你是一位剛剛滑到我主頁的陌生人。你完全不認識我，也不知道我的背景。
+只根據下面的名稱和簡介前兩行，用 3 秒的感覺回答：
+1. 這個人在幫誰？
+2. 幫他做什麼？
+3. 我會不會追蹤？為什麼？
+4. 哪一個詞或哪一句我看不懂，或覺得很普通？
+不要猜測沒有寫出來的東西。如果看不出來，就直接說看不出來。`,
+        },
+      ],
+      groups: [
+        { title: 'AI 使用紀錄（選填）', gintro: '你改了什麼，就是你的聲音。這裡記下來，老師回饋時看得到。', fields: [
+          { id: 'ai_tool', type: 'text', label: '我用了哪個 AI 工具？', hint: '例如 ChatGPT、Claude、Gemini', optional: true },
+          { id: 'ai_used', type: 'text', label: '我用了哪幾個 prompt？', optional: true },
+          { id: 'ai_pick', type: 'area', label: 'AI 給的版本，我選了哪一個？為什麼？', optional: true },
+          { id: 'ai_chg', type: 'area', label: '我改了哪些地方？為什麼？', hint: '這一題最重要', optional: true },
+          { id: 'ai_fake', type: 'radio', label: 'AI 有沒有寫出我沒做過、沒說過的事？', options: ['沒有', '有，我刪掉了'], optional: true },
+          { id: 'ai_like', type: 'scale', label: '這份輸出有多像我？', hint: '1 不像，5 很像', optional: true },
+        ]},
+      ],
+    },
+    {
+      id: 'r7', tab: '⑦ 本週作業', when: '做完再傳給老師',
+      title: '本週作業',
+      intro: '不訂統一的交件日，請自己和老師約哪一天能交。第一版就好，不用完美，第 6 週期中檢查時會再看一次。如果設定到帳號上讓你很緊張，可以先設成私人，再決定何時公開。',
+      tipsTitle: '本週要完成',
+      tips: [
+        '把名稱、頭像、簡介實際設定到帳號上（還沒有帳號的人：註冊並設定完成），截圖給老師',
+        '語氣指南補完（可以先用 Prompt ② 整理，再自己改）',
+        '找 3 個陌生人或不太熟的朋友做 3 秒測試，記下他們說的原話（下面三張卡）',
+        '週日回報',
+        '選做：用 Prompt ① 產生簡介 3 版，和你的主版比較',
+        '選做：視覺風格、主頁配置',
+      ],
+      groups: [
+        { title: '選做：視覺風格', fields: [
+          { id: 'vs1', type: 'text', label: '2 個主色', optional: true },
+          { id: 'vs2', type: 'text', label: '字體的感覺', hint: '圓潤、俐落、手寫…', optional: true },
+          { id: 'vs3', type: 'text', label: '版型方向', hint: '滿版圖、文字卡、照片…', optional: true },
+        ]},
+        { title: '選做：主頁配置', fields: [
+          { id: 'pin', type: 'area', label: '置頂貼文要放什麼', optional: true },
+          { id: 'hl', type: 'area', label: '精選動態要有哪 3 個分類', optional: true },
+          { id: 'lnk', type: 'text', label: '主頁連結要放什麼', optional: true },
+        ]},
+      ],
+      repeat: {
+        count: 3, cardTitle: '3 秒測試（找真人）', fullCount: 3, basicFields: 4,
+        fields: [
+          { id: 'tw', type: 'text', label: '測試的人', hint: '不用寫名字，寫「朋友 A」', optional: true },
+          { id: 'says', type: 'area', label: '他說我在幫誰、幫什麼' },
+          { id: 'follow', type: 'text', label: '他會追蹤嗎？為什麼？', optional: true },
+          { id: 'tchg', type: 'area', label: '我想改哪裡', optional: true },
+        ],
+      },
+    },
+    {
+      id: 'r8', tab: '⑧ 週日回報', when: '每週日晚上，3 分鐘',
+      title: '週日回報',
+      intro: '每週日填一次。下週開始新的一份之前，先下載備份。',
+      groups: [
+        { title: '這週的我', fields: [
+          { id: 'w1', type: 'area', label: '這週做了什麼？', hint: '完成的作業、發的內容' },
+          { id: 'w2', type: 'text', label: '這週實際花了幾小時？', hint: '和你預估的差多少？' },
+          { id: 'w3', type: 'area', label: '這週最卡的是什麼？' },
+          { id: 'w4', type: 'area', label: '這週有什麼讓你驚喜或有成就感的事？' },
+          { id: 'w5', type: 'area', label: '下週我要完成…' },
+          { id: 'w6', type: 'scale', label: '心情溫度', hint: '1 很低，5 很好' },
+          { id: 'w7', type: 'area', label: '想補充的', optional: true },
+        ]},
+      ],
+    },
+  ],
+};
+
+/* ============================ 程式 ============================ */
+const $ = (s, r = document) => r.querySelector(s);
+let state = { values: {}, tab: 'p1' };
+let saveTimer = null;
+let dlCap = null;
+let pendingYes = null;
+
+function loadState() {
+  try { const s = localStorage.getItem(COURSE.key); if (s) state = Object.assign(state, JSON.parse(s)); } catch (e) {}
+}
+function setStatus(t) { $('#status').textContent = t; }
+function saveNow() {
+  try { localStorage.setItem(COURSE.key, JSON.stringify(state)); setStatus('已自動儲存在這台裝置　' + new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })); }
+  catch (e) { setStatus('這個瀏覽器無法自動儲存，請用「複製全部文字」或「下載備份」保存'); }
+}
+function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 400); }
+function setVal(id, v) { state.values[id] = v; scheduleSave(); updateProgress(); }
+function isFilled(v) { return Array.isArray(v) ? v.length > 0 : (typeof v === 'boolean' ? v : !!(v && String(v).trim())); }
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    if (k === 'class') e.className = attrs[k];
+    else if (k === 'text') e.textContent = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  }
+  kids.flat().forEach(c => c != null && e.append(c));
+  return e;
+}
+
+function labelNode(f) {
+  const frag = document.createDocumentFragment();
+  frag.append(f.label);
+  if (f.optional) frag.append(el('span', { class: 'opt', text: '（選填）' }));
+  if (f.hint) frag.append(' ', el('span', { class: 'hint', text: f.hint }));
+  return frag;
+}
+
+function renderField(f, idOverride) {
+  const id = idOverride || f.id;
+  const wrap = el('div', { class: 'field' });
+  const v = state.values[id];
+  if (f.type === 'text' || f.type === 'area') {
+    wrap.append(el('label', { for: 'f_' + id }, labelNode(f)));
+    const inp = f.type === 'text' ? el('input', { type: 'text', id: 'f_' + id }) : el('textarea', { id: 'f_' + id });
+    if (f.placeholder) inp.setAttribute('placeholder', f.placeholder);
+    inp.value = v || '';
+    inp.addEventListener('input', () => { setVal(id, inp.value); if (f.type === 'area') fit(inp); });
+    wrap.append(inp);
+    if (f.type === 'area') setTimeout(() => fit(inp), 0);
+    if (f.counter) {
+      const cnt = el('p', { class: 'hint' });
+      const upd = () => { cnt.textContent = `${[...(inp.value || '').replace(/\s/g, '')].length} / 約 ${f.counter} 字`; };
+      inp.addEventListener('input', upd); upd(); wrap.append(cnt);
+    }
+  } else if (f.type === 'radio' || f.type === 'scale') {
+    const opts = f.type === 'scale' ? ['1', '2', '3', '4', '5'] : f.options;
+    const fs = el('fieldset', null, el('legend', null, labelNode(f)));
+    const box = el('div', { class: 'choices' });
+    opts.forEach(o => {
+      const r = el('input', { type: 'radio', name: 'f_' + id, value: o });
+      r.checked = v === o;
+      r.addEventListener('change', () => setVal(id, o));
+      box.append(el('label', { class: 'choice' }, r, o));
+    });
+    fs.append(box); wrap.append(fs);
+  } else if (f.type === 'check') {
+    const fs = el('fieldset', null, el('legend', null, labelNode(f)));
+    const box = el('div', { class: 'choices' });
+    f.options.forEach(o => {
+      const c = el('input', { type: 'checkbox', value: o });
+      c.checked = Array.isArray(v) && v.includes(o);
+      c.addEventListener('change', () => {
+        const cur = new Set(state.values[id] || []);
+        c.checked ? cur.add(o) : cur.delete(o);
+        setVal(id, f.options.filter(x => cur.has(x)));
+      });
+      box.append(el('label', { class: 'choice' }, c, o));
+    });
+    fs.append(box); wrap.append(fs);
+  }
+  return wrap;
+}
+function fit(t) { t.style.height = 'auto'; t.style.height = Math.max(84, t.scrollHeight + 2) + 'px'; }
+
+function countedFields(part) {
+  const out = [];
+  (part.groups || []).forEach(g => g.fields.forEach(f => { if (!f.optional) out.push({ id: f.id, f }); }));
+  if (part.repeat) {
+    const r = part.repeat;
+    for (let n = 1; n <= r.count; n++) {
+      r.fields.forEach((f, i) => {
+        const basicOnly = n > r.fullCount;
+        if (f.optional) return;
+        if (!basicOnly || i < r.basicFields) out.push({ id: `${part.id}_${n}_${f.id}`, f });
+      });
+    }
+  }
+  return out;
+}
+function saveOverall(pct) {
+  try {
+    const k = 'smcourse-progress';
+    const o = JSON.parse(localStorage.getItem(k) || '{}');
+    o[COURSE.key] = { pct, at: Date.now() };
+    localStorage.setItem(k, JSON.stringify(o));
+  } catch (e) {}
+}
+function renderNav() {
+  const n = COURSE.nav;
+  if (!n) return;
+  ['topnav', 'botnav'].forEach(id => {
+    const box = $('#' + id);
+    if (!box) return;
+    box.replaceChildren();
+    const left = el('span', null, el('a', { href: withCode(n.home), text: '← 回到總覽' }));
+    if (n.prev) left.append('　', el('a', { href: withCode(n.prev.href), text: '‹ ' + n.prev.label }));
+    box.append(left);
+    if (n.next) box.append(el('a', { href: withCode(n.next.href), text: n.next.label + ' ›' }));
+  });
+}
+function updateProgress() {
+  let totalAll = 0, doneAll = 0;
+  COURSE.parts.forEach(p => {
+    const list = countedFields(p);
+    const done = list.filter(x => isFilled(state.values[x.id])).length;
+    totalAll += list.length; doneAll += done;
+    const pct = list.length ? Math.round(done / list.length * 100) : 0;
+    const node = $(`#tab_${p.id} .pct`);
+    if (node) node.textContent = list.length ? pct + '%' : '';
+  });
+  const overall = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
+  saveOverall(overall);
+  const hf = $('#heroFill'), hp = $('#heroPct');
+  if (hf) hf.style.width = overall + '%';
+  if (hp) hp.textContent = overall === 0 ? '尚未開始' : (overall >= 100 ? '全部完成 🎉' : '已完成 ' + overall + '%');
+}
+
+
+/* ---------- 「用 AI 試試」：把學習單材料和 prompt 一起複製 ---------- */
+// 材料來源：self＝這一堂，其他＝同一個瀏覽器裡別堂的 localStorage key（例如 smcourse-lesson2-v1）
+function otherState(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
+function matValue(src, id) {
+  const s = src === 'self' ? state : otherState(src);
+  return valString(s && s.values && s.values[id]);
+}
+function fillTokens(text) {
+  return text.replace(/\{\{(\w+)(?:\|([^}]*))?\}\}/g, (m, id, fb) => matValue('self', id) || fb || '（未填）');
+}
+function buildPromptText(pr, withMaterials) {
+  let out = fillTokens(pr.body).trim();
+  const missing = [];
+  if (withMaterials && pr.materials && pr.materials.length) {
+    const parts = [];
+    pr.materials.forEach(m => {
+      const vals = m.ids.map(id => matValue(m.src || 'self', id)).filter(Boolean);
+      if (!vals.length) { missing.push(m.label); return; }
+      const body = m.numbered ? vals.map((v, i) => (i + 1) + '. ' + v).join('\n') : vals.join('\n');
+      parts.push('## ' + m.label + '\n' + body);
+    });
+    out += '\n\n【我的材料】\n' + (parts.length ? parts.join('\n\n') : '（目前學習單裡還沒有填寫的材料）');
+  }
+  return { text: out, missing };
+}
+async function copyPrompt(pr, withMaterials) {
+  const r = buildPromptText(pr, withMaterials);
+  const tail = withMaterials && r.missing.length ? '　還沒有這些材料：' + r.missing.join('、') + '（AI 會先問你；第 2 堂的內容要在同一個瀏覽器才讀得到）' : '';
+  try { await navigator.clipboard.writeText(r.text); setStatus('已複製「' + pr.title + '」，去貼到 AI 吧。' + tail); }
+  catch (e) { showExport(r.text, '無法自動複製，請把下面的文字全部選取後自己複製，再貼到 AI。'); }
+}
+function renderPrompt(pr) {
+  const d = el('details', { class: 'card ai' });
+  d.append(el('summary', null, el('span', { text: pr.title }), el('span', { class: 'hint', text: pr.when || '' })));
+  const body = el('div', { class: 'body' });
+  if (pr.purpose) body.append(el('p', { class: 'intro', text: pr.purpose }));
+  if (pr.warn) body.append(el('p', { class: 'aiwarn', text: pr.warn }));
+  if (pr.steps) { const ol = el('ol', { class: 'steps' }); pr.steps.forEach(s => ol.append(el('li', { text: s }))); body.append(ol); }
+  const row = el('div', { class: 'row' });
+  const hasMat = !!(pr.materials && pr.materials.length);
+  const b1 = el('button', { class: 'primary', type: 'button', text: hasMat ? '複製 prompt（已帶入我的內容）' : '複製 prompt' });
+  b1.addEventListener('click', () => copyPrompt(pr, true));
+  row.append(b1);
+  if (hasMat) {
+    const b2 = el('button', { type: 'button', text: '只複製 prompt（不含材料）' });
+    b2.addEventListener('click', () => copyPrompt(pr, false));
+    row.append(b2);
+  }
+  body.append(row);
+  const pv = el('details', { class: 'more' }, el('summary', { text: '看 prompt 全文' }));
+  const pre = el('pre', { class: 'promptpre' });
+  pv.addEventListener('toggle', () => { if (pv.open) pre.textContent = buildPromptText(pr, true).text; });
+  pv.append(pre); body.append(pv);
+  d.append(body);
+  return d;
+}
+
+function renderPart(p) {
+  const panel = el('section', { class: 'panel', id: 'panel_' + p.id, role: 'tabpanel', 'aria-labelledby': 'tab_' + p.id });
+  panel.append(el('span', { class: 'when', text: p.when }), el('h2', { text: p.title }), el('p', { class: 'intro', text: p.intro }));
+  if (p.tips) {
+    const ul = el('ul', { class: 'clean' }); p.tips.forEach(t => ul.append(el('li', { text: t })));
+    panel.append(el('div', { class: 'group' }, el('h3', { text: p.tipsTitle || '怎麼找' }), ul));
+  }
+  (p.cards || []).forEach(c => {
+    const box = el('div', { class: 'group' }, el('h3', { text: c.title }));
+    if (c.intro) box.append(el('p', { class: 'gintro', text: c.intro }));
+    if (c.table) {
+      const t = el('table', { class: 'frame' });
+      c.table.forEach((row, i) => t.append(el('tr', null, ...row.map(x => el(i === 0 ? 'th' : 'td', { text: x })))));
+      box.append(el('div', { class: 'tablewrap' }, t));
+    }
+    if (c.items) { const ul = el('ul', { class: 'clean' }); c.items.forEach(t => ul.append(el('li', { text: t }))); box.append(ul); }
+    if (c.note) box.append(el('p', { class: 'hint', text: c.note }));
+    panel.append(box);
+  });
+  (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
+  (p.groups || []).forEach(g => {
+    const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
+    if (g.gintro) box.append(el('p', { class: 'gintro', text: g.gintro }));
+    g.fields.forEach(f => box.append(renderField(f)));
+    panel.append(box);
+  });
+  if (p.repeat) {
+    const r = p.repeat;
+    for (let n = 1; n <= r.count; n++) {
+      const full = n <= r.fullCount;
+      const d = el('details', { class: 'card' });
+      if (n === 1) d.setAttribute('open', '');
+      d.append(el('summary', null, el('span', { text: `${r.cardTitle} ${n}` }), el('span', { class: 'hint', text: full ? '完整拆解' : '基本資料即可' })));
+      const body = el('div', { class: 'body' });
+      const more = el('details', { class: 'more' }, el('summary', { text: '展開完整拆解欄位（選填）' }));
+      r.fields.forEach((f, i) => {
+        const node = renderField(f, `${p.id}_${n}_${f.id}`);
+        (full || i < r.basicFields ? body : more).append(node);
+      });
+      if (!full) body.append(more);
+      d.append(body); panel.append(d);
+    }
+  }
+  return panel;
+}
+
+function build() {
+  renderNav();
+  const ti = COURSE.title.split('：');
+  if (ti.length === 2) { const h = $('#title'); h.replaceChildren(el('span', { class: 'lno', text: ti[0] }), ti[1]); }
+  else $('#title').textContent = COURSE.title;
+  $('#subtitle').textContent = COURSE.subtitle;
+  const tabs = $('#tabs'), panels = $('#panels');
+  tabs.replaceChildren(); panels.replaceChildren();
+  COURSE.parts.forEach(p => {
+    const b = el('button', { class: 'tab', id: 'tab_' + p.id, role: 'tab', 'aria-selected': 'false' }, p.tab, el('span', { class: 'pct', text: '0%' }));
+    b.addEventListener('click', () => select(p.id));
+    tabs.append(b);
+    panels.append(renderPart(p));
+  });
+  select(COURSE.parts.some(p => p.id === state.tab) ? state.tab : COURSE.parts[0].id, true);
+  updateProgress();
+}
+function select(id, silent) {
+  state.tab = id;
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.id === 'tab_' + id ? 'true' : 'false'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel_' + id));
+  document.querySelectorAll('#panel_' + id + ' textarea').forEach(fit);
+  if (!silent) { scheduleSave(); window.scrollTo({ top: 0 }); }
+}
+
+/* ---------- 匯出 ---------- */
+function valText(f, v) {
+  const s = Array.isArray(v) ? v.join('、') : (v || '').toString().trim();
+  return `**${f.label}**\n\n${s || '（未填）'}`;
+}
+function toMarkdown() {
+  const d = new Date().toLocaleDateString('zh-TW');
+  let md = `# ${COURSE.title}：我的學習單\n\n> 匯出日期：${d}\n\n`;
+  COURSE.parts.forEach(p => {
+    md += `## ${p.title}\n\n`;
+    (p.groups || []).forEach(g => {
+      md += `### ${g.title}\n\n`;
+      g.fields.forEach(f => { md += valText(f, state.values[f.id]) + '\n\n'; });
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        md += `### ${p.repeat.cardTitle} ${n}\n\n`;
+        p.repeat.fields.forEach(f => { md += valText(f, state.values[`${p.id}_${n}_${f.id}`]) + '\n\n'; });
+      }
+    }
+  });
+  return md;
+}
+function stamp() { const d = new Date(); return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`; }
+
+function showExport(text, msg) {
+  $('#exportMsg').textContent = msg;
+  const ta = $('#exportText'); ta.value = text;
+  $('#exportBox').hidden = false;
+  ta.focus(); ta.select();
+}
+const inArtifact = !!(window.claude && window.claude.use);
+function saveViaLink(name, text) {
+  const type = name.endsWith('.json') ? 'application/json' : 'text/markdown';
+  const blob = new Blob([text], { type: type + ';charset=utf-8' });
+  const a = el('a', { href: URL.createObjectURL(blob), download: name });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function offerFile(name, text, okMsg) {
+  if (dlCap) {
+    try { await dlCap.save({ filename: name, data: text }); setStatus(okMsg); return; }
+    catch (e) {
+      if (e && e.code === 'declined') { setStatus('已取消下載'); return; }
+    }
+  } else if (!inArtifact) {
+    saveViaLink(name, text); setStatus(okMsg); return;
+  }
+  showExport(text, '這個環境無法直接下載，請把下面的文字全部複製，貼到自己的筆記或訊息裡保存。');
+}
+async function copyAll() {
+  const t = toMarkdown();
+  try { await navigator.clipboard.writeText(t); setStatus('已複製，可以貼到 Notion、LINE 或 Email'); }
+  catch (e) { showExport(t, '無法自動複製，請把下面的文字全部選取後自己複製。'); }
+}
+function askConfirm(msg, yesLabel, onYes) {
+  $('#confirmMsg').textContent = msg; $('#confirmYes').textContent = yesLabel;
+  pendingYes = onYes; $('#confirmBar').hidden = false; $('#confirmNo').focus();
+}
+
+/* ---------- 專屬連結與「提交給老師」 ---------- */
+// 網址帶 ?s=代碼 就代表這是老師發的專屬連結。代碼存起來，之後在總覽、各堂之間跳轉都會帶著。
+const SUBMIT_URL = ((window.SMCOURSE_CONFIG || {}).submitUrl || '').trim();
+function readCode() {
+  let c = '';
+  try { c = new URLSearchParams(location.search).get('s') || ''; } catch (e) {}
+  if (/^[A-Za-z0-9]{4,32}$/.test(c)) { try { localStorage.setItem('smcourse-student', c); } catch (e) {} return c; }
+  try { c = localStorage.getItem('smcourse-student') || ''; } catch (e) { c = ''; }
+  return /^[A-Za-z0-9]{4,32}$/.test(c) ? c : '';
+}
+const STUDENT = SUBMIT_URL ? readCode() : '';
+function withCode(href) { return STUDENT ? href + (href.includes('?') ? '&' : '?') + 's=' + STUDENT : href; }
+function lessonNo() { const m = /lesson(\d+)/.exec(COURSE.key); return m ? Number(m[1]) : 0; }
+function valString(v) { return Array.isArray(v) ? v.join('、') : (v == null ? '' : String(v)).trim(); }
+function buildBlocks() {
+  const out = [];
+  COURSE.parts.forEach(p => {
+    out.push({ t: 'h2', x: p.title });
+    (p.groups || []).forEach(g => {
+      out.push({ t: 'h3', x: g.title });
+      g.fields.forEach(f => out.push({ t: 'q', l: f.label, v: valString(state.values[f.id]) }));
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        const fs = p.repeat.fields.map(f => ({ f, v: valString(state.values[`${p.id}_${n}_${f.id}`]) }));
+        if (!fs.some(x => x.v)) continue;
+        out.push({ t: 'h3', x: `${p.repeat.cardTitle} ${n}` });
+        fs.forEach(x => out.push({ t: 'q', l: x.f.label, v: x.v }));
+      }
+    }
+  });
+  return out;
+}
+function progressNumbers() {
+  let total = 0, done = 0;
+  COURSE.parts.forEach(p => { const l = countedFields(p); total += l.length; done += l.filter(x => isFilled(state.values[x.id])).length; });
+  return { total, done, pct: total ? Math.round(done / total * 100) : 0 };
+}
+let prevSubmit = null;
+function setSubmitInfo(t, bad) { $('#submitInfo').textContent = t; $('#submitBox').classList.toggle('bad', !!bad); }
+async function loadSubmitStatus() {
+  const q = new URLSearchParams({ action: 'status', s: STUDENT, lesson: String(lessonNo()) });
+  try {
+    const r = await (await fetch(SUBMIT_URL + '?' + q)).json();
+    if (!r.ok) { $('#submitWho').textContent = '這個連結的代碼不正確'; setSubmitInfo('請向老師索取你的專屬連結。', true); $('#btnSubmit').disabled = true; return; }
+    $('#submitWho').textContent = r.name + '，這是你的專屬學習單';
+    prevSubmit = r.submitted;
+    setSubmitInfo(r.submitted
+      ? `這一堂你已在 ${r.submitted.last} 提交過（第 ${r.submitted.count} 次）。再提交一次只會更新同一份文件，老師看到的是最新版。`
+      : '填好之後按「提交給老師」。之後想修改，可以再提交一次，不會產生重複的文件。');
+  } catch (e) {
+    $('#submitWho').textContent = '專屬學習單';
+    setSubmitInfo('目前連不上老師的接收端。你填的內容還在這台裝置上，等一下再按「提交給老師」試試。', true);
+  }
+}
+async function doSubmit() {
+  const n = progressNumbers();
+  const btn = $('#btnSubmit');
+  btn.disabled = true; setStatus('正在提交…');
+  try {
+    const body = { s: STUDENT, lesson: lessonNo(), title: COURSE.title, filled: n.done, total: n.total, pct: n.pct, blocks: buildBlocks() };
+    const r = await (await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })).json();
+    if (r.ok) {
+      setStatus(`已提交給老師（第 ${r.count} 次）　${r.at}`);
+      prevSubmit = { count: r.count, last: r.at, filled: n.done };
+      setSubmitInfo(`這一堂最近一次提交：${r.at}（第 ${r.count} 次）。再提交只會更新同一份文件。`);
+    } else {
+      const msg = { empty: '還沒有填任何必填欄位，所以沒有送出，免得蓋掉你之前提交的內容。', invalid: '這個連結的代碼不正確，請向老師索取專屬連結。', busy: '老師的接收端正忙，請稍後再按一次。' }[r.error] || '提交失敗，請稍後再試。你填的內容還在這台裝置上。';
+      setStatus(msg); setSubmitInfo(msg, true);
+    }
+  } catch (e) {
+    const msg = '提交失敗（網路或接收端連不上）。你填的內容還在這台裝置上，請稍後再試。';
+    setStatus(msg); setSubmitInfo(msg, true);
+  } finally { btn.disabled = false; }
+}
+function startSubmit() {
+  const n = progressNumbers();
+  if (n.done <= 0) { setStatus('還沒有填任何必填欄位，先填一些再提交。'); return; }
+  const pf = prevSubmit && prevSubmit.filled || 0;
+  if (pf >= 5 && n.done < pf * 0.6) {
+    askConfirm(`這次只填了 ${n.done} 題，你上次提交時是 ${pf} 題。提交會用現在的內容取代上次那一堂。如果你換了瀏覽器或裝置，請先按「匯入備份」還原再提交。確定要送出嗎？`, '確定送出', doSubmit);
+    return;
+  }
+  doSubmit();
+}
+function setupSubmit() {
+  if (!STUDENT) return;
+  $('#notice').innerHTML = '<span>你填的內容會先<strong>存在這台裝置的瀏覽器裡</strong>。按「提交給老師」才會送給老師；提交之後想改，可以再提交一次，老師看到的永遠是最新版。換裝置或清除瀏覽資料前，請先「下載備份」。</span>';
+  $('#submitBox').hidden = false;
+  $('#submitWho').textContent = '專屬學習單';
+  setSubmitInfo('正在確認你的專屬連結…');
+  $('#btnSubmit').addEventListener('click', startSubmit);
+  loadSubmitStatus();
+}
+
+/* ---------- 下載 PDF：直接產生 PDF 檔，檔名由頁面自己決定 ---------- */
+function pvField(label, v) {
+  const s = Array.isArray(v) ? v.join('、') : (v == null ? '' : String(v)).trim();
+  return el('div', { class: 'pv-f' }, el('div', { class: 'pv-l', text: label }), el('div', { class: s ? 'pv-v' : 'pv-v empty', text: s || '（未填）' }));
+}
+function buildPrintView(pv) {
+  pv.replaceChildren();
+  pv.append(el('h1', { text: COURSE.title }), el('p', { class: 'pv-sub', text: COURSE.subtitle + '　匯出日期：' + new Date().toLocaleDateString('zh-TW') }));
+  COURSE.parts.forEach(p => {
+    pv.append(el('h2', { text: p.title }));
+    (p.groups || []).forEach(g => {
+      pv.append(el('h3', { text: g.title }));
+      g.fields.forEach(f => pv.append(pvField(f.label, state.values[f.id])));
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        const fields = p.repeat.fields.map(f => ({ f, v: state.values[`${p.id}_${n}_${f.id}`] }));
+        if (!fields.some(x => isFilled(x.v))) continue;
+        pv.append(el('h3', { text: `${p.repeat.cardTitle} ${n}` }));
+        fields.forEach(x => pv.append(pvField(x.f.label, x.v)));
+      }
+    }
+  });
+}
+function lessonLabel() { return COURSE.title.split('：')[0].replace(/\s/g, ''); }
+function pdfName() { return lessonLabel() + '學習單-' + stamp() + '.pdf'; }
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (window.html2pdf) return resolve();
+    const s = el('script', { src });
+    s.onload = resolve; s.onerror = () => reject(new Error('script'));
+    document.head.append(s);
+  });
+}
+function startPrint(name, msg) {
+  buildPrintView($('#printView'));
+  const old = document.title;
+  document.title = name.replace(/\.pdf$/, '');
+  const restore = () => { document.title = old; window.removeEventListener('afterprint', restore); };
+  window.addEventListener('afterprint', restore);
+  setStatus(msg);
+  setTimeout(() => window.print(), 80);
+}
+function printFallback(name) {
+  $('#printName').textContent = '建議檔名：' + name;
+  $('#printGuide').hidden = false;
+  startPrint(name, '無法直接產生 PDF，改用列印：目的地選「另存為 PDF」');
+}
+async function downloadPdf() {
+  const name = pdfName();
+  const btn = $('#btnPdf');
+  btn.disabled = true; setStatus('正在產生 PDF，請稍候…');
+  const root = $('#pdfRoot');
+  try {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
+    buildPrintView(root);
+    await new Promise(r => requestAnimationFrame(() => setTimeout(r, 60)));
+    const h = Math.max(1, root.scrollHeight);
+    const scale = Math.max(1, Math.min(2, Math.sqrt(14e6 / (700 * h))));
+    await window.html2pdf().set({
+      margin: [12, 12, 12, 12], filename: name,
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale, useCORS: true, backgroundColor: '#ffffff', windowWidth: 716 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['.pv-f', 'h2', 'h3'] },
+    }).from(root).save();
+    setStatus('已下載：' + name);
+  } catch (e) {
+    printFallback(name);
+  } finally {
+    root.replaceChildren(); btn.disabled = false;
+  }
+}
+$('#btnPdf').addEventListener('click', downloadPdf);
+$('#btnPrint').addEventListener('click', () => {
+  $('#printName').textContent = '建議檔名：' + pdfName();
+  $('#printGuide').hidden = false;
+  $('#printGuide').scrollIntoView({ block: 'nearest' });
+});
+$('#btnPrintGo').addEventListener('click', () => startPrint(pdfName(), '在列印視窗：目的地選「另存為 PDF」，按儲存'));
+$('#printClose').addEventListener('click', () => { $('#printGuide').hidden = true; });
+if (inArtifact) { $('#btnPdf').hidden = true; $('#btnPrint').hidden = true; }
+
+$('#btnCopy').addEventListener('click', copyAll);
+$('#btnMd').addEventListener('click', () => offerFile(`${lessonLabel()}學習單-${stamp()}.md`, toMarkdown(), '已下載文字檔'));
+$('#btnJson').addEventListener('click', () => offerFile(`${lessonLabel()}備份-${stamp()}.json`, JSON.stringify({ key: COURSE.key, values: state.values }, null, 2), '已下載備份，之後可用「匯入備份」還原'));
+$('#btnImport').addEventListener('click', () => $('#fileIn').click());
+$('#fileIn').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const j = JSON.parse(rd.result);
+      if (j.key !== COURSE.key || typeof j.values !== 'object' || !j.values) throw 0;
+      askConfirm('匯入會取代目前畫面上的內容。', '確定匯入', () => { state.values = j.values; saveNow(); build(); setStatus('已匯入備份'); });
+    } catch (err) { setStatus('這不是這份學習單的備份檔'); }
+  };
+  rd.readAsText(f); e.target.value = '';
+});
+$('#btnReset').addEventListener('click', () => askConfirm('會清除所有已填內容，且無法復原。建議先按「下載備份」。', '確定清除', () => { state.values = {}; saveNow(); build(); setStatus('已清除'); }));
+$('#confirmYes').addEventListener('click', () => { $('#confirmBar').hidden = true; const f = pendingYes; pendingYes = null; if (f) f(); });
+$('#confirmNo').addEventListener('click', () => { $('#confirmBar').hidden = true; pendingYes = null; });
+$('#exportClose').addEventListener('click', () => { $('#exportBox').hidden = true; });
+
+function applyPrefill() {
+  state.pf = state.pf || {};
+  (COURSE.prefill || []).forEach(p => {
+    if (state.pf[p.to] || isFilled(state.values[p.to])) return;
+    try {
+      const s = JSON.parse(localStorage.getItem(p.from) || 'null');
+      const v = s && s.values && s.values[p.fromId];
+      if (v) { state.values[p.to] = v; state.pf[p.to] = true; }
+    } catch (e) {}
+  });
+}
+loadState();
+applyPrefill();
+build();
+setupSubmit();
+// 「更多」選單：按了任何選項或點選單外面就收起來
+(function () {
+  const d = $('#moreTools'); if (!d) return;
+  d.addEventListener('click', e => { if (e.target.closest('.menu button')) d.open = false; });
+  document.addEventListener('click', e => { if (d.open && !d.contains(e.target)) d.open = false; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') d.open = false; });
+})();
+(async () => {
+  try { dlCap = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null; } catch (e) { dlCap = null; }
+})();
+</script>
