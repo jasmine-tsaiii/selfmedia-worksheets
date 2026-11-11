@@ -1256,7 +1256,7 @@ function renderPart(p) {
     if (c.note) box.append(el('p', { class: 'hint', text: c.note }));
     panel.append(box);
   });
-  (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
+  if (!p.promptsEnd) (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
   const partHasReq = countedFields(p).length > 0;
   (p.groups || []).forEach(g => {
     const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
@@ -1290,6 +1290,7 @@ function renderPart(p) {
       d.append(body); panel.append(d);
     }
   }
+  if (p.promptsEnd) (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
   const ix = COURSE.parts.indexOf(p), nx = COURSE.parts[ix + 1];
   const nb = el('div', { class: 'nextbar' });
   if (nx) {
