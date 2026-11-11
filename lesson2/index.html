@@ -751,7 +751,14 @@ function saveNow() {
   catch (e) { setStatus('這個瀏覽器無法自動儲存，請用「複製全部文字」或「下載備份」保存'); }
 }
 function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 400); }
-function setVal(id, v) { state.values[id] = v; scheduleSave(); updateProgress(); }
+var progTimer;
+// soft = 正在打字：先不判定，等停下來（約 1.5 秒）或離開欄位才更新進度與慶祝，避免才打一個字就跳動畫
+function setVal(id, v, soft) {
+  state.values[id] = v; scheduleSave();
+  clearTimeout(progTimer);
+  if (soft) progTimer = setTimeout(() => updateProgress(), 1500); else updateProgress();
+}
+function flushProgress() { clearTimeout(progTimer); updateProgress(); }
 function isFilled(v) { return Array.isArray(v) ? v.length > 0 : (typeof v === 'boolean' ? v : !!(v && String(v).trim())); }
 
 function el(tag, attrs, ...kids) {
@@ -782,7 +789,8 @@ function renderField(f, idOverride) {
     const inp = f.type === 'text' ? el('input', { type: 'text', id: 'f_' + id }) : el('textarea', { id: 'f_' + id });
     if (f.placeholder) inp.setAttribute('placeholder', f.placeholder);
     inp.value = v || '';
-    inp.addEventListener('input', () => { setVal(id, inp.value); if (f.type === 'area') fit(inp); });
+    inp.addEventListener('input', () => { setVal(id, inp.value, true); if (f.type === 'area') fit(inp); });
+    inp.addEventListener('blur', flushProgress);
     wrap.append(inp);
     if (f.type === 'area') setTimeout(() => fit(inp), 0);
     if (f.suggest && f.suggest.length) {
