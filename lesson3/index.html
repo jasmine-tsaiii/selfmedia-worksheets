@@ -1437,7 +1437,14 @@ function startSubmit() {
   doSubmit();
 }
 function setupSubmit() {
-  if (!STUDENT) return;
+  if (!STUDENT) {
+    // 沒有專屬連結（例如試聽版）：不提交，只存檔
+    const wt = $('#wrapTitle'); if (wt) wt.textContent = '🎒 存檔';
+    const wh = document.querySelector('#wrapup > .hint'); if (wh) wh.textContent = '今天先到這裡也可以。想留一份，可以在這裡下載備份。';
+    document.querySelectorAll('.nextbar button').forEach(b => { if (/提交給老師/.test(b.textContent)) b.textContent = '去存檔 ↓'; });
+    document.querySelectorAll('.privacy li').forEach(li => { if (/提交給老師/.test(li.textContent)) li.textContent = '你填的內容不會送給任何人，只留在你這台裝置上。'; });
+    return;
+  }
   $('#notice').innerHTML = '<span>你填的內容會先<strong>存在這台裝置的瀏覽器裡</strong>。按「提交給老師」才會送給老師；提交之後想改，可以再提交一次，老師看到的永遠是最新版。換裝置或清除瀏覽資料前，請先「下載備份」。</span>';
   $('#submitBox').hidden = false;
   $('#submitWho').textContent = '專屬學習單';

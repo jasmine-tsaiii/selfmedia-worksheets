@@ -30,3 +30,9 @@ https://jasmine-tsaiii.github.io/selfmedia-worksheets/
 - 右下角有淺色/深色切換鈕（選擇會記在瀏覽器裡）。
 - 各堂的題目寫在 `lessonN/index.html` 的 `COURSE`（欄位加 `optional: true` 就是選填）。
 - 頁尾是收合的「隱私小說明」加上版權字樣。
+
+## 試聽版（給大眾）
+
+- 網址：`/trial/`。只開放第 1 堂，其餘關卡鎖定；沒有「提交給老師」，填的內容只留在使用者自己的瀏覽器。
+- 試聽版與正式版的進度分開存（key 不同），不會互相影響。
+- 由原始碼資料夾的 `build_trial.py` 產生。
