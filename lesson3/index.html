@@ -299,6 +299,65 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .mission.exp.done .mno::before{content:"✅"}
 
 .tab.done .pct{display:none}
+
+/* ===== 版面調整（11/11）：題目往上拉，存檔／提交／隱私放最底下 ===== */
+.hero{padding:16px 18px 14px;gap:2px 12px}
+.hero h1{font-size:1.5rem;margin-bottom:2px}
+.hero p#subtitle{font-size:.88rem}
+.eyebrow{margin-bottom:6px;font-size:.72rem}
+.mascot{width:84px;height:84px}
+.herostats{margin-top:2px;gap:8px 12px}
+.xpchip{padding:2px 12px}
+.xpchip b{font-size:1.1rem}
+.stars{font-size:1.3rem}
+.saved{grid-column:1 / -1;margin:0;font-size:.74rem;color:rgba(255,255,255,.78);min-height:1.2em}
+@media (max-width:520px){.hero{padding:14px 14px 12px}.hero h1{font-size:1.3rem}.mascot{width:62px;height:62px}.herostats .heroprog{min-width:150px}}
+
+/* 徽章：一排小圖示（點一下看名稱） */
+.badges{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 12px;border-radius:18px;box-shadow:0 3px 0 var(--stroke)}
+.badges-title{margin:0;white-space:nowrap;font-size:.78rem}
+.badge-row{gap:8px;padding:2px 2px 4px;flex:1}
+.badge-row .bdg{width:auto;cursor:pointer}
+.badge-row .bdg .ico{width:40px;height:40px;font-size:1.2rem;box-shadow:0 3px 0 #c9922b}
+.badge-row .bdg.locked .ico{box-shadow:0 3px 0 var(--stroke)}
+.badge-row .bdg .nm{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 每個任務最後：往下一個任務走 */
+.nextbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:24px 0 4px}
+.nextbar .hint{margin:0}
+
+/* 最底下的「存檔與提交」 */
+.wrapup{margin-top:36px;padding:18px 16px 18px;border-radius:26px;background:var(--card);border:2px solid var(--stroke);box-shadow:0 5px 0 var(--stroke)}
+.wrapup h2{margin:0 0 4px;font-size:1.25rem;font-weight:900}
+.wrapup>.hint{margin:0 0 6px}
+.wrapup .submitbox{margin-top:10px}
+
+/* 頁尾：隱私說明與 IG */
+.foot{margin-top:26px;display:grid;gap:16px}
+.privacy{background:var(--ok-soft);border:2px solid var(--ok);border-radius:24px;padding:16px 18px 14px;box-shadow:0 4px 0 var(--ok)}
+.privacy h2{margin:0 0 6px;font-size:1.08rem;font-weight:900}
+.privacy ul{margin:0;padding-left:1.2em}
+.privacy li{margin:4px 0;font-size:.92rem}
+.privacy li::marker{color:var(--ok)}
+.follow{display:flex;align-items:center;gap:14px;background:var(--card);border:2px solid var(--stroke);border-radius:24px;padding:14px 18px;box-shadow:0 4px 0 var(--stroke)}
+.follow .mascot{width:56px;height:56px;animation:none;flex:none}
+.follow p{margin:0;font-size:.9rem;color:var(--muted)}
+.follow b{color:var(--ink)}
+.igbtn{display:inline-block;margin-top:6px;padding:8px 20px;border-radius:999px;background:linear-gradient(135deg,#f2b84b,#ff7a8a);color:#3a1a00;text-decoration:none;font-weight:900;border:2px solid #c9922b;box-shadow:0 4px 0 #c9922b;min-height:42px}
+.igbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c9922b}
+@media print{.wrapup,.foot,.nextbar{display:none!important}}
+
+
+/* ===== 精簡（11/11）：流程闖關，不放徽章與 XP ===== */
+.hero .rule{margin:6px 0 0;font-size:.78rem;color:rgba(255,255,255,.78)}
+.optfold{margin-top:16px;border:2px dashed var(--stroke);border-radius:16px;padding:2px 14px 6px;background:var(--field)}
+.optfold>summary{cursor:pointer;padding:10px 0;font-weight:800;font-size:.9rem;color:var(--accent-deep);list-style:none}
+.optfold>summary::-webkit-details-marker{display:none}
+.optfold[open]>summary{border-bottom:1px dashed var(--stroke);margin-bottom:4px}
+.optfold .opt{display:none}
+.mxp{font-size:.8rem}
+.mprog{display:none}
+.mission{padding-top:10px;padding-bottom:12px}
 /* 列印與 PDF（維持純白、黑字） */
 .pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
 .pv h1{font-size:20pt;margin:0 0 4pt}
@@ -330,33 +389,33 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
       <p class="eyebrow" id="eyebrow">自媒體陪跑　學習單</p>
       <h1 id="title"></h1>
       <p id="subtitle"></p>
+      <p class="rule">只有標「必填」的題目算破關；選填的不影響。沒破關也沒關係，進度會幫你留著。</p>
     </div>
     <div class="mascot" id="heroMascot" aria-hidden="true"></div>
+    <p class="saved" id="savedMini"></p>
     <div class="herostats">
-      <span class="xpchip"><b id="xpNum">0</b> XP</span>
       <span class="stars" id="stars" role="img" aria-label="星星 0 顆"></span>
-      <div class="heroprog" aria-label="這一關的完成度">
+      <div class="heroprog" aria-label="這一關的必填完成度">
         <div class="track"><div class="fill" id="heroFill"></div></div>
         <span class="pct" id="heroPct">尚未開始</span>
       </div>
     </div>
   </header>
-  <section class="badges" aria-label="這一關的徽章">
-    <p class="badges-title">徽章　<span id="badgeCount"></span></p>
-    <div class="badge-row" id="badgeRow"></div>
-  </section>
+  
 
-  <div class="notice" id="notice">
-    <span>你填的內容<strong>只存在這台裝置的瀏覽器裡，不會上傳到任何地方</strong>，要用同一個瀏覽器打開才會看到。換裝置或清除瀏覽資料就會消失，請定期按「下載備份」。會談前，也可以按「複製全部文字」或「下載文字檔」傳給老師。</span>
-  </div>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="學習單分頁"></nav>
+  <main id="panels"></main>
 
-  <div class="submitbox" id="submitBox" hidden>
+  <section class="wrapup" id="wrapup" aria-labelledby="wrapTitle">
+    <h2 id="wrapTitle">🎒 存檔、交給老師</h2>
+    <p class="hint">全部填完，或今天先到這裡，再來這裡存檔、提交。</p>
+    <div class="submitbox" id="submitBox" hidden>
     <p class="who" id="submitWho"></p>
     <p class="hint" id="submitInfo"></p>
     <div class="row"><button class="primary" id="btnSubmit">提交給老師</button></div>
   </div>
 
-  <div class="toolbar">
+    <div class="toolbar">
     <button class="primary" id="btnCopy">複製全部文字</button>
     <button id="btnPdf">下載 PDF</button>
     <details class="tools" id="moreTools">
@@ -373,7 +432,7 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
     <input type="file" id="fileIn" accept=".json,application/json" hidden>
   </div>
 
-  <div class="confirm" id="confirmBar" role="alertdialog" aria-labelledby="confirmMsg" hidden>
+    <div class="confirm" id="confirmBar" role="alertdialog" aria-labelledby="confirmMsg" hidden>
     <p id="confirmMsg"></p>
     <div class="row"><button class="danger" id="confirmYes"></button><button id="confirmNo">取消</button></div>
   </div>
@@ -397,18 +456,38 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
   </div>
 
   <div id="status" role="status" aria-live="polite"></div>
+  </section>
 
-  <nav class="tabs" id="tabs" role="tablist" aria-label="學習單分頁"></nav>
-  <main id="panels"></main>
+  <footer class="foot" id="foot">
+    <section class="privacy" aria-labelledby="privTitle">
+      <h2 id="privTitle">🔒 隱私與資料說明</h2>
+      <ul>
+        <li>你填的內容<b>只存在這台裝置的瀏覽器</b>，不會自動上傳到任何地方。換裝置或清除瀏覽資料就會消失，請定期下載備份。</li>
+        <li>只有你按下「提交給老師」，這一堂的內容才會送出，存進老師的 Google 文件，由老師閱讀；沒有按，老師看不到。</li>
+        <li>這個頁面沒有登入，也沒有放分析或追蹤程式，不會蒐集你的瀏覽紀錄。</li>
+        <li>「複製 prompt」只是複製到你的剪貼簿，要貼到哪個 AI 由你決定。貼之前，請先刪掉真名、公司、客戶或別人的個資。</li>
+        <li>想把你的內容寫成案例或對外分享，老師會先徵得你的同意。</li>
+        <li>想刪掉資料：「更多」→「清除全部」可以清掉這台裝置上的內容；已經提交給老師的，可以請老師刪除。</li>
+      </ul>
+    </section>
+    <section class="follow">
+      <div class="mascot" id="footMascot" aria-hidden="true"></div>
+      <div>
+        <p><b>Jas Soul｜Jasmine</b>　自媒體陪跑、AI 影片剪輯</p>
+        <a class="igbtn" href="https://www.instagram.com/jas.soulcareer/" target="_blank" rel="noopener">📷 追蹤我的 IG　@jas.soulcareer</a>
+      </div>
+    </section>
+  </footer>
+  <div class="notice" id="notice" hidden></div>
   <nav class="topnav bottom" id="botnav" aria-label="課程導覽"></nav>
 </div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <canvas id="confetti" hidden></canvas>
 <div class="clear" id="clearModal" role="dialog" aria-modal="true" aria-labelledby="clearTitle" hidden></div>
 <div id="printView" class="pv" aria-hidden="true"></div>
 <div id="pdfHost" aria-hidden="true"><div id="pdfRoot" class="pv"></div></div>
 <script src="../config.js"></script>
-<script src="../badges.js"></script>
 <script>
 const L2 = 'smcourse-lesson2-v1';
 const lgIds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(n => 'lg' + n);
@@ -428,13 +507,13 @@ const COURSE = {
       intro: '今天不是從零開始寫，而是把前兩週的材料放進一個 3 秒就讀完的地方。如果你用同一個瀏覽器填過第 2 堂，定位 v1 會自動帶進來。',
       groups: [
         { title: '上週寫的東西', fields: [
-          { id: 'v1', type: 'area', label: '我的定位 v1' },
-          { id: 'st_fav', type: 'area', label: '我的故事裡，最喜歡的一句', hint: '這句常常可以放進簡介' },
-          { id: 'lg_fav', type: 'area', label: '語言庫裡，最像我的 3 條', hint: '或是看了會笑、有點被戳到的' },
+          { id: 'v1', optional: true, type: 'area', label: '我的定位 v1' },
+          { id: 'st_fav', optional: true, type: 'area', label: '我的故事裡，最喜歡的一句', hint: '這句常常可以放進簡介' },
+          { id: 'lg_fav', optional: true, type: 'area', label: '語言庫裡，最像我的 3 條', hint: '或是看了會笑、有點被戳到的' },
         ]},
         { title: '曝光決定（第 1 堂寫的）', gintro: '名稱、頭像、簡介都會碰到這個決定。它不是永遠的，先選 3 個月。', fields: [
           { id: 'ex', type: 'area', label: '我的曝光決定', hint: '露臉或不露臉、本名或化名、有沒有「絕對不想讓人知道」的事' },
-          { id: 'ex_chg', type: 'radio', label: '這三週過去，我想不想改？', options: ['不改', '想改一點', '想大改'] },
+          { id: 'ex_chg', optional: true, type: 'radio', label: '這三週過去，我想不想改？', options: ['不改', '想改一點', '想大改'] },
           { id: 'ex_why', type: 'area', label: '如果想改，為什麼？', optional: true },
         ]},
       ],
@@ -447,8 +526,8 @@ const COURSE = {
         { title: '一個對標帳號', fields: [
           { id: 'ac1', type: 'text', label: '帳號', hint: '寫名稱就好，不用貼連結', optional: true },
           { id: 'ac1_who', type: 'area', label: '我 5 秒看到的：他在幫誰？幫什麼？' },
-          { id: 'ac1_follow', type: 'text', label: '我會追蹤嗎？為什麼？' },
-          { id: 'ac1_key', type: 'text', label: '讓我 3 秒就懂的是哪一句？', hint: '如果看不懂，就寫「看不懂」' },
+          { id: 'ac1_follow', optional: true, type: 'text', label: '我會追蹤嗎？為什麼？' },
+          { id: 'ac1_key', optional: true, type: 'text', label: '讓我 3 秒就懂的是哪一句？', hint: '如果看不懂，就寫「看不懂」' },
         ]},
         { title: '我自己現在的門面', gintro: '還沒有帳號就跳過，直接進下一頁。', fields: [
           { id: 'me_now', type: 'area', label: '我現在的名稱、頭像、簡介是什麼？', optional: true },
@@ -465,14 +544,14 @@ const COURSE = {
       intro: '不求完美，先選一個。改名之後舊追蹤者會認不出你，所以這 3 個月先固定，第 6 週期中檢查時再評估。頭像的任務是「被辨認」，不是好看。',
       groups: [
         { title: '帳號名稱', gintro: '帳號 ID：短、好念、好打，各平台盡量一致。顯示名稱：「名字＋我做什麼」，讓人光看名稱就知道方向。', fields: [
-          { id: 'id_c', type: 'area', label: '帳號 ID 候選', hint: '寫 3 個，念出聲' },
+          { id: 'id_c', optional: true, type: 'area', label: '帳號 ID 候選', hint: '寫 3 個，念出聲' },
           { id: 'id_pick', type: 'text', label: '我選的帳號 ID' },
-          { id: 'nm_c', type: 'area', label: '顯示名稱候選', hint: '寫 2 個，格式：名字＋我做什麼' },
+          { id: 'nm_c', optional: true, type: 'area', label: '顯示名稱候選', hint: '寫 2 個，格式：名字＋我做什麼' },
           { id: 'nm_show', type: 'text', label: '我選的顯示名稱' },
         ]},
         { title: '頭像（這堂的重點）', gintro: '縮到手機上拇指大，還認得出來嗎？第一眼給人什麼感覺？和你的定位搭不搭？可以把候選截圖（先遮住個資）貼給 AI 校驗，見「⑥ 用 AI 試試」的 Prompt ③。', fields: [
-          { id: 'av_type', type: 'radio', label: '頭像的做法', options: ['露臉照', '半露臉／背影／剪影', '插畫／手繪／物件', '字標（名字或一個字）', '還沒決定'] },
-          { id: 'av_cands', type: 'area', label: '頭像候選', hint: '寫 2–3 個做法或描述；照片就寫是哪幾張' },
+          { id: 'av_type', optional: true, type: 'radio', label: '頭像的做法', options: ['露臉照', '半露臉／背影／剪影', '插畫／手繪／物件', '字標（名字或一個字）', '還沒決定'] },
+          { id: 'av_cands', optional: true, type: 'area', label: '頭像候選', hint: '寫 2–3 個做法或描述；照片就寫是哪幾張' },
           { id: 'av_ai', type: 'area', label: 'AI 對頭像的回饋', hint: '縮小後認得出來嗎？第一眼的 3 個詞？跟我的定位搭不搭？', optional: true },
           { id: 'av_desc', type: 'area', label: '我最後選的頭像', hint: '照片：是哪一張？插畫或字標：長什麼樣子、什麼顏色？' },
         ]},
@@ -501,8 +580,8 @@ const COURSE = {
       ],
       groups: [
         { title: '平台', fields: [
-          { id: 'platform', type: 'text', label: '我的主平台', hint: '例如 Threads、Instagram' },
-          { id: 'limit', type: 'text', label: '我想把簡介控制在幾個字內？', hint: '平台上限約 150 字，但好的簡介多半 50–90 字；不確定就先寫 60' },
+          { id: 'platform', optional: true, type: 'text', label: '我的主平台', hint: '例如 Threads、Instagram' },
+          { id: 'limit', optional: true, type: 'text', label: '我想把簡介控制在幾個字內？', hint: '平台上限約 150 字，但好的簡介多半 50–90 字；不確定就先寫 60' },
         ]},
         { title: '主版', fields: [
           { id: 'bio1', type: 'area', label: '第 1 行：我幫誰做什麼', hint: '帶一句受眾語言' },
@@ -514,9 +593,9 @@ const COURSE = {
           { id: 'alt', type: 'area', label: '備用版全文', optional: true },
         ]},
         { title: '檢查', fields: [
-          { id: 'ck1', type: 'radio', label: '第 1 行，我前兩週寫的那個人看到，會覺得「這是在說我」嗎？', options: ['會', '不確定', '不會'] },
-          { id: 'ck2', type: 'radio', label: '每一句都是真的、沒有放大？', options: ['是', '還不是'] },
-          { id: 'ck3', type: 'radio', label: '沒有保證結果或療效的用語？', options: ['沒有', '有，要改'] },
+          { id: 'ck1', optional: true, type: 'radio', label: '第 1 行，我前兩週寫的那個人看到，會覺得「這是在說我」嗎？', options: ['會', '不確定', '不會'] },
+          { id: 'ck2', optional: true, type: 'radio', label: '每一句都是真的、沒有放大？', options: ['是', '還不是'] },
+          { id: 'ck3', optional: true, type: 'radio', label: '沒有保證結果或療效的用語？', options: ['沒有', '有，要改'] },
         ]},
       ],
     },
@@ -526,15 +605,15 @@ const COURSE = {
       intro: '語氣是你說話的方式，不是你要變成的人。從你的語言庫和平常說話的方式找，不要套模板。念出來連自己都覺得彆扭，就是太用力了。',
       groups: [
         { title: '四條滑桿', fields: [
-          { id: 'sl1', type: 'radio', label: '像朋友 ←→ 像老師', options: ['偏像朋友', '中間', '偏像老師'] },
-          { id: 'sl2', type: 'radio', label: '溫柔 ←→ 直接', options: ['偏溫柔', '中間', '偏直接'] },
-          { id: 'sl3', type: 'radio', label: '幽默 ←→ 認真', options: ['偏幽默', '中間', '偏認真'] },
-          { id: 'sl4', type: 'radio', label: '口語 ←→ 書面', options: ['偏口語', '中間', '偏書面'] },
+          { id: 'sl1', optional: true, type: 'radio', label: '像朋友 ←→ 像老師', options: ['偏像朋友', '中間', '偏像老師'] },
+          { id: 'sl2', optional: true, type: 'radio', label: '溫柔 ←→ 直接', options: ['偏溫柔', '中間', '偏直接'] },
+          { id: 'sl3', optional: true, type: 'radio', label: '幽默 ←→ 認真', options: ['偏幽默', '中間', '偏認真'] },
+          { id: 'sl4', optional: true, type: 'radio', label: '口語 ←→ 書面', options: ['偏口語', '中間', '偏書面'] },
         ]},
-        { title: '我會這樣說（5 個詞或句型）', gintro: '寫詞和句型，不要寫形容詞。從語言庫、平常說話挑。', fields: [1, 2, 3, 4, 5].map(n => ({ id: 'say' + n, type: 'text', label: `第 ${n} 個` })) },
-        { title: '我不會這樣說（5 個詞或句型）', gintro: '例如「賦能」「底層邏輯」「一定要」。', fields: [1, 2, 3, 4, 5].map(n => ({ id: 'no' + n, type: 'text', label: `第 ${n} 個` })) },
+        { title: '我會這樣說（5 個詞或句型）', gintro: '寫詞和句型，不要寫形容詞。從語言庫、平常說話挑。', fields: [1, 2, 3, 4, 5].map(n => ({ id: 'say' + n, type: 'text', label: `第 ${n} 個`, optional: n > 3 })) },
+        { title: '我不會這樣說（5 個詞或句型）', gintro: '例如「賦能」「底層邏輯」「一定要」。', fields: [1, 2, 3, 4, 5].map(n => ({ id: 'no' + n, type: 'text', label: `第 ${n} 個`, optional: n > 3 })) },
         { title: '示範與樣本', fields: [
-          { id: 'tone_demo', type: 'area', label: '用我的語氣，把簡介第 2 行改寫一次' },
+          { id: 'tone_demo', optional: true, type: 'area', label: '用我的語氣，把簡介第 2 行改寫一次' },
           { id: 'tone_sample', type: 'area', label: '我平常傳給朋友的一則訊息，或我貼過的一則貼文', hint: '之後給 AI 看，讓它知道你實際怎麼說話', optional: true },
         ]},
       ],
@@ -711,17 +790,17 @@ const COURSE = {
       },
     },
     {
-      id: 'r8', tab: '⑧ 週日回報', when: '每週日晚上，3 分鐘',
+      id: 'r8', tab: '⑧ 週日回報', when: '選填，每週日晚上 3 分鐘',
       title: '週日回報',
       intro: '每週日填一次。下週開始新的一份之前，先下載備份。',
       groups: [
         { title: '這週的我', fields: [
-          { id: 'w1', type: 'area', label: '這週做了什麼？', hint: '完成的作業、發的內容' },
-          { id: 'w2', type: 'text', label: '這週實際花了幾小時？', hint: '和你預估的差多少？' },
-          { id: 'w3', type: 'area', label: '這週最卡的是什麼？' },
-          { id: 'w4', type: 'area', label: '這週有什麼讓你驚喜或有成就感的事？' },
-          { id: 'w5', type: 'area', label: '下週我要完成…' },
-          { id: 'w6', type: 'scale', label: '心情溫度', hint: '1 很低，5 很好' },
+          { id: 'w1', optional: true, type: 'area', label: '這週做了什麼？', hint: '完成的作業、發的內容' },
+          { id: 'w2', optional: true, type: 'text', label: '這週實際花了幾小時？', hint: '和你預估的差多少？' },
+          { id: 'w3', optional: true, type: 'area', label: '這週最卡的是什麼？' },
+          { id: 'w4', optional: true, type: 'area', label: '這週有什麼讓你驚喜或有成就感的事？' },
+          { id: 'w5', optional: true, type: 'area', label: '下週我要完成…' },
+          { id: 'w6', optional: true, type: 'scale', label: '心情溫度', hint: '1 很低，5 很好' },
           { id: 'w7', type: 'area', label: '想補充的', optional: true },
         ]},
       ],
@@ -740,7 +819,7 @@ const TIPS = {
   r5: '語氣不是演出來的。念出來連自己都覺得彆扭，就是太用力了。',
   r6: 'AI 是更快的草稿，不是更好的你。先自己寫，再給 AI。',
   r7: '第一版就好，不用完美。找真人測試，比自己想更準。',
-  r8: '這份回報是讓我知道你的狀態，誠實最重要。',
+  r8: '這份是選填的，不影響破關。想讓我知道你這週的狀態，再寫就好。',
 };
 COURSE.parts.forEach(p => { if (TIPS[p.id]) p.tip = TIPS[p.id]; });
 /* ============================ 程式 ============================ */
@@ -753,7 +832,7 @@ let pendingYes = null;
 function loadState() {
   try { const s = localStorage.getItem(COURSE.key); if (s) state = Object.assign(state, JSON.parse(s)); } catch (e) {}
 }
-function setStatus(t) { $('#status').textContent = t; }
+function setStatus(t) { $('#status').textContent = t; const m = $('#savedMini'); if (m) m.textContent = /^已自動儲存/.test(t) ? '✓ ' + t : ''; }
 function saveNow() {
   try { localStorage.setItem(COURSE.key, JSON.stringify(state)); setStatus('已自動儲存在這台裝置　' + new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })); }
   catch (e) { setStatus('這個瀏覽器無法自動儲存，請用「複製全部文字」或「下載備份」保存'); }
@@ -834,6 +913,7 @@ function countedFields(part) {
   if (part.repeat) {
     const r = part.repeat;
     for (let n = 1; n <= r.count; n++) {
+      if (r.reqCards && n > r.reqCards) continue;
       r.fields.forEach((f, i) => {
         const basicOnly = n > r.fullCount;
         if (f.optional) return;
@@ -923,7 +1003,7 @@ function showClear(info) {
   if (next) { const go = el('button', { class: 'primary', type: 'button', text: '前往' + next.label + ' ›' }); go.addEventListener('click', () => { location.href = withCode(next.href); }); row.append(go); }
   const stay = el('button', { type: 'button', text: '先留在這裡' }); stay.addEventListener('click', closeClear);
   row.append(stay);
-  card.append(mas, el('h2', { id: 'clearTitle', text: '破關！第 ' + (COURSE.level || '') + ' 關完成' }), stars, el('div', { class: 'clear-xp', text: '本關 ' + info.xp + ' XP' }), el('p', { text: COURSE.clearMsg || '你把這一關的必填任務都完成了。先休息一下，再往下一關走。' }), bd, row);
+  card.append(mas, el('h2', { id: 'clearTitle', text: '破關！第 ' + (COURSE.level || '') + ' 關完成' }), stars, el('p', { text: COURSE.clearMsg || '你把這一關的必填任務都完成了。先休息一下，再往下一關走。' }), row);
   m.replaceChildren(card); m.hidden = false;
   confetti(140);
   const first = card.querySelector('button'); if (first) first.focus();
@@ -946,9 +1026,9 @@ function updateProgress(silent) {
     const ms = $('#ms_' + p.id);
     if (ms) {
       ms.querySelector('.mfill').style.width = info.pct + '%';
-      ms.querySelector('.xpnow').textContent = info.xp;
+      ms.querySelector('.xpnow').textContent = info.list.length ? '必填 ' + info.filled + ' / ' + info.list.length : '';
       ms.classList.toggle('done', info.done);
-      ms.querySelector('.mprog').textContent = info.list.length ? (info.done ? '任務完成！' : '已完成 ' + info.filled + ' / ' + info.list.length + ' 題') : (info.done ? '已經體驗過了 ✓' : '動手試一次就算完成：複製一個 prompt，或寫下你的想法');
+      ms.querySelector('.mprog').textContent = info.list.length ? (info.done ? '任務完成！' : '只算標「必填」的題目，選填的可以先跳過') : (info.done ? '已經試過了 ✓' : '選填，想寫再寫，不影響破關');
     }
     if (info.done && !state.done[p.id]) { state.done[p.id] = true; if (info.list.length) newlyDone.push(p); }
     if (!info.done && state.done[p.id]) delete state.done[p.id];
@@ -970,7 +1050,7 @@ function updateProgress(silent) {
 
   const hf = $('#heroFill'), hp = $('#heroPct'), xn = $('#xpNum'), st = $('#stars'), bc = $('#badgeCount');
   if (hf) hf.style.width = overall + '%';
-  if (hp) hp.textContent = overall === 0 ? '尚未開始' : (allDone ? '破關！' : '已完成 ' + overall + '%');
+  if (hp) hp.textContent = overall === 0 ? '尚未開始' : (allDone ? '破關！' : '必填完成 ' + overall + '%');
   if (xn) xn.textContent = xp;
   if (st) { st.innerHTML = [0, 1, 2].map(i => '<span class="' + (i < stars ? '' : 'off') + '">★</span>').join(''); st.setAttribute('aria-label', '星星 ' + stars + ' 顆'); }
   if (bc) bc.textContent = earned.length + ' / ' + all.length;
@@ -984,7 +1064,7 @@ function updateProgress(silent) {
   const newClear = allDone && !state.celebrated;
   if (silent) { if (allDone) state.celebrated = true; return; }
   if (!allDone) state.celebrated = false;
-  newlyDone.forEach(p => toast('🎉 完成「' + partName(p) + '」　+' + XP_PART + ' XP', 'win'));
+  newlyDone.forEach(p => toast('🎉 完成「' + partName(p) + '」！', 'win'));
   fresh.forEach(b => toast(b.icon + ' 獲得徽章：' + b.name, 'gold'));
   if (newlyDone.length || fresh.length) confetti(newClear ? 40 : 70);
   if (newClear) { state.celebrated = true; scheduleSave(); setTimeout(() => showClear({ xp, stars }), 1200); }
@@ -1023,7 +1103,7 @@ async function copyPrompt(pr, withMaterials) {
   try { await navigator.clipboard.writeText(r.text); setStatus('已複製「' + pr.title + '」，去貼到 AI 吧。' + tail); }
   catch (e) { showExport(r.text, '無法自動複製，請把下面的文字全部選取後自己複製，再貼到 AI。'); }
   state.ai = state.ai || {};
-  if (!state.ai[pr.title]) { state.ai[pr.title] = true; scheduleSave(); toast('🤖 +' + XP_AI + ' XP　AI 夥伴上線', 'win'); }
+  if (!state.ai[pr.title]) { state.ai[pr.title] = true; scheduleSave(); toast('🤖 AI 夥伴上線！', 'win'); }
   updateProgress();
 }
 function renderPrompt(pr) {
@@ -1057,7 +1137,7 @@ function missionNode(p) {
   const m = p.tab.match(/^(\S+)\s+/), no = m ? m[1] : '';
   const numbered = /^[①②③④⑤⑥⑦⑧⑨⑩]/.test(no);
   return el('div', { class: 'mission' + (numbered ? '' : ' exp'), id: 'ms_' + p.id },
-    el('div', { class: 'mtop' }, el('span', { class: 'mno', text: numbered ? '任務 ' + no : '體驗任務' }), el('span', { class: 'mxp' }, el('b', { class: 'xpnow', text: '0' }), ' / ' + info.max + ' XP')),
+    el('div', { class: 'mtop' }, el('span', { class: 'mno', text: info.list.length ? '任務 ' + no : (numbered ? '選填 ' + no : '體驗任務') }), el('span', { class: 'mxp' }, el('b', { class: 'xpnow', text: '' }))),
     el('div', { class: 'mbar' }, el('div', { class: 'mfill' })),
     el('p', { class: 'mprog', text: '' }));
 }
@@ -1068,7 +1148,7 @@ function coachNode(text) {
 function renderPart(p) {
   const panel = el('section', { class: 'panel', id: 'panel_' + p.id, role: 'tabpanel', 'aria-labelledby': 'tab_' + p.id });
   panel.append(missionNode(p), el('span', { class: 'when', text: p.when }), el('h2', { text: p.title }), el('p', { class: 'intro', text: p.intro }));
-  if (p.tip) panel.append(coachNode(p.tip));
+  if (p.tip && p.tip !== p.intro) panel.append(coachNode(p.tip));
   if (p.tips) {
     const ul = el('ul', { class: 'clean' }); p.tips.forEach(t => ul.append(el('li', { text: t })));
     panel.append(el('div', { class: 'group note' }, el('h3', { text: p.tipsTitle || '怎麼找', 'data-ico': '💡' }), ul));
@@ -1086,10 +1166,20 @@ function renderPart(p) {
     panel.append(box);
   });
   (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
+  const partHasReq = countedFields(p).length > 0;
   (p.groups || []).forEach(g => {
     const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
     if (g.gintro) box.append(el('p', { class: 'gintro', text: g.gintro }));
-    g.fields.forEach(f => box.append(renderField(f)));
+    const req = g.fields.filter(f => !f.optional), opt = g.fields.filter(f => f.optional);
+    if (!partHasReq || !opt.length) {
+      g.fields.forEach(f => box.append(renderField(f)));
+    } else {
+      req.forEach(f => box.append(renderField(f)));
+      const fold = el('details', { class: 'optfold' }, el('summary', { text: '＋ 選填（' + opt.length + ' 題），想寫再展開' }));
+      opt.forEach(f => fold.append(renderField(f)));
+      if (opt.some(f => isFilled(state.values[f.id]))) fold.setAttribute('open', '');
+      box.append(fold);
+    }
     panel.append(box);
   });
   if (p.repeat) {
@@ -1109,6 +1199,20 @@ function renderPart(p) {
       d.append(body); panel.append(d);
     }
   }
+  const ix = COURSE.parts.indexOf(p), nx = COURSE.parts[ix + 1];
+  const nb = el('div', { class: 'nextbar' });
+  if (nx) {
+    nb.append(el('p', { class: 'hint', text: '做不完也沒關係，進度會自動存起來。' }));
+    const go = el('button', { class: 'primary', type: 'button', text: '前往「' + partName(nx) + '」 ›' });
+    go.addEventListener('click', () => select(nx.id));
+    nb.append(go);
+  } else {
+    nb.append(el('p', { class: 'hint', text: '這一關的任務都看完了。' }));
+    const go = el('button', { class: 'primary', type: 'button', text: '去存檔、提交給老師 ↓' });
+    go.addEventListener('click', () => { const w = $('#wrapup'); if (w) w.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    nb.append(go);
+  }
+  panel.append(nb);
   return panel;
 }
 
@@ -1120,8 +1224,9 @@ function build() {
   $('#subtitle').textContent = COURSE.subtitle;
   const ey = $('#eyebrow'); if (ey) ey.textContent = 'LEVEL ' + (COURSE.level || '') + (COURSE.world ? '　' + COURSE.world : '');
   const hm = $('#heroMascot'); if (hm) hm.innerHTML = MASCOT;
+  const fm = $('#footMascot'); if (fm) fm.innerHTML = MASCOT;
   const row = $('#badgeRow');
-  if (row) { row.replaceChildren(); lessonBadges().forEach(b => row.append(el('div', { class: 'bdg locked', 'data-id': b.id, title: b.desc }, el('span', { class: 'ico', text: b.icon }), el('span', { class: 'nm', text: b.name })))); }
+  if (row) { row.replaceChildren(); lessonBadges().forEach(b => { const n = el('div', { class: 'bdg locked', 'data-id': b.id, title: b.name + '：' + b.desc, role: 'button', tabindex: '0' }, el('span', { class: 'ico', text: b.icon }), el('span', { class: 'nm', text: b.name })); const say = () => toast(b.icon + ' ' + b.name + '：' + b.desc + (n.classList.contains('locked') ? '（還沒解鎖）' : '（已獲得）'), n.classList.contains('locked') ? '' : 'gold'); n.addEventListener('click', say); n.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); say(); } }); row.append(n); }); }
   const tabs = $('#tabs'), panels = $('#panels');
   tabs.replaceChildren(); panels.replaceChildren();
   COURSE.parts.forEach((p, i) => {
@@ -1417,6 +1522,12 @@ loadState();
 applyPrefill();
 build();
 setupSubmit();
+(function () {
+  ['confirmBar', 'printGuide', 'exportBox'].forEach(id => {
+    const n = document.getElementById(id); if (!n) return;
+    new MutationObserver(() => { if (!n.hidden) n.scrollIntoView({ behavior: 'smooth', block: 'center' }); }).observe(n, { attributes: true, attributeFilter: ['hidden'] });
+  });
+})();
 // 「更多」選單：按了任何選項或點選單外面就收起來
 (function () {
   const d = $('#moreTools'); if (!d) return;
