@@ -180,6 +180,125 @@ table.frame{border-collapse:collapse;width:100%;font-size:.9rem;min-width:420px}
 table.frame th,table.frame td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
 table.frame th{background:var(--accent-soft);color:var(--accent-deep);font-weight:700}
 
+
+/* ================= 破關版型（遊戲層）：覆蓋上面的基本樣式 ================= */
+:root{--ok:#2fa37f;--ok-soft:#e1f6ee;--pop:#ff7a8a;--sh:#3a2b86;--stroke:#e2dbd0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ok:#52d1a6;--ok-soft:#173a30;--pop:#ff8f9d;--sh:#5a4bb0;--stroke:#3d3648}}
+:root[data-theme="dark"]{--ok:#52d1a6;--ok-soft:#173a30;--pop:#ff8f9d;--sh:#5a4bb0;--stroke:#3d3648}
+body{background-image:radial-gradient(circle at 10% -4%,rgba(106,85,201,.12),transparent 38%),radial-gradient(circle at 98% 2%,rgba(242,184,75,.18),transparent 34%);background-attachment:fixed}
+
+/* 主視覺：關卡標題、小星星關主、XP 與星星 */
+.hero{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center;padding:24px 22px 20px;box-shadow:0 6px 0 var(--sh)}
+.hero>*{position:relative;z-index:1}
+.hero-text{min-width:0}
+.eyebrow{background:rgba(255,255,255,.2);font-weight:800}
+.mascot{width:108px;height:108px;flex:none;animation:bob 3.4s ease-in-out infinite}
+.mascot svg{width:100%;height:100%;filter:drop-shadow(0 6px 0 rgba(0,0,0,.2))}
+@keyframes bob{50%{transform:translateY(-7px) rotate(4deg)}}
+.herostats{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:6px}
+.xpchip{display:inline-flex;align-items:baseline;gap:5px;background:rgba(255,255,255,.2);padding:4px 16px;border-radius:999px;font-weight:800;font-size:.9rem}
+.xpchip b{font-size:1.3rem;color:var(--gold)}
+.stars{font-size:1.55rem;letter-spacing:3px;color:var(--gold);text-shadow:0 2px 0 rgba(0,0,0,.25);line-height:1}
+.stars .off{opacity:.35}
+.herostats .heroprog{flex:1;min-width:190px;margin-top:0}
+.heroprog .track{height:12px}
+.hero::before{width:260px;height:260px;right:-60px;top:-110px}
+@media (max-width:520px){.mascot{width:78px;height:78px}.hero{padding:20px 16px 16px}}
+
+/* 徽章列 */
+.badges{margin:14px 0 0;background:var(--card);border:2px solid var(--stroke);border-radius:22px;padding:12px 14px 10px;box-shadow:0 4px 0 var(--stroke)}
+.badges-title{margin:0 0 8px;font-size:.8rem;font-weight:800;color:var(--muted);letter-spacing:.08em}
+.badge-row{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.badge-row::-webkit-scrollbar{display:none}
+.bdg{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px;width:78px;text-align:center}
+.bdg .ico{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:1.65rem;background:linear-gradient(145deg,#ffe29a,#f2b84b);box-shadow:0 4px 0 #c9922b;color:#3a2900}
+.bdg .nm{font-size:.72rem;font-weight:800;line-height:1.25}
+.bdg.locked .ico{background:var(--field);box-shadow:0 4px 0 var(--stroke);filter:grayscale(1);opacity:.5}
+.bdg.locked .nm{color:var(--muted);font-weight:600}
+.bdg.pop .ico{animation:pop .7s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.2) rotate(-20deg)}100%{transform:none}}
+
+/* 通知、按鈕：貼紙感 */
+.notice{border-radius:18px;border:2px solid var(--stroke);border-left:6px solid var(--gold);box-shadow:0 4px 0 var(--stroke)}
+button{border:2px solid var(--stroke);box-shadow:0 3px 0 var(--stroke);font-weight:800}
+button:hover{box-shadow:0 3px 0 var(--accent)}
+button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--stroke)}
+button.primary{border-color:var(--sh);box-shadow:0 4px 0 var(--sh)}
+button.primary:hover{box-shadow:0 4px 0 var(--sh)}
+button.primary:active{box-shadow:0 1px 0 var(--sh)}
+details.tools>summary{border:2px solid var(--stroke);box-shadow:0 3px 0 var(--stroke);font-weight:800}
+
+/* 闖關步驟條（取代原本的分頁） */
+.tabs{gap:10px;padding:14px 4px 12px;align-items:stretch}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px;min-width:86px;max-width:110px;padding:10px 10px 9px;border-radius:20px;border:2px solid var(--stroke);background:linear-gradient(90deg,var(--accent-soft) var(--p,0%),var(--card) var(--p,0%));box-shadow:0 4px 0 var(--stroke);color:var(--ink);font-weight:800;white-space:normal}
+.tab .no{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--accent-deep);font-size:.98rem;font-weight:900;border:2px solid var(--accent)}
+.tab .lb{font-size:.76rem;line-height:1.25;text-align:center;word-break:keep-all}
+.tab .pct{font-size:.68rem;font-weight:800;color:var(--muted);background:none;padding:0;margin:0}
+.tab .pct:empty{display:none}
+.tab.done .no{background:var(--ok);border-color:var(--ok);color:#fff;font-size:0}
+.tab.done .no::before{content:"✓";font-size:1.05rem}
+.tab.done{border-color:var(--ok);box-shadow:0 4px 0 var(--ok)}
+.tab[aria-selected="true"]{border-color:var(--accent-deep);box-shadow:0 4px 0 var(--sh);transform:translateY(-3px);background:linear-gradient(90deg,var(--accent-soft) var(--p,0%),var(--card) var(--p,0%))}
+.tab[aria-selected="true"] .no{background:var(--accent-deep);color:var(--accent-ink);border-color:var(--accent-deep)}
+.tab[aria-selected="true"].done .no{background:var(--ok);border-color:var(--ok);color:#fff}
+.tab[aria-selected="true"] .lb{color:var(--accent-deep)}
+
+/* 任務橫幅與關主說 */
+.mission{margin:2px 0 16px;padding:14px 16px 12px;border-radius:22px;border:2px solid var(--gold);background:linear-gradient(135deg,var(--gold-soft),var(--card));box-shadow:0 4px 0 var(--gold)}
+.mtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mno{display:inline-flex;gap:8px;align-items:center;font-size:1.02rem;font-weight:900;color:var(--gold-ink)}
+.mno::before{content:"🎯"}
+.mxp{font-size:.8rem;font-weight:800;color:var(--gold-ink);white-space:nowrap}
+.mbar{height:12px;border-radius:999px;background:rgba(0,0,0,.09);overflow:hidden;margin:10px 0 6px}
+.mfill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.mprog{margin:0;font-size:.82rem;color:var(--muted);font-weight:600}
+.mission.done{border-color:var(--ok);background:linear-gradient(135deg,var(--ok-soft),var(--card));box-shadow:0 4px 0 var(--ok)}
+.mission.done .mno{color:var(--ok)}
+.mission.done .mno::before{content:"✅"}
+.mission.done .mxp{color:var(--ok)}
+.coach{display:flex;gap:12px;align-items:flex-start;margin:4px 0 18px}
+.coach-face{flex:none;width:56px;height:56px}
+.coach-face svg{width:100%;height:100%;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.coach-say{position:relative;background:var(--card);border:2px solid var(--stroke);border-radius:20px;padding:10px 16px;box-shadow:0 3px 0 var(--stroke);font-size:.95rem;line-height:1.6}
+.coach-say::before{content:"";position:absolute;left:-9px;top:20px;width:14px;height:14px;background:var(--card);border-left:2px solid var(--stroke);border-bottom:2px solid var(--stroke);transform:rotate(45deg)}
+.coach-say b{display:block;font-size:.72rem;color:var(--accent-deep);letter-spacing:.1em;margin-bottom:1px}
+
+/* 區塊：編號圓圈、貼紙陰影 */
+.panel{counter-reset:g}
+.panel h2{font-size:1.5rem;font-weight:900}
+.group{border:2px solid var(--stroke);border-radius:24px;box-shadow:0 5px 0 var(--stroke);padding:20px 18px 22px}
+.group h3::before{counter-increment:g;content:counter(g);flex:none;width:32px;height:32px;border-radius:50%;background:var(--accent-deep);color:var(--accent-ink);display:grid;place-items:center;font-size:.92rem;font-weight:900}
+.group.note{background:var(--gold-soft);border-color:var(--gold);box-shadow:0 5px 0 var(--gold)}
+.group.note h3::before{content:attr(data-ico);counter-increment:none;background:none;width:auto;height:auto;font-size:1.3rem}
+.field.filled>label::after,.field.filled>fieldset>legend::after{content:"✓";display:inline-grid;place-items:center;width:18px;height:18px;margin-left:8px;border-radius:50%;background:var(--ok);color:#fff;font-size:.7rem;font-weight:900;vertical-align:2px}
+details.card{border:2px solid var(--stroke);border-radius:22px;box-shadow:0 5px 0 var(--stroke)}
+details.card.ai{border-color:var(--accent);box-shadow:0 5px 0 var(--accent)}
+details.card.ai>summary::before{content:"🤖";margin-right:8px}
+.choice{border-width:2px}
+.choice:has(input:checked){box-shadow:0 3px 0 var(--accent)}
+input[type=text],textarea{border-width:2px}
+
+/* 慶祝：提示、紙花、破關視窗 */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,28px);opacity:0;pointer-events:none;background:#231f3a;color:#fff;padding:12px 22px;border-radius:999px;font-weight:800;z-index:60;box-shadow:0 6px 0 rgba(0,0,0,.2);transition:opacity .25s,transform .25s;max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.win{background:linear-gradient(135deg,#6a55c9,#8f72dc)}
+.toast.gold{background:#f2b84b;color:#3a2900}
+canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+.clear{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(20,16,36,.64);padding:16px;backdrop-filter:blur(4px)}
+.clear-card{max-width:440px;width:100%;background:var(--card);border-radius:30px;padding:30px 24px 24px;text-align:center;box-shadow:0 10px 0 var(--sh);border:3px solid var(--gold);margin-top:60px}
+.clear-card .mascot{margin:-92px auto 8px;width:116px;height:116px}
+.clear-card h2{margin:0;font-size:1.8rem;font-weight:900}
+.clear-card p{margin:6px 0;color:var(--muted)}
+.clear-stars{font-size:2.3rem;color:var(--gold);letter-spacing:6px;margin:4px 0;text-shadow:0 3px 0 rgba(0,0,0,.15)}
+.clear-xp{display:inline-block;background:var(--gold-soft);color:var(--gold-ink);font-weight:900;padding:4px 18px;border-radius:999px;margin:4px 0 10px}
+.clear-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:10px 0}
+.clear-card .row{justify-content:center;margin-top:16px}
+@media print{.toast,canvas#confetti,.clear,.badges{display:none!important}}
+@media (prefers-reduced-motion: reduce){.mascot,.bdg.pop .ico{animation:none}}
+.mission.exp .mno::before{content:"🤖"}
+.mission.exp.done .mno::before{content:"✅"}
+
+.tab.done .pct{display:none}
 /* 列印與 PDF（維持純白、黑字） */
 .pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
 .pv h1{font-size:20pt;margin:0 0 4pt}
@@ -207,14 +326,25 @@ table.frame th{background:var(--accent-soft);color:var(--accent-deep);font-weigh
 <div class="wrap">
   <nav class="topnav" id="topnav" aria-label="課程導覽"></nav>
   <header class="hero">
-    <p class="eyebrow">自媒體陪跑　學習單</p>
-    <h1 id="title"></h1>
-    <p id="subtitle"></p>
-    <div class="heroprog" aria-label="這一堂的填寫進度">
-      <div class="track"><div class="fill" id="heroFill"></div></div>
-      <span class="pct" id="heroPct">尚未開始</span>
+    <div class="hero-text">
+      <p class="eyebrow" id="eyebrow">自媒體陪跑　學習單</p>
+      <h1 id="title"></h1>
+      <p id="subtitle"></p>
+    </div>
+    <div class="mascot" id="heroMascot" aria-hidden="true"></div>
+    <div class="herostats">
+      <span class="xpchip"><b id="xpNum">0</b> XP</span>
+      <span class="stars" id="stars" role="img" aria-label="星星 0 顆"></span>
+      <div class="heroprog" aria-label="這一關的完成度">
+        <div class="track"><div class="fill" id="heroFill"></div></div>
+        <span class="pct" id="heroPct">尚未開始</span>
+      </div>
     </div>
   </header>
+  <section class="badges" aria-label="這一關的徽章">
+    <p class="badges-title">徽章　<span id="badgeCount"></span></p>
+    <div class="badge-row" id="badgeRow"></div>
+  </section>
 
   <div class="notice" id="notice">
     <span>你填的內容<strong>只存在這台裝置的瀏覽器裡，不會上傳到任何地方</strong>，要用同一個瀏覽器打開才會看到。換裝置或清除瀏覽資料就會消失，請定期按「下載備份」。會談前，也可以按「複製全部文字」或「下載文字檔」傳給老師。</span>
@@ -272,9 +402,13 @@ table.frame th{background:var(--accent-soft);color:var(--accent-deep);font-weigh
   <main id="panels"></main>
   <nav class="topnav bottom" id="botnav" aria-label="課程導覽"></nav>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas id="confetti" hidden></canvas>
+<div class="clear" id="clearModal" role="dialog" aria-modal="true" aria-labelledby="clearTitle" hidden></div>
 <div id="printView" class="pv" aria-hidden="true"></div>
 <div id="pdfHost" aria-hidden="true"><div id="pdfRoot" class="pv"></div></div>
 <script src="../config.js"></script>
+<script src="../badges.js"></script>
 <script>
 /* 課程內容都在這個 COURSE 物件裡。
    欄位類型 type：text 單行 / area 多行 / radio 單選 / check 多選。 */
@@ -442,11 +576,20 @@ const COURSE = {
   ],
 };
 
-
-
-
-
-
+/* ---- 破關設定 ---- */
+COURSE.level = 2; COURSE.world = '第 1 個月・打地基';
+COURSE.clearMsg = '第 2 關的必填任務都完成了：你有了一個具體的人、他的煩惱、他的語言，還有定位 v1。';
+const TIPS = {
+  q1: '先回頭看上週：哪一句最有感覺，就是今天的起點。',
+  q2: '給他一個名字，他就不再是「一群人」。',
+  q3: '十個寫不滿也沒關係，先寫最痛的三個。',
+  q4: '寫原話，不寫標題。越碎、越口語，越真。',
+  q5: 'v1 不是推翻 v0，是你知道得更多了。',
+  q6: '不用精彩，寫真實的就好。',
+  q7: '訪談是加分題，先做一個就很棒。',
+  q8: '這份回報是讓我知道你的狀態，誠實最重要。',
+};
+COURSE.parts.forEach(p => { if (TIPS[p.id]) p.tip = TIPS[p.id]; });
 /* ============================ 程式 ============================ */
 const $ = (s, r = document) => r.querySelector(s);
 let state = { values: {}, tab: 'p1' };
@@ -487,7 +630,7 @@ function labelNode(f) {
 
 function renderField(f, idOverride) {
   const id = idOverride || f.id;
-  const wrap = el('div', { class: 'field' });
+  const wrap = el('div', { class: 'field', 'data-id': id });
   const v = state.values[id];
   if (f.type === 'text' || f.type === 'area') {
     wrap.append(el('label', { for: 'f_' + id }, labelNode(f)));
@@ -547,12 +690,12 @@ function countedFields(part) {
   }
   return out;
 }
-function saveOverall(pct) {
+function saveOverall(o) {
   try {
     const k = 'smcourse-progress';
-    const o = JSON.parse(localStorage.getItem(k) || '{}');
-    o[COURSE.key] = { pct, at: Date.now() };
-    localStorage.setItem(k, JSON.stringify(o));
+    const all = JSON.parse(localStorage.getItem(k) || '{}');
+    all[COURSE.key] = o;
+    localStorage.setItem(k, JSON.stringify(all));
   } catch (e) {}
 }
 function renderNav() {
@@ -568,21 +711,131 @@ function renderNav() {
     if (n.next) box.append(el('a', { href: withCode(n.next.href), text: n.next.label + ' ›' }));
   });
 }
-function updateProgress() {
-  let totalAll = 0, doneAll = 0;
+
+/* ---------- 闖關系統：XP、星星、徽章、慶祝 ---------- */
+var XP_FIELD = 10, XP_PART = 20, XP_AI = 15, XP_CLEAR = 100;
+var MASCOT = '<svg viewBox="0 0 100 100" role="img" aria-label="小星星關主"><polygon points="50,10 61.17,36.63 89.95,39.02 68.07,57.87 74.69,85.98 50,71 25.31,85.98 31.93,57.87 10.05,39.02 38.83,36.63" fill="#F2B84B" stroke="#F2B84B" stroke-width="8" stroke-linejoin="round"/><circle cx="41" cy="52" r="3.2" fill="#4a3410"/><circle cx="59" cy="52" r="3.2" fill="#4a3410"/><path d="M42 61 Q50 68 58 61" fill="none" stroke="#4a3410" stroke-width="2.6" stroke-linecap="round"/><circle cx="35" cy="59" r="3.6" fill="#ff9aa8" opacity=".7"/><circle cx="65" cy="59" r="3.6" fill="#ff9aa8" opacity=".7"/></svg>';
+
+function partName(p) { return p.tab.replace(/^\S+\s+/, ''); }
+function partInfo(p) {
+  const list = countedFields(p);
+  const filled = list.filter(x => isFilled(state.values[x.id])).length;
+  const prompts = p.prompts || [];
+  const copied = prompts.filter(pr => (state.ai || {})[pr.title]).length;
+  let done;
+  if (list.length) done = filled === list.length;
+  else done = copied > 0 || (p.groups || []).some(g => g.fields.some(f => isFilled(state.values[f.id])));
+  const max = list.length * XP_FIELD + XP_PART + prompts.length * XP_AI;
+  const xp = filled * XP_FIELD + (done ? XP_PART : 0) + copied * XP_AI;
+  return { list, filled, copied, done, max, xp, pct: list.length ? Math.round(filled / list.length * 100) : (done ? 100 : 0) };
+}
+function lessonNo2() { const m = /lesson(\d+)/.exec(COURSE.key); return m ? Number(m[1]) : 0; }
+function lessonBadges() { return (window.SMBADGES || []).filter(b => b.lesson === lessonNo2()); }
+function stateForBadges() { return { values: state.values, ai: state.ai || {}, cleared: !!state.cleared }; }
+function badgeOn(b) { return window.SMBADGE_EVAL ? window.SMBADGE_EVAL(b, stateForBadges()) : false; }
+
+var toastQ = [], toastBusy = false;
+function toast(msg, kind) { toastQ.push({ msg, kind }); if (!toastBusy) nextToast(); }
+function nextToast() {
+  const t = toastQ.shift(), box = $('#toast');
+  if (!t || !box) { toastBusy = false; return; }
+  toastBusy = true; box.textContent = t.msg; box.className = 'toast show ' + (t.kind || '');
+  setTimeout(() => { box.classList.remove('show'); setTimeout(nextToast, 260); }, 2300);
+}
+function confetti(n) {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cv = $('#confetti'); if (!cv) return;
+  const ctx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight; cv.hidden = false;
+  const cols = ['#f2b84b', '#6a55c9', '#ff7a8a', '#3fc1a5', '#8f72dc'];
+  const ps = Array.from({ length: n || 70 }, () => ({ x: innerWidth / 2 + (Math.random() - .5) * 240, y: innerHeight * .38, vx: (Math.random() - .5) * 13, vy: -Math.random() * 12 - 4, s: 7 + Math.random() * 6, c: cols[Math.floor(Math.random() * cols.length)], r: Math.random() * 6, vr: (Math.random() - .5) * .4 }));
+  let f = 0;
+  (function tick() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ps.forEach(q => { q.x += q.vx; q.y += q.vy; q.vy += .36; q.r += q.vr; ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.r); ctx.fillStyle = q.c; ctx.fillRect(-q.s / 2, -q.s / 2, q.s, q.s * .6); ctx.restore(); });
+    if (++f < 120) requestAnimationFrame(tick); else { ctx.clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
+  })();
+}
+function closeClear() { const m = $('#clearModal'); if (m) { m.hidden = true; m.replaceChildren(); } }
+function showClear(info) {
+  const m = $('#clearModal'); if (!m) return;
+  const next = COURSE.nav && COURSE.nav.next;
+  const earned = lessonBadges().filter(b => badgeOn(b));
+  const card = el('div', { class: 'clear-card' });
+  const mas = el('div', { class: 'mascot' }); mas.innerHTML = MASCOT;
+  const stars = el('div', { class: 'clear-stars', text: '★★★' });
+  const bd = el('div', { class: 'clear-badges' });
+  earned.forEach(b => bd.append(el('div', { class: 'bdg', title: b.desc }, el('span', { class: 'ico', text: b.icon }), el('span', { class: 'nm', text: b.name }))));
+  const row = el('div', { class: 'row' });
+  if (next) { const go = el('button', { class: 'primary', type: 'button', text: '前往' + next.label + ' ›' }); go.addEventListener('click', () => { location.href = withCode(next.href); }); row.append(go); }
+  const stay = el('button', { type: 'button', text: '先留在這裡' }); stay.addEventListener('click', closeClear);
+  row.append(stay);
+  card.append(mas, el('h2', { id: 'clearTitle', text: '破關！第 ' + (COURSE.level || '') + ' 關完成' }), stars, el('div', { class: 'clear-xp', text: '本關 ' + info.xp + ' XP' }), el('p', { text: COURSE.clearMsg || '你把這一關的必填任務都完成了。先休息一下，再往下一關走。' }), bd, row);
+  m.replaceChildren(card); m.hidden = false;
+  confetti(140);
+  const first = card.querySelector('button'); if (first) first.focus();
+}
+
+function updateProgress(silent) {
+  state.done = state.done || {}; state.badges = state.badges || {}; state.ai = state.ai || {};
+  let totalAll = 0, doneAll = 0, xp = 0, max = 0, partsDone = 0, partsReq = 0;
+  const newlyDone = [];
   COURSE.parts.forEach(p => {
-    const list = countedFields(p);
-    const done = list.filter(x => isFilled(state.values[x.id])).length;
-    totalAll += list.length; doneAll += done;
-    const pct = list.length ? Math.round(done / list.length * 100) : 0;
-    const node = $(`#tab_${p.id} .pct`);
-    if (node) node.textContent = list.length ? pct + '%' : '';
+    const info = partInfo(p);
+    totalAll += info.list.length; doneAll += info.filled; xp += info.xp; max += info.max;
+    if (info.list.length) { partsReq++; if (info.done) partsDone++; }
+    const tab = $('#tab_' + p.id);
+    if (tab) {
+      tab.style.setProperty('--p', info.pct + '%');
+      tab.classList.toggle('done', info.done);
+      const pc = tab.querySelector('.pct'); if (pc) pc.textContent = info.list.length ? info.pct + '%' : '';
+    }
+    const ms = $('#ms_' + p.id);
+    if (ms) {
+      ms.querySelector('.mfill').style.width = info.pct + '%';
+      ms.querySelector('.xpnow').textContent = info.xp;
+      ms.classList.toggle('done', info.done);
+      ms.querySelector('.mprog').textContent = info.list.length ? (info.done ? '任務完成！' : '已完成 ' + info.filled + ' / ' + info.list.length + ' 題') : (info.done ? '已經體驗過了 ✓' : '動手試一次就算完成：複製一個 prompt，或寫下你的想法');
+    }
+    if (info.done && !state.done[p.id]) { state.done[p.id] = true; if (info.list.length) newlyDone.push(p); }
+    if (!info.done && state.done[p.id]) delete state.done[p.id];
   });
+  document.querySelectorAll('.field[data-id]').forEach(w => w.classList.toggle('filled', isFilled(state.values[w.getAttribute('data-id')])));
   const overall = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
-  saveOverall(overall);
-  const hf = $('#heroFill'), hp = $('#heroPct');
+  const allDone = partsReq > 0 && partsDone === partsReq;
+  state.cleared = allDone;
+  if (allDone) xp += XP_CLEAR;
+  max += XP_CLEAR;
+  const stars = allDone ? 3 : overall >= 66 ? 2 : overall >= 33 ? 1 : 0;
+
+  const all = lessonBadges(), earned = [], fresh = [];
+  all.forEach(b => {
+    const on = badgeOn(b);
+    if (on) { earned.push(b.id); if (!state.badges[b.id]) { fresh.push(b); state.badges[b.id] = true; } }
+    else delete state.badges[b.id];
+  });
+
+  const hf = $('#heroFill'), hp = $('#heroPct'), xn = $('#xpNum'), st = $('#stars'), bc = $('#badgeCount');
   if (hf) hf.style.width = overall + '%';
-  if (hp) hp.textContent = overall === 0 ? '尚未開始' : (overall >= 100 ? '全部完成 🎉' : '已完成 ' + overall + '%');
+  if (hp) hp.textContent = overall === 0 ? '尚未開始' : (allDone ? '破關！' : '已完成 ' + overall + '%');
+  if (xn) xn.textContent = xp;
+  if (st) { st.innerHTML = [0, 1, 2].map(i => '<span class="' + (i < stars ? '' : 'off') + '">★</span>').join(''); st.setAttribute('aria-label', '星星 ' + stars + ' 顆'); }
+  if (bc) bc.textContent = earned.length + ' / ' + all.length;
+  document.querySelectorAll('#badgeRow .bdg').forEach(n => {
+    const id = n.getAttribute('data-id'), on = earned.indexOf(id) >= 0;
+    n.classList.toggle('locked', !on);
+    if (!silent && fresh.some(b => b.id === id)) { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); }
+  });
+  saveOverall({ pct: overall, xp, max, done: partsDone, total: partsReq, stars, at: Date.now() });
+
+  const newClear = allDone && !state.celebrated;
+  if (silent) { if (allDone) state.celebrated = true; return; }
+  if (!allDone) state.celebrated = false;
+  newlyDone.forEach(p => toast('🎉 完成「' + partName(p) + '」　+' + XP_PART + ' XP', 'win'));
+  fresh.forEach(b => toast(b.icon + ' 獲得徽章：' + b.name, 'gold'));
+  if (newlyDone.length || fresh.length) confetti(newClear ? 40 : 70);
+  if (newClear) { state.celebrated = true; scheduleSave(); setTimeout(() => showClear({ xp, stars }), 1200); }
+  else if (newlyDone.length || fresh.length) scheduleSave();
 }
 
 
@@ -602,7 +855,7 @@ function buildPromptText(pr, withMaterials) {
   if (withMaterials && pr.materials && pr.materials.length) {
     const parts = [];
     pr.materials.forEach(m => {
-      const vals = m.ids.map(id => matValue(m.src || 'self', id)).filter(Boolean);
+      const vals = m.ids.map((id, i) => { const v = matValue(m.src || 'self', id); return v ? ((m.lab && m.lab[i]) ? m.lab[i] + '：' + v : v) : ''; }).filter(Boolean);
       if (!vals.length) { missing.push(m.label); return; }
       const body = m.numbered ? vals.map((v, i) => (i + 1) + '. ' + v).join('\n') : vals.join('\n');
       parts.push('## ' + m.label + '\n' + body);
@@ -613,9 +866,12 @@ function buildPromptText(pr, withMaterials) {
 }
 async function copyPrompt(pr, withMaterials) {
   const r = buildPromptText(pr, withMaterials);
-  const tail = withMaterials && r.missing.length ? '　還沒有這些材料：' + r.missing.join('、') + '（AI 會先問你；第 2 堂的內容要在同一個瀏覽器才讀得到）' : '';
+  const tail = withMaterials && r.missing.length ? '　還沒有這些材料：' + r.missing.join('、') + '（AI 會先問你；別堂的內容要在同一個瀏覽器才讀得到）' : '';
   try { await navigator.clipboard.writeText(r.text); setStatus('已複製「' + pr.title + '」，去貼到 AI 吧。' + tail); }
   catch (e) { showExport(r.text, '無法自動複製，請把下面的文字全部選取後自己複製，再貼到 AI。'); }
+  state.ai = state.ai || {};
+  if (!state.ai[pr.title]) { state.ai[pr.title] = true; scheduleSave(); toast('🤖 +' + XP_AI + ' XP　AI 夥伴上線', 'win'); }
+  updateProgress();
 }
 function renderPrompt(pr) {
   const d = el('details', { class: 'card ai' });
@@ -643,15 +899,29 @@ function renderPrompt(pr) {
   return d;
 }
 
+function missionNode(p) {
+  const info = partInfo(p);
+  const m = p.tab.match(/^(\S+)\s+/), no = m ? m[1] : '';
+  const numbered = /^[①②③④⑤⑥⑦⑧⑨⑩]/.test(no);
+  return el('div', { class: 'mission' + (numbered ? '' : ' exp'), id: 'ms_' + p.id },
+    el('div', { class: 'mtop' }, el('span', { class: 'mno', text: numbered ? '任務 ' + no : '體驗任務' }), el('span', { class: 'mxp' }, el('b', { class: 'xpnow', text: '0' }), ' / ' + info.max + ' XP')),
+    el('div', { class: 'mbar' }, el('div', { class: 'mfill' })),
+    el('p', { class: 'mprog', text: '' }));
+}
+function coachNode(text) {
+  const f = el('div', { class: 'coach-face' }); f.innerHTML = MASCOT;
+  return el('div', { class: 'coach' }, f, el('div', { class: 'coach-say' }, el('b', { text: '關主說' }), el('span', { text })));
+}
 function renderPart(p) {
   const panel = el('section', { class: 'panel', id: 'panel_' + p.id, role: 'tabpanel', 'aria-labelledby': 'tab_' + p.id });
-  panel.append(el('span', { class: 'when', text: p.when }), el('h2', { text: p.title }), el('p', { class: 'intro', text: p.intro }));
+  panel.append(missionNode(p), el('span', { class: 'when', text: p.when }), el('h2', { text: p.title }), el('p', { class: 'intro', text: p.intro }));
+  if (p.tip) panel.append(coachNode(p.tip));
   if (p.tips) {
     const ul = el('ul', { class: 'clean' }); p.tips.forEach(t => ul.append(el('li', { text: t })));
-    panel.append(el('div', { class: 'group' }, el('h3', { text: p.tipsTitle || '怎麼找' }), ul));
+    panel.append(el('div', { class: 'group note' }, el('h3', { text: p.tipsTitle || '怎麼找', 'data-ico': '💡' }), ul));
   }
   (p.cards || []).forEach(c => {
-    const box = el('div', { class: 'group' }, el('h3', { text: c.title }));
+    const box = el('div', { class: 'group note' }, el('h3', { text: c.title, 'data-ico': '📌' }));
     if (c.intro) box.append(el('p', { class: 'gintro', text: c.intro }));
     if (c.table) {
       const t = el('table', { class: 'frame' });
@@ -695,16 +965,22 @@ function build() {
   if (ti.length === 2) { const h = $('#title'); h.replaceChildren(el('span', { class: 'lno', text: ti[0] }), ti[1]); }
   else $('#title').textContent = COURSE.title;
   $('#subtitle').textContent = COURSE.subtitle;
+  const ey = $('#eyebrow'); if (ey) ey.textContent = 'LEVEL ' + (COURSE.level || '') + (COURSE.world ? '　' + COURSE.world : '');
+  const hm = $('#heroMascot'); if (hm) hm.innerHTML = MASCOT;
+  const row = $('#badgeRow');
+  if (row) { row.replaceChildren(); lessonBadges().forEach(b => row.append(el('div', { class: 'bdg locked', 'data-id': b.id, title: b.desc }, el('span', { class: 'ico', text: b.icon }), el('span', { class: 'nm', text: b.name })))); }
   const tabs = $('#tabs'), panels = $('#panels');
   tabs.replaceChildren(); panels.replaceChildren();
-  COURSE.parts.forEach(p => {
-    const b = el('button', { class: 'tab', id: 'tab_' + p.id, role: 'tab', 'aria-selected': 'false' }, p.tab, el('span', { class: 'pct', text: '0%' }));
+  COURSE.parts.forEach((p, i) => {
+    const m = p.tab.match(/^(\S+)\s+(.*)$/);
+    const b = el('button', { class: 'tab', id: 'tab_' + p.id, role: 'tab', 'aria-selected': 'false' },
+      el('span', { class: 'no', text: m ? m[1] : String(i + 1) }), el('span', { class: 'lb', text: m ? m[2] : p.tab }), el('span', { class: 'pct', text: '' }));
     b.addEventListener('click', () => select(p.id));
     tabs.append(b);
     panels.append(renderPart(p));
   });
   select(COURSE.parts.some(p => p.id === state.tab) ? state.tab : COURSE.parts[0].id, true);
-  updateProgress();
+  updateProgress(true);
 }
 function select(id, silent) {
   state.tab = id;
@@ -968,7 +1244,7 @@ $('#fileIn').addEventListener('change', e => {
   };
   rd.readAsText(f); e.target.value = '';
 });
-$('#btnReset').addEventListener('click', () => askConfirm('會清除所有已填內容，且無法復原。建議先按「下載備份」。', '確定清除', () => { state.values = {}; saveNow(); build(); setStatus('已清除'); }));
+$('#btnReset').addEventListener('click', () => askConfirm('會清除所有已填內容，且無法復原。建議先按「下載備份」。', '確定清除', () => { state.values = {}; state.done = {}; state.cleared = false; state.celebrated = false; state.badges = {}; state.ai = {}; saveNow(); build(); setStatus('已清除'); }));
 $('#confirmYes').addEventListener('click', () => { $('#confirmBar').hidden = true; const f = pendingYes; pendingYes = null; if (f) f(); });
 $('#confirmNo').addEventListener('click', () => { $('#confirmBar').hidden = true; pendingYes = null; });
 $('#exportClose').addEventListener('click', () => { $('#exportBox').hidden = true; });
@@ -993,7 +1269,7 @@ setupSubmit();
   const d = $('#moreTools'); if (!d) return;
   d.addEventListener('click', e => { if (e.target.closest('.menu button')) d.open = false; });
   document.addEventListener('click', e => { if (d.open && !d.contains(e.target)) d.open = false; });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') d.open = false; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { d.open = false; closeClear(); } });
 })();
 (async () => {
   try { dlCap = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null; } catch (e) { dlCap = null; }
