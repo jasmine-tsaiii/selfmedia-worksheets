@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#4b3a9e">
 <style>
-/* 破關地圖：13 週 = 13 關，三個月 = 三個世界。每一關的進度，都來自你在學習單裡填的內容。 */
+/* 破關地圖：12 週 = 12 關，三個月 = 三個世界。每一關的進度，都來自你在學習單裡填的內容。 */
 :root{
   --bg:#fbf8f3;--card:#fff;--ink:#2a2433;--muted:#6b6478;--line:#e9e2d9;--stroke:#e2dbd0;--field:#fbf8f3;
   --accent:#6a55c9;--accent-deep:#4b3a9e;--accent-ink:#fff;--accent-soft:#f0ecfc;
@@ -154,13 +154,20 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
 .week{color:var(--muted)}
 :root[data-theme="dark"] .world,:root[data-theme="dark"] .lv.current .node{color:#17141f}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .world,:root:not([data-theme="light"]) .lv.current .node{color:#17141f}}
+
+/* ===== 課程總覽卡片 ===== */
+.ovgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 8px}
+.ovcard{background:var(--card);border:2px solid var(--stroke,var(--line));border-radius:20px;padding:14px 18px;box-shadow:0 3px 0 var(--stroke,var(--line))}
+.ovcard b{display:block;font-size:1rem;margin-bottom:4px}
+.ovcard p{margin:0;font-size:.88rem;line-height:1.6;color:var(--muted)}
+@media (max-width:620px){.ovgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main>
 <header class="hero">
   <div>
-    <p class="eyebrow">自媒體陪跑　13 週破關</p>
+    <p class="eyebrow">自媒體陪跑　12 週破關</p>
     <h1>你的自媒體破關地圖</h1>
     <p class="lead">每週一關，三個月三個世界。填完一關的必填任務就能破關、拿星星。沒破關也沒關係，進度會幫你留著。</p>
   </div>
@@ -168,6 +175,15 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
   <div class="stats" id="stats"></div>
   <div class="cta" id="cta"></div>
 </header>
+<h2>📖 課程總覽</h2>
+<p class="lead2">開始之前，先知道這門課怎麼進行。</p>
+<section class="ovgrid" aria-label="課程總覽">
+  <div class="ovcard"><b>🗓️ 12 週，三個月</b><p>每週一關。第 1 個月打地基，第 2 個月開始被看見，第 3 個月走到被付費。最後一週加上復盤。</p></div>
+  <div class="ovcard"><b>🔁 每週的節奏</b><p>會談 → 學習單 → 老師回饋 → 下一關。學習單邊做邊存，內容只留在你的瀏覽器。</p></div>
+  <div class="ovcard"><b>✅ 只有「必填」算破關</b><p>選填題、週日回報、「用 AI 試試」都不影響破關。沒破關也沒關係，進度會留著。</p></div>
+  <div class="ovcard"><b>🤖 AI 是教練，不是代筆</b><p>先自己寫，再請 AI 看。它會說哪裡不錯、哪裡可以加強，給行動和改寫方向，由你決定。</p></div>
+</section>
+
 <h2>🗺️ 闖關地圖</h2>
 <p class="lead2">不用等所有人，照自己的節奏走。灰色的關卡還在準備中。</p>
 <div class="map" id="map"></div>
@@ -197,8 +213,7 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
   var WORLDS = {
     1: { icon: '🌱', name: '第 1 個月・打地基', sub: '知道自己是誰、對誰說、說什麼　第 1–4 週' },
     2: { icon: '🌟', name: '第 2 個月・開始被看見', sub: '穩定產出、找到有效的內容　第 5–8 週' },
-    3: { icon: '💰', name: '第 3 個月・被付費', sub: '有名單、有服務、有人來詢問或付費　第 9–12 週' },
-    4: { icon: '🏁', name: '第 13 週・結業', sub: '復盤，規劃下一季' },
+    3: { icon: '💰', name: '第 3 個月・被付費', sub: '有名單、有服務、有人來詢問或付費　第 9–12 週（含最後的復盤）' },
   };
   var LEVELS = [
     { n: 1, w: 1, key: 'smcourse-lesson1-v1', href: 'lesson1/', title: '起點、市場觀察與定位', quests: ['目標卡', '曝光決定', '卡點', '一句話定位 v0', '5 個對標帳號', '🤖 AI 陪練'] },
@@ -212,8 +227,7 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
     { n: 9, w: 3, soon: 1, title: '信任與名單', quests: ['產品階梯', '名單磁鐵', '社會證明'], tent: 1 },
     { n: 10, w: 3, soon: 1, title: 'LINE 與培育', quests: ['LINE 官方帳號', '培育訊息', '案例內容'], tent: 1 },
     { n: 11, w: 3, soon: 1, title: '設計第一個服務', quests: ['服務規格', '定價', '服務介紹頁'], tent: 1 },
-    { n: 12, w: 3, soon: 1, title: '銷售與成交', quests: ['上市內容', '諮詢腳本', '異議處理'], tent: 1 },
-    { n: 13, w: 4, soon: 1, title: '復盤與下一季', quests: ['前後對照', '復盤筆記', '飛輪藍圖', '學員見證'], tent: 1 },
+    { n: 12, w: 3, soon: 1, title: '銷售成交與復盤', quests: ['上市內容', '諮詢腳本', '異議處理', '前後對照', '復盤筆記', '飛輪藍圖'], tent: 1 },
   ];
   var TIERS = [
     [0, '🌱', '剛出發'], [200, '🧭', '探索者'], [500, '🎯', '定位達人'], [900, '🎨', '門面設計師'], [1400, '🚀', '內容創作者'],
