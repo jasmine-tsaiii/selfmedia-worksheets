@@ -716,39 +716,6 @@ const COURSE = {
       ],
     },
     {
-      id: 'pai', tab: '🤖 用 AI 試試', when: '上課後或非同步做，約 20–30 分鐘',
-      title: '用 AI 試試：四位 AI 教練',
-      intro: 'AI 是輔助工具，不是代筆。四位 AI 教練分別放在對應的格子旁邊，寫完那一格再請它看一次；這裡是總說明、給 AI 看的素材，和你的使用紀錄。',
-      cards: [
-        { title: '這週的四位 AI 教練', items: [
-          '🎯 目標卡教練：寫完目標卡後，說哪裡不錯、哪裡可加強，給行動和改寫方向（在「② 上課四張卡」）',
-          '👂 卡點聆聽者：寫完卡點後，先接住你的擔心，給小行動和換個說法（在「② 上課四張卡」）',
-          '🧩 對標整理助手：拆完對標帳號後，整理共同做法和空缺（在「④ 本週作業」）',
-          '🕵️ 陌生人測試：寫完一句話定位後，說他看到什麼、哪裡可以更具體（在「③ 定位」）',
-        ], note: '它們預設收合，想用再打開，都是選填。它不能做：替你決定目標、編你的經歷、告訴你「應該」怎麼活。' },
-        { title: 'AI 使用的三個原則', items: [
-          '先自己寫，再給 AI。空白頁直接問 AI，每個人拿到的答案都會很像。',
-          'AI 只能用你給它的材料。它說的不一定對，你的感覺才是最後決定。',
-          '貼給 AI 之前，刪掉真名、公司、客戶或別人的個資。免費版 AI 可能拿對話改進模型，不想被使用，請到工具的設定裡確認與關閉。',
-        ] },
-      ],
-      groups: [
-        { title: '我的 AI 觀點（想一想）', gintro: '沒有標準答案。這三題是讓你先想清楚：AI 在你的自媒體裡，要站在哪個位置。', fields: [
-          { id: 'ai_can', type: 'area', label: '在自媒體上，我想請 AI 幫我做…', hint: '例如：整理資料、當練習對象、檢查我的句子', optional: true },
-          { id: 'ai_must', type: 'area', label: '哪些事，我一定要自己做？為什麼？', hint: '例如：決定要說什麼、寫自己的故事', optional: true },
-          { id: 'ai_worry', type: 'area', label: '我對用 AI 的擔心或疑問', hint: '例如：怕變得不像自己、怕被看出來', optional: true },
-        ]},
-        { title: '給 AI 看的素材（選填）', gintro: 'Prompt ③ 會一起帶入。', fields: [
-          { id: 'bm_posts', type: 'area', label: '一個對標帳號最近 10 篇的標題或開頭', hint: '自己從帳號複製貼上，一行一篇', optional: true },
-        ]},
-        { title: 'AI 使用紀錄（選填）', gintro: '你改了什麼，就是你的聲音。記下來，上課時可以一起看。', fields: [
-          { id: 'ai_tool', type: 'text', label: '我用了哪個 AI 工具？', hint: '例如 ChatGPT、Claude、Gemini', optional: true },
-          { id: 'ai_pick', type: 'area', label: 'AI 給的東西，哪一句我覺得很準？哪一句不準？', optional: true },
-          { id: 'ai_chg', type: 'area', label: '我自己改了哪些地方？為什麼？', hint: '這一題最重要', optional: true },
-        ]},
-      ],
-    },
-    {
       id: 'p3', tab: '④ 本週作業', when: '做完帶來上課一起看',
       title: '本週作業：找出你的 5 個對標帳號',
       promptsEnd: true,
@@ -756,14 +723,13 @@ const COURSE = {
         {
           title: '🤖 請 AI 整理我的對標帳號', when: '選填，拆完對標帳號後',
           purpose: '請 AI 說說你的拆解哪裡不錯、哪裡可以加強，整理共同做法與空缺，並給你驗證行動和差異化方向。空缺只是「假說」，之後由你自己驗證。',
-          steps: ['先在「④ 本週作業」填好至少 3 個對標帳號。', '想要更準，可以到「🤖 用 AI 試試」分頁的「給 AI 看的素材」貼上一個帳號最近 10 篇的標題或開頭（自己複製貼上）。', '按「複製 prompt（已帶入我的內容）」，到 AI 貼上。', '挑一個你覺得有道理的「差異化方向」，帶去「③ 定位」的差異化那一段；再選一個驗證行動，這週做做看。'],
+          steps: ['先在「④ 本週作業」填好至少 3 個對標帳號。', '想要更準，可以在貼上 prompt 之後，再貼一個帳號最近 10 篇的標題或開頭（自己從帳號複製貼上）。', '按「複製 prompt（已帶入我的內容）」，到 AI 貼上。', '挑一個你覺得有道理的「差異化方向」，帶去「③ 定位」的差異化那一段；再選一個驗證行動，這週做做看。'],
           materials: [
             { label: '對標帳號 1', ids: ['p3_1_name', 'p3_1_topic', 'p3_1_format', 'p3_1_freq', 'p3_1_hot', 'p3_1_hook', 'p3_1_money', 'p3_1_learn', 'p3_1_avoid'], lab: ['帳號', '主題', '形式', '頻率', '最紅的 3 篇與原因', '開頭原話', '賺錢方式', '我想學', '我不想學'] },
             { label: '對標帳號 2', ids: ['p3_2_name', 'p3_2_topic', 'p3_2_format', 'p3_2_freq', 'p3_2_hot', 'p3_2_hook', 'p3_2_money', 'p3_2_learn', 'p3_2_avoid'], lab: ['帳號', '主題', '形式', '頻率', '最紅的 3 篇與原因', '開頭原話', '賺錢方式', '我想學', '我不想學'] },
             { label: '對標帳號 3', ids: ['p3_3_name', 'p3_3_topic', 'p3_3_format', 'p3_3_freq', 'p3_3_hot', 'p3_3_hook', 'p3_3_money', 'p3_3_learn', 'p3_3_avoid'], lab: ['帳號', '主題', '形式', '頻率', '最紅的 3 篇與原因', '開頭原話', '賺錢方式', '我想學', '我不想學'] },
             { label: '對標帳號 4', ids: ['p3_4_name', 'p3_4_topic', 'p3_4_format', 'p3_4_freq'], lab: ['帳號', '主題', '形式', '頻率'] },
             { label: '對標帳號 5', ids: ['p3_5_name', 'p3_5_topic', 'p3_5_format', 'p3_5_freq'], lab: ['帳號', '主題', '形式', '頻率'] },
-            { label: '我貼的最近貼文標題或開頭', ids: ['bm_posts'] },
           ],
           body: `你是我的市場觀察教練，有條理、有想法，也很支持我。我剛開始做自媒體，下面是我拆解的幾個對標帳號。請根據我提供的資料，像教練一樣幫我看一次：哪裡不錯、哪裡可以加強、接下來可以做什麼。資料不夠的地方，直接說不夠，不要編。
 
@@ -848,7 +814,6 @@ const TIPS = {
   p1: '沒有標準答案，想到什麼寫什麼。不確定就寫「不知道」，這也是有用的資訊。',
   p2: '今天的重點是「看見」，不是解決。卡點寫下來，就算過關。',
   pp: '定位會改。先寫得出來，比寫得漂亮重要。',
-  pai: 'AI 是你的陪練，不是代筆。先自己寫，再請它挑毛病；它說的不一定對，你的感覺才是最後決定。',
   p3: '找帳號是在找方向，不是要複製。找不到 5 個，先交 3 個就好。',
   p4: '這份是選填的，不影響破關。想讓我知道你這週的狀態，再寫就好，不用寫得好看。',
 };
@@ -1174,6 +1139,7 @@ function renderPrompt(pr) {
   if (pr.purpose) body.append(el('p', { class: 'intro', text: pr.purpose }));
   if (pr.warn) body.append(el('p', { class: 'aiwarn', text: pr.warn }));
   if (pr.steps) { const ol = el('ol', { class: 'steps' }); pr.steps.forEach(s => ol.append(el('li', { text: s }))); body.append(ol); }
+  body.append(el('p', { class: 'hint aihint', text: '先自己寫，再請 AI 看；它說的不一定對，你的感覺才是最後決定。貼給 AI 之前，先刪掉真名、公司、客戶或別人的個資。' }));
   const row = el('div', { class: 'row' });
   const hasMat = !!(pr.materials && pr.materials.length);
   const b1 = el('button', { class: 'primary', type: 'button', text: hasMat ? '複製 prompt（已帶入我的內容）' : '複製 prompt' });

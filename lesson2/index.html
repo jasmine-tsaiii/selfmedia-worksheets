@@ -1056,6 +1056,7 @@ function renderPrompt(pr) {
   if (pr.purpose) body.append(el('p', { class: 'intro', text: pr.purpose }));
   if (pr.warn) body.append(el('p', { class: 'aiwarn', text: pr.warn }));
   if (pr.steps) { const ol = el('ol', { class: 'steps' }); pr.steps.forEach(s => ol.append(el('li', { text: s }))); body.append(ol); }
+  body.append(el('p', { class: 'hint aihint', text: '先自己寫，再請 AI 看；它說的不一定對，你的感覺才是最後決定。貼給 AI 之前，先刪掉真名、公司、客戶或別人的個資。' }));
   const row = el('div', { class: 'row' });
   const hasMat = !!(pr.materials && pr.materials.length);
   const b1 = el('button', { class: 'primary', type: 'button', text: hasMat ? '複製 prompt（已帶入我的內容）' : '複製 prompt' });
