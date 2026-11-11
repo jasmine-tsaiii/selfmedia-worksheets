@@ -294,7 +294,7 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .clear-xp{display:inline-block;background:var(--gold-soft);color:var(--gold-ink);font-weight:900;padding:4px 18px;border-radius:999px;margin:4px 0 10px}
 .clear-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:10px 0}
 .clear-card .row{justify-content:center;margin-top:16px}
-@media print{.toast,canvas#confetti,.clear,.badges{display:none!important}}
+@media print{.suggest{display:none!important}.toast,canvas#confetti,.clear,.badges{display:none!important}}
 @media (prefers-reduced-motion: reduce){.mascot,.bdg.pop .ico{animation:none}}
 .mission.exp .mno::before{content:"🤖"}
 .mission.exp.done .mno::before{content:"✅"}
@@ -380,6 +380,13 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .tab[aria-selected="true"] .pct{background:none;color:var(--accent-deep)}
 .hero .lno{color:#ffd98a}
 .hero .eyebrow{background:rgba(0,0,0,.18)}
+
+/* 提案勾勾勾（欄位下面的建議選項，輸入框本身就是自己寫的地方） */
+.suggest{margin-top:10px;padding:12px 14px 14px;border:2px dashed var(--stroke,var(--line));border-radius:16px;background:var(--field)}
+.suggest .sg-title{margin:0 0 8px;font-size:.84rem;font-weight:700;color:var(--accent-deep)}
+.suggest .choice{border-radius:14px;align-items:flex-start;line-height:1.5;padding:9px 14px 9px 12px;min-height:0}
+.suggest .choice input{margin-top:4px;flex:none}
+.suggest .choices{flex-direction:column;gap:6px}
 /* 列印與 PDF（維持純白、黑字） */
 .pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
 .pv h1{font-size:20pt;margin:0 0 4pt}
@@ -915,6 +922,27 @@ function renderField(f, idOverride) {
     inp.addEventListener('input', () => { setVal(id, inp.value); if (f.type === 'area') fit(inp); });
     wrap.append(inp);
     if (f.type === 'area') setTimeout(() => fit(inp), 0);
+    if (f.suggest && f.suggest.length) {
+      const box = el('div', { class: 'suggest' }, el('p', { class: 'sg-title', text: f.suggestTitle || '不知道怎麼寫？勾一個最接近的，再改成你的話。都不像，就直接寫在上面。' }));
+      const list = el('div', { class: 'choices' });
+      const lines = () => (inp.value || '').split('\n').map(s => s.trim());
+      const boxes = [];
+      f.suggest.forEach(o => {
+        const c = el('input', { type: 'checkbox' });
+        c.checked = lines().includes(o);
+        c.addEventListener('change', () => {
+          let ls = (inp.value || '').split('\n').filter(s => s.trim() !== '');
+          if (c.checked) { if (!ls.map(s => s.trim()).includes(o)) ls.push(o); }
+          else ls = ls.filter(s => s.trim() !== o);
+          inp.value = ls.join('\n');
+          setVal(id, inp.value); if (f.type === 'area') fit(inp);
+        });
+        boxes.push([c, o]);
+        list.append(el('label', { class: 'choice' }, c, o));
+      });
+      inp.addEventListener('input', () => { const ls = lines(); boxes.forEach(([c, o]) => { c.checked = ls.includes(o); }); });
+      box.append(list); wrap.append(box);
+    }
     if (f.counter) {
       const cnt = el('p', { class: 'hint' });
       const upd = () => { cnt.textContent = `${[...(inp.value || '').replace(/\s/g, '')].length} / 約 ${f.counter} 字`; };

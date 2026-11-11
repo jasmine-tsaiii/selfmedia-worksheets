@@ -294,7 +294,7 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .clear-xp{display:inline-block;background:var(--gold-soft);color:var(--gold-ink);font-weight:900;padding:4px 18px;border-radius:999px;margin:4px 0 10px}
 .clear-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:10px 0}
 .clear-card .row{justify-content:center;margin-top:16px}
-@media print{.toast,canvas#confetti,.clear,.badges{display:none!important}}
+@media print{.suggest{display:none!important}.toast,canvas#confetti,.clear,.badges{display:none!important}}
 @media (prefers-reduced-motion: reduce){.mascot,.bdg.pop .ico{animation:none}}
 .mission.exp .mno::before{content:"🤖"}
 .mission.exp.done .mno::before{content:"✅"}
@@ -380,6 +380,13 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .tab[aria-selected="true"] .pct{background:none;color:var(--accent-deep)}
 .hero .lno{color:#ffd98a}
 .hero .eyebrow{background:rgba(0,0,0,.18)}
+
+/* 提案勾勾勾（欄位下面的建議選項，輸入框本身就是自己寫的地方） */
+.suggest{margin-top:10px;padding:12px 14px 14px;border:2px dashed var(--stroke,var(--line));border-radius:16px;background:var(--field)}
+.suggest .sg-title{margin:0 0 8px;font-size:.84rem;font-weight:700;color:var(--accent-deep)}
+.suggest .choice{border-radius:14px;align-items:flex-start;line-height:1.5;padding:9px 14px 9px 12px;min-height:0}
+.suggest .choice input{margin-top:4px;flex:none}
+.suggest .choices{flex-direction:column;gap:6px}
 /* 列印與 PDF（維持純白、黑字） */
 .pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
 .pv h1{font-size:20pt;margin:0 0 4pt}
@@ -574,9 +581,9 @@ const COURSE = {
       intro: '會談時我們一起完成。你也可以先自己填一版，會談時再一起修。',
       groups: [
         { title: '卡 1：目標卡', gintro: '格式：我做自媒體是為了＿＿。3 個月後，我希望看到＿＿。最低標準是＿＿。', fields: [
-          { id: 'g1', type: 'area', label: '我做自媒體是為了…' },
-          { id: 'g2', type: 'area', label: '3 個月後，我希望看到…', hint: '要看得見的畫面，不要寫「更有影響力」' },
-          { id: 'g3', type: 'area', label: '最低標準是…', hint: '做到什麼程度，你會覺得這 3 個月沒白費？' },
+          { id: 'g1', type: 'area', label: '我做自媒體是為了…', suggest: ['讓更多人認識我做的事', '找到穩定的客人或案子', '把我的經驗變成一個可以長期做的副業', '記錄自己、整理自己，慢慢長成我想成為的樣子', '認識跟我一樣在意這件事的人'] },
+          { id: 'g2', type: 'area', label: '3 個月後，我希望看到…', hint: '要看得見的畫面，不要寫「更有影響力」', suggest: ['我發了至少 24 則貼文，而且還在持續發', '我的主頁清楚寫著我幫誰做什麼', '有陌生人在留言或私訊裡問我問題', '有第一位客人問我的服務或報價', '我有 5 篇自己滿意、可以放在置頂的作品'] },
+          { id: 'g3', type: 'area', label: '最低標準是…', hint: '做到什麼程度，你會覺得這 3 個月沒白費？', suggest: ['每週至少發 1 篇，連續 12 週', '每週花 3 小時在自媒體上', '3 個月內完成主頁簡介和 6 篇作品', '就算沒人按讚，也照原本的節奏發'] },
           { id: 'g4', optional: true, type: 'radio', label: '這件事在我生活中的順位', options: ['前三名', '中間', '比較後面'] },
         ]},
         { title: '卡 2：資源清單', fields: [
@@ -640,7 +647,7 @@ const COURSE = {
         {
           title: 'Prompt ① 目標卡翻譯機', when: '寫完目標卡後用',
           purpose: '請 AI 當你的教練：先肯定你寫得好的地方，再給你幾個更具體的版本可以選。最後怎麼寫，由你決定。',
-          steps: ['先在「② 會談四張卡」寫好目標卡。', '按「複製 prompt（已帶入我的內容）」，到 AI 貼上。', 'AI 會先說它看到的你，再給你幾個版本可以選，也會問你一兩個小問題。', '改寫版本只是參考，把你覺得對的句子，用自己的話寫回目標卡。'],
+          steps: ['先在「② 會談四張卡」寫好目標卡。', '按「複製 prompt（已帶入我的內容）」，到 AI 貼上。', 'AI 會先說它看到的你，再給你 A、B、C 幾個選項，勾一個最接近的，或選 D 自己寫。', '改寫版本只是參考，把你覺得對的句子，用自己的話寫回目標卡。'],
           materials: [
             { label: '我的入學表單', ids: ['b4', 'b5', 'c7'], lab: ['我為什麼想做自媒體', '我最想做出的結果', '每週可投入的時數'] },
             { label: '我的目標卡', ids: ['g1', 'g2', 'g3', 'g4'], lab: ['我做自媒體是為了', '3 個月後，我希望看到', '最低標準是', '這件事在我生活中的順位'] },
@@ -655,10 +662,15 @@ const COURSE = {
 【請你做】
 1. 先用 2–3 句話，說你從目標卡看到的我：我想要什麼、為什麼想要。
 2. 列出目標卡裡已經很清楚、可以直接用的句子。
-3. 有些句子比較模糊（例如「被看見」「影響力」），請各給我 2–3 個「更具體的版本」讓我選，例如「每週發 2 篇」「寫出一句話定位」，並簡短說明差在哪裡。
-4. 簡單告訴我：哪些是我自己能控制的（行為、成品），哪些要靠別人的反應？這樣我比較知道從哪裡開始。
-5. 看「最低標準」：是不是我自己做得到的事？如果有點太高，給我一個比較輕鬆、不容易放棄的版本。
-6. 最後給我一版「暫時的改寫」，標出你改了哪裡，再問我最多 2 個小問題，幫我再調整。
+3. 有些句子比較模糊（例如「被看見」「影響力」），請各給我 3 個「更具體的版本」讓我選，例如「每週發 2 篇」「寫出一句話定位」。
+4. 看「最低標準」：是不是我自己做得到的事？如果有點太高，給我一個比較輕鬆、不容易放棄的版本。
+5. 最後只問我 1 個小問題，幫我再想一想。
+
+【輸出格式（請簡短，全部控制在 300 字內，不要寫長篇）】
+1. 我看到的你：1–2 句。
+2. 目標卡的每一句：先說寫得好的地方；想調整的，附 A、B、C 三個選項，每個選項只寫一句話，讓我可以勾一個。
+3. 最低標準：給我「A 輕鬆版」「B 標準版」兩個選項。
+每一題都多留一個「D　我自己寫」，讓我可以不選你的。
 
 語氣像一位有經驗、有耐心的教練。繁體中文，口語。`,
         },
@@ -860,6 +872,27 @@ function renderField(f, idOverride) {
     inp.addEventListener('input', () => { setVal(id, inp.value); if (f.type === 'area') fit(inp); });
     wrap.append(inp);
     if (f.type === 'area') setTimeout(() => fit(inp), 0);
+    if (f.suggest && f.suggest.length) {
+      const box = el('div', { class: 'suggest' }, el('p', { class: 'sg-title', text: f.suggestTitle || '不知道怎麼寫？勾一個最接近的，再改成你的話。都不像，就直接寫在上面。' }));
+      const list = el('div', { class: 'choices' });
+      const lines = () => (inp.value || '').split('\n').map(s => s.trim());
+      const boxes = [];
+      f.suggest.forEach(o => {
+        const c = el('input', { type: 'checkbox' });
+        c.checked = lines().includes(o);
+        c.addEventListener('change', () => {
+          let ls = (inp.value || '').split('\n').filter(s => s.trim() !== '');
+          if (c.checked) { if (!ls.map(s => s.trim()).includes(o)) ls.push(o); }
+          else ls = ls.filter(s => s.trim() !== o);
+          inp.value = ls.join('\n');
+          setVal(id, inp.value); if (f.type === 'area') fit(inp);
+        });
+        boxes.push([c, o]);
+        list.append(el('label', { class: 'choice' }, c, o));
+      });
+      inp.addEventListener('input', () => { const ls = lines(); boxes.forEach(([c, o]) => { c.checked = ls.includes(o); }); });
+      box.append(list); wrap.append(box);
+    }
     if (f.counter) {
       const cnt = el('p', { class: 'hint' });
       const upd = () => { cnt.textContent = `${[...(inp.value || '').replace(/\s/g, '')].length} / 約 ${f.counter} 字`; };
