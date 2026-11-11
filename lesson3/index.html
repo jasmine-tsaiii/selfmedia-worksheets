@@ -390,6 +390,8 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .suggest .choices{margin-top:8px;flex-direction:column;gap:6px}
 .suggest .choice{border-radius:14px;align-items:flex-start;line-height:1.5;padding:9px 14px 9px 12px;min-height:0}
 .suggest .choice input{margin-top:4px;flex:none}
+.mission.fbk .mno::before{content:"💬"}
+.mission.fbk.done .mno::before{content:"✅"}
 /* 列印與 PDF（維持純白、黑字） */
 .pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
 .pv h1{font-size:20pt;margin:0 0 4pt}
@@ -858,6 +860,19 @@ const COURSE = {
         ]},
       ],
     },
+    {
+      id: 'fb', tab: '💬 課後回饋', when: '選填，約 1 分鐘',
+      title: '這一堂的小回饋',
+      intro: '給我一點方向，我會用來調整下一堂。不用寫很多，也可以不填。',
+      groups: [
+        { title: '這一堂的感覺', fields: [
+          { id: 'fb1', optional: true, type: 'scale', label: '難易度', hint: '1 很簡單，3 剛好，5 很難' },
+          { id: 'fb2', optional: true, type: 'scale', label: '理解度：這一堂的內容，我懂了多少？', hint: '1 還很模糊，5 完全懂' },
+          { id: 'fb3', optional: true, type: 'area', label: '這一堂，我最有收穫的一件事', hint: '一句話就好' },
+          { id: 'fb4', optional: true, type: 'area', label: '想對老師說的話', hint: '哪裡可以更好、哪裡太快或太慢、想多聊什麼，都可以寫' },
+        ]},
+      ],
+    },
   ],
 };
 
@@ -1211,8 +1226,9 @@ function missionNode(p) {
   const info = partInfo(p);
   const m = p.tab.match(/^(\S+)\s+/), no = m ? m[1] : '';
   const numbered = /^[①②③④⑤⑥⑦⑧⑨⑩]/.test(no);
-  return el('div', { class: 'mission' + (numbered ? '' : ' exp'), id: 'ms_' + p.id },
-    el('div', { class: 'mtop' }, el('span', { class: 'mno', text: info.list.length ? '任務 ' + no : (numbered ? '選填 ' + no : '體驗任務') }), el('span', { class: 'mxp' }, el('b', { class: 'xpnow', text: '' }))),
+  const fbk = no === '💬';
+  return el('div', { class: 'mission' + (numbered ? '' : ' exp') + (fbk ? ' fbk' : ''), id: 'ms_' + p.id },
+    el('div', { class: 'mtop' }, el('span', { class: 'mno', text: info.list.length ? '任務 ' + no : (numbered ? '選填 ' + no : (fbk ? '課後回饋' : '體驗任務')) }), el('span', { class: 'mxp' }, el('b', { class: 'xpnow', text: '' }))),
     el('div', { class: 'mbar' }, el('div', { class: 'mfill' })),
     el('p', { class: 'mprog', text: '' }));
 }
