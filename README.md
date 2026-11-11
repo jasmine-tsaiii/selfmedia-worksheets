@@ -28,4 +28,4 @@ https://jasmine-tsaiii.github.io/selfmedia-worksheets/
 - 只有標「必填」的題目算破關；選填題收在「＋ 選填」摺疊裡。週日回報與「用 AI 試試」都是選填，不影響破關。沒破關也沒關係，頁面上有明講。
 - 進度與星星都存在學員自己的瀏覽器（localStorage），不會上傳。
 - 各堂的題目寫在 `lessonN/index.html` 的 `COURSE`（欄位加 `optional: true` 就是選填）。
-- 頁尾有隱私說明與 IG 連結（@jas.soulcareer）。
+- 頁尾是收合的「隱私小說明」加上版權字樣。

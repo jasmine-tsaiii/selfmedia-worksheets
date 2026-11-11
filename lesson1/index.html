@@ -358,6 +358,16 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .mxp{font-size:.8rem}
 .mprog{display:none}
 .mission{padding-top:10px;padding-bottom:12px}
+
+/* ===== 頁尾：收合的隱私說明＋版權 ===== */
+.foot{margin-top:32px;display:block}
+.privacy{background:none;border:0;box-shadow:none;border-radius:0;padding:0}
+.privacy>summary{cursor:pointer;list-style:none;display:inline-block;font-size:.82rem;font-weight:600;color:var(--muted);padding:6px 2px}
+.privacy>summary::-webkit-details-marker{display:none}
+.privacy[open]>summary{color:var(--ink)}
+.privacy ul{margin:6px 0 0;padding:10px 16px 10px 2.2em;background:var(--field);border-radius:14px;font-size:.84rem;color:var(--muted)}
+.privacy li{margin:4px 0}
+.foot .copy{margin:10px 0 0;font-size:.78rem;color:var(--muted);text-align:center}
 /* 列印與 PDF（維持純白、黑字） */
 .pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
 .pv h1{font-size:20pt;margin:0 0 4pt}
@@ -459,24 +469,17 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
   </section>
 
   <footer class="foot" id="foot">
-    <section class="privacy" aria-labelledby="privTitle">
-      <h2 id="privTitle">🔒 隱私與資料說明</h2>
+    <details class="privacy">
+      <summary>🔒 隱私小說明</summary>
       <ul>
-        <li>你填的內容<b>只存在這台裝置的瀏覽器</b>，不會自動上傳到任何地方。換裝置或清除瀏覽資料就會消失，請定期下載備份。</li>
-        <li>只有你按下「提交給老師」，這一堂的內容才會送出，存進老師的 Google 文件，由老師閱讀；沒有按，老師看不到。</li>
-        <li>這個頁面沒有登入，也沒有放分析或追蹤程式，不會蒐集你的瀏覽紀錄。</li>
-        <li>「複製 prompt」只是複製到你的剪貼簿，要貼到哪個 AI 由你決定。貼之前，請先刪掉真名、公司、客戶或別人的個資。</li>
-        <li>想把你的內容寫成案例或對外分享，老師會先徵得你的同意。</li>
-        <li>想刪掉資料：「更多」→「清除全部」可以清掉這台裝置上的內容；已經提交給老師的，可以請老師刪除。</li>
+        <li>你填的內容只存在這台裝置的瀏覽器，換裝置或清除瀏覽資料就會不見，記得偶爾下載備份。</li>
+        <li>只有按下「提交給老師」，內容才會送出給老師看；沒按，老師看不到。</li>
+        <li>這個頁面沒有登入，也沒有追蹤你的瀏覽紀錄。</li>
+        <li>「複製 prompt」只會複製到剪貼簿，貼給 AI 之前，記得先刪掉真名和別人的個資。</li>
+        <li>想清掉資料：「更多」→「清除全部」。</li>
       </ul>
-    </section>
-    <section class="follow">
-      <div class="mascot" id="footMascot" aria-hidden="true"></div>
-      <div>
-        <p><b>Jas Soul｜Jasmine</b>　自媒體陪跑、AI 影片剪輯</p>
-        <a class="igbtn" href="https://www.instagram.com/jas.soulcareer/" target="_blank" rel="noopener">📷 追蹤我的 IG　@jas.soulcareer</a>
-      </div>
-    </section>
+    </details>
+    <p class="copy">© Jasmine Tsai 2026</p>
   </footer>
   <div class="notice" id="notice" hidden></div>
   <nav class="topnav bottom" id="botnav" aria-label="課程導覽"></nav>
