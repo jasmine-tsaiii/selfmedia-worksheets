@@ -178,7 +178,7 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
       <summary>🔒 隱私小說明</summary>
       <ul>
         <li>你填的內容只存在這台裝置的瀏覽器，換裝置或清除瀏覽資料就會不見，記得偶爾下載備份。</li>
-        <li>只有按下「提交給老師」，內容才會送出給老師看；沒按，老師看不到。</li>
+        <li>只有按下「提交給 Jasmine」，內容才會送出給 Jasmine 看；沒按，Jasmine 看不到。</li>
         <li>這個頁面沒有登入，也沒有追蹤你的瀏覽紀錄。</li>
         <li>每堂的「複製 prompt」只會複製到剪貼簿，貼給 AI 之前，記得先刪掉真名和別人的個資。</li>
         <li>想清掉資料：到各堂學習單的「更多」→「清除全部」。</li>
@@ -279,7 +279,7 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
     map.appendChild(lv);
   });
 
-  // 老師發的專屬連結（?s=代碼）：記住代碼，並讓各堂入口都帶著它
+  // Jasmine 發的專屬連結（?s=代碼）：記住代碼，並讓各堂入口都帶著它
   if ((window.SMCOURSE_CONFIG || {}).submitUrl) {
     var c = '';
     try { c = new URLSearchParams(location.search).get('s') || ''; } catch (e) {}

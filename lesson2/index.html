@@ -441,12 +441,12 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
   <main id="panels"></main>
 
   <section class="wrapup" id="wrapup" aria-labelledby="wrapTitle">
-    <h2 id="wrapTitle">🎒 存檔、交給老師</h2>
+    <h2 id="wrapTitle">🎒 存檔、交給 Jasmine</h2>
     <p class="hint">全部填完，或今天先到這裡，再來這裡存檔、提交。</p>
     <div class="submitbox" id="submitBox" hidden>
     <p class="who" id="submitWho"></p>
     <p class="hint" id="submitInfo"></p>
-    <div class="row"><button class="primary" id="btnSubmit">提交給老師</button></div>
+    <div class="row"><button class="primary" id="btnSubmit">提交給 Jasmine</button></div>
   </div>
 
     <div class="toolbar">
@@ -497,7 +497,7 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
       <summary>🔒 隱私小說明</summary>
       <ul>
         <li>你填的內容只存在這台裝置的瀏覽器，換裝置或清除瀏覽資料就會不見，記得偶爾下載備份。</li>
-        <li>只有按下「提交給老師」，內容才會送出給老師看；沒按，老師看不到。</li>
+        <li>只有按下「提交給 Jasmine」，內容才會送出給 Jasmine 看；沒按，Jasmine 看不到。</li>
         <li>這個頁面沒有登入，也沒有追蹤你的瀏覽紀錄。</li>
         <li>「複製 prompt」只會複製到剪貼簿，貼給 AI 之前，記得先刪掉真名和別人的個資。</li>
         <li>想清掉資料：「更多」→「清除全部」。</li>
@@ -660,9 +660,9 @@ const COURSE = {
       ],
     },
     {
-      id: 'q7', tab: '⑦ 本週作業', when: '做完再傳給老師',
+      id: 'q7', tab: '⑦ 本週作業', when: '做完帶來上課一起看',
       title: '本週作業',
-      intro: '不訂統一的交件日，請自己和老師約哪一天能交。訪談只記對方的原話與狀態，不記姓名或聯絡方式，並且要先取得對方同意。',
+      intro: '不訂統一的交件日，請自己決定哪一天能交。訪談只記對方的原話與狀態，不記姓名或聯絡方式，並且要先取得對方同意。',
       tipsTitle: '本週要完成',
       tips: [
         '個人故事 300 字（上下 50 字都可以）',
@@ -713,8 +713,8 @@ const COURSE = {
         { title: '這一堂的感覺', fields: [
           { id: 'fb1', optional: true, type: 'scale', label: '難易度', hint: '1 很簡單，3 剛好，5 很難' },
           { id: 'fb2', optional: true, type: 'scale', label: '理解度：這一堂的內容，我懂了多少？', hint: '1 還很模糊，5 完全懂' },
-          { id: 'fb3', optional: true, type: 'area', label: '這一堂，我最有收穫的一件事', hint: '一句話就好' },
-          { id: 'fb4', optional: true, type: 'area', label: '想對老師說的話', hint: '哪裡可以更好、哪裡太快或太慢、想多聊什麼，都可以寫' },
+          { id: 'fb3', optional: true, type: 'area', label: '這一堂，印象深刻的重點', hint: '至少寫一句，想寫幾個都可以' },
+          { id: 'fb4', optional: true, type: 'area', label: '想對我說的話', hint: '哪裡很好、哪裡可以更好，都可以寫' },
         ]},
       ],
     },
@@ -1144,7 +1144,7 @@ function renderPart(p) {
     nb.append(go);
   } else {
     nb.append(el('p', { class: 'hint', text: '這一關的任務都看完了。' }));
-    const go = el('button', { class: 'primary', type: 'button', text: '去存檔、提交給老師 ↓' });
+    const go = el('button', { class: 'primary', type: 'button', text: '去存檔、提交給 Jasmine ↓' });
     go.addEventListener('click', () => { const w = $('#wrapup'); if (w) w.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
     nb.append(go);
   }
@@ -1244,8 +1244,8 @@ function askConfirm(msg, yesLabel, onYes) {
   pendingYes = onYes; $('#confirmBar').hidden = false; $('#confirmNo').focus();
 }
 
-/* ---------- 專屬連結與「提交給老師」 ---------- */
-// 網址帶 ?s=代碼 就代表這是老師發的專屬連結。代碼存起來，之後在總覽、各堂之間跳轉都會帶著。
+/* ---------- 專屬連結與「提交給 Jasmine」 ---------- */
+// 網址帶 ?s=代碼 就代表這是 Jasmine 發的專屬連結。代碼存起來，之後在總覽、各堂之間跳轉都會帶著。
 const SUBMIT_URL = ((window.SMCOURSE_CONFIG || {}).submitUrl || '').trim();
 function readCode() {
   let c = '';
@@ -1288,15 +1288,15 @@ async function loadSubmitStatus() {
   const q = new URLSearchParams({ action: 'status', s: STUDENT, lesson: String(lessonNo()) });
   try {
     const r = await (await fetch(SUBMIT_URL + '?' + q)).json();
-    if (!r.ok) { $('#submitWho').textContent = '這個連結的代碼不正確'; setSubmitInfo('請向老師索取你的專屬連結。', true); $('#btnSubmit').disabled = true; return; }
+    if (!r.ok) { $('#submitWho').textContent = '這個連結的代碼不正確'; setSubmitInfo('請向 Jasmine 索取你的專屬連結。', true); $('#btnSubmit').disabled = true; return; }
     $('#submitWho').textContent = r.name + '，這是你的專屬學習單';
     prevSubmit = r.submitted;
     setSubmitInfo(r.submitted
-      ? `這一堂你已在 ${r.submitted.last} 提交過（第 ${r.submitted.count} 次）。再提交一次只會更新同一份文件，老師看到的是最新版。`
-      : '填好之後按「提交給老師」。之後想修改，可以再提交一次，不會產生重複的文件。');
+      ? `這一堂你已在 ${r.submitted.last} 提交過（第 ${r.submitted.count} 次）。再提交一次只會更新同一份文件，Jasmine 看到的是最新版。`
+      : '填好之後按「提交給 Jasmine」。之後想修改，可以再提交一次，不會產生重複的文件。');
   } catch (e) {
     $('#submitWho').textContent = '專屬學習單';
-    setSubmitInfo('目前連不上老師的接收端。你填的內容還在這台裝置上，等一下再按「提交給老師」試試。', true);
+    setSubmitInfo('目前連不上 Jasmine 的接收端。你填的內容還在這台裝置上，等一下再按「提交給 Jasmine」試試。', true);
   }
 }
 async function doSubmit() {
@@ -1307,11 +1307,11 @@ async function doSubmit() {
     const body = { s: STUDENT, lesson: lessonNo(), title: COURSE.title, filled: n.done, total: n.total, pct: n.pct, blocks: buildBlocks() };
     const r = await (await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })).json();
     if (r.ok) {
-      setStatus(`已提交給老師（第 ${r.count} 次）　${r.at}`);
+      setStatus(`已提交給 Jasmine（第 ${r.count} 次）　${r.at}`);
       prevSubmit = { count: r.count, last: r.at, filled: n.done };
       setSubmitInfo(`這一堂最近一次提交：${r.at}（第 ${r.count} 次）。再提交只會更新同一份文件。`);
     } else {
-      const msg = { empty: '還沒有填任何必填欄位，所以沒有送出，免得蓋掉你之前提交的內容。', invalid: '這個連結的代碼不正確，請向老師索取專屬連結。', busy: '老師的接收端正忙，請稍後再按一次。' }[r.error] || '提交失敗，請稍後再試。你填的內容還在這台裝置上。';
+      const msg = { empty: '還沒有填任何必填欄位，所以沒有送出，免得蓋掉你之前提交的內容。', invalid: '這個連結的代碼不正確，請向 Jasmine 索取專屬連結。', busy: 'Jasmine 的接收端正忙，請稍後再按一次。' }[r.error] || '提交失敗，請稍後再試。你填的內容還在這台裝置上。';
       setStatus(msg); setSubmitInfo(msg, true);
     }
   } catch (e) {
@@ -1334,11 +1334,11 @@ function setupSubmit() {
     // 沒有專屬連結（例如試聽版）：不提交，只存檔
     const wt = $('#wrapTitle'); if (wt) wt.textContent = '🎒 存檔';
     const wh = document.querySelector('#wrapup > .hint'); if (wh) wh.textContent = '今天先到這裡也可以。想留一份，可以在這裡下載備份。';
-    document.querySelectorAll('.nextbar button').forEach(b => { if (/提交給老師/.test(b.textContent)) b.textContent = '去存檔 ↓'; });
-    document.querySelectorAll('.privacy li').forEach(li => { if (/提交給老師/.test(li.textContent)) li.textContent = '你填的內容不會送給任何人，只留在你這台裝置上。'; });
+    document.querySelectorAll('.nextbar button').forEach(b => { if (/提交給 Jasmine/.test(b.textContent)) b.textContent = '去存檔 ↓'; });
+    document.querySelectorAll('.privacy li').forEach(li => { if (/提交給 Jasmine/.test(li.textContent)) li.textContent = '你填的內容不會送給任何人，只留在你這台裝置上。'; });
     return;
   }
-  $('#notice').innerHTML = '<span>你填的內容會先<strong>存在這台裝置的瀏覽器裡</strong>。按「提交給老師」才會送給老師；提交之後想改，可以再提交一次，老師看到的永遠是最新版。換裝置或清除瀏覽資料前，請先「下載備份」。</span>';
+  $('#notice').innerHTML = '<span>你填的內容會先<strong>存在這台裝置的瀏覽器裡</strong>。按「提交給 Jasmine」才會送給 Jasmine；提交之後想改，可以再提交一次，Jasmine 看到的永遠是最新版。換裝置或清除瀏覽資料前，請先「下載備份」。</span>';
   $('#submitBox').hidden = false;
   $('#submitWho').textContent = '專屬學習單';
   setSubmitInfo('正在確認你的專屬連結…');
