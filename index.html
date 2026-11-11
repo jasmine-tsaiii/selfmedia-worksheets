@@ -2,6 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
+<script>try{var __t=localStorage.getItem("smcourse-theme");if(__t==="dark"||__t==="light")document.documentElement.setAttribute("data-theme",__t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>自媒體陪跑・破關地圖</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -15,7 +16,7 @@
   --accent:#6a55c9;--accent-deep:#4b3a9e;--accent-ink:#fff;--accent-soft:#f0ecfc;
   --gold:#f2b84b;--gold-ink:#7a4e00;--gold-soft:#fff3d9;--ok:#2fa37f;--ok-soft:#e1f6ee;--sh:#3a2b86;
   --hero:linear-gradient(135deg,#4b3a9e 0%,#6a55c9 58%,#8f72dc 100%);
-  --w1:#6a55c9;--w2:#e0657a;--w3:#1fa38a;--w4:#e0a02c;
+  --w1:#6a55c9;--w2:#cf4d67;--w3:#13806a;--w4:#e0a02c;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#15131a;--card:#1e1b26;--ink:#efecf5;--muted:#aaa5b8;--line:#352f40;--stroke:#3d3648;--field:#16131d;
@@ -136,6 +137,23 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
 .privacy ul{margin:6px 0 0;padding:10px 16px 10px 2.2em;background:var(--field);border-radius:14px;font-size:.84rem;color:var(--muted)}
 .privacy li{margin:4px 0}
 .foot .copy{margin:10px 0 0;font-size:.78rem;color:var(--muted);text-align:center}
+
+/* ===== 淺色／深色切換鈕 ===== */
+.themebtn{position:fixed;right:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:40;width:46px;height:46px;border-radius:50%;border:2px solid var(--stroke,var(--line));background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;cursor:pointer;box-shadow:0 4px 0 var(--stroke,var(--line)),0 8px 20px -8px rgba(0,0,0,.35);display:grid;place-items:center;padding:0}
+.themebtn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--stroke,var(--line))}
+.themebtn:focus-visible{outline:3px solid var(--accent,#6a55c9);outline-offset:2px}
+@media print{.themebtn{display:none}}
+/* 深色模式的補強：進度條底色、分頁上的百分比 */
+.mbar{background:var(--line)}
+.tab[aria-selected="true"] .pct{background:none;color:var(--accent-deep)}
+
+/* ===== 對比補強（深色模式世界橫幅、週次文字、主視覺數字） ===== */
+.stat{background:rgba(0,0,0,.22)}
+.stat b{color:#ffd98a}
+.eyebrow{background:rgba(0,0,0,.18)}
+.week{color:var(--muted)}
+:root[data-theme="dark"] .world,:root[data-theme="dark"] .lv.current .node{color:#17141f}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .world,:root:not([data-theme="light"]) .lv.current .node{color:#17141f}}
 </style>
 </head>
 <body>
@@ -272,6 +290,32 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
       document.querySelectorAll('a[href^="lesson"]').forEach(function (a) { a.setAttribute('href', a.getAttribute('href') + '?s=' + c); });
     }
   }
+})();
+</script>
+<script>
+(function () {
+  var KEY = 'smcourse-theme', root = document.documentElement;
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'themebtn';
+  function isDark() {
+    var t = root.getAttribute('data-theme');
+    return t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function paint() {
+    var d = isDark();
+    b.textContent = d ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    b.setAttribute('aria-label', d ? '\u5207\u63DB\u6210\u6DFA\u8272\u6A21\u5F0F' : '\u5207\u63DB\u6210\u6DF1\u8272\u6A21\u5F0F');
+    b.title = d ? '\u6DFA\u8272\u6A21\u5F0F' : '\u6DF1\u8272\u6A21\u5F0F';
+  }
+  b.addEventListener('click', function () {
+    var next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+    paint();
+  });
+  try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint); } catch (e) {}
+  paint();
+  document.body.appendChild(b);
 })();
 </script>
 </body>

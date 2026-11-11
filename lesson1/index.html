@@ -2,6 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
+<script>try{var __t=localStorage.getItem("smcourse-theme");if(__t==="dark"||__t==="light")document.documentElement.setAttribute("data-theme",__t)}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>第 1 堂課學習單</title>
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
@@ -368,6 +369,17 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .privacy ul{margin:6px 0 0;padding:10px 16px 10px 2.2em;background:var(--field);border-radius:14px;font-size:.84rem;color:var(--muted)}
 .privacy li{margin:4px 0}
 .foot .copy{margin:10px 0 0;font-size:.78rem;color:var(--muted);text-align:center}
+
+/* ===== 淺色／深色切換鈕 ===== */
+.themebtn{position:fixed;right:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:40;width:46px;height:46px;border-radius:50%;border:2px solid var(--stroke,var(--line));background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;cursor:pointer;box-shadow:0 4px 0 var(--stroke,var(--line)),0 8px 20px -8px rgba(0,0,0,.35);display:grid;place-items:center;padding:0}
+.themebtn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--stroke,var(--line))}
+.themebtn:focus-visible{outline:3px solid var(--accent,#6a55c9);outline-offset:2px}
+@media print{.themebtn{display:none}}
+/* 深色模式的補強：進度條底色、分頁上的百分比 */
+.mbar{background:var(--line)}
+.tab[aria-selected="true"] .pct{background:none;color:var(--accent-deep)}
+.hero .lno{color:#ffd98a}
+.hero .eyebrow{background:rgba(0,0,0,.18)}
 /* 列印與 PDF（維持純白、黑字） */
 .pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
 .pv h1{font-size:20pt;margin:0 0 4pt}
@@ -485,6 +497,32 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
   <nav class="topnav bottom" id="botnav" aria-label="課程導覽"></nav>
 </div>
 
+<script>
+(function () {
+  var KEY = 'smcourse-theme', root = document.documentElement;
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'themebtn';
+  function isDark() {
+    var t = root.getAttribute('data-theme');
+    return t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function paint() {
+    var d = isDark();
+    b.textContent = d ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    b.setAttribute('aria-label', d ? '\u5207\u63DB\u6210\u6DFA\u8272\u6A21\u5F0F' : '\u5207\u63DB\u6210\u6DF1\u8272\u6A21\u5F0F');
+    b.title = d ? '\u6DFA\u8272\u6A21\u5F0F' : '\u6DF1\u8272\u6A21\u5F0F';
+  }
+  b.addEventListener('click', function () {
+    var next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+    paint();
+  });
+  try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint); } catch (e) {}
+  paint();
+  document.body.appendChild(b);
+})();
+</script>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <canvas id="confetti" hidden></canvas>
 <div class="clear" id="clearModal" role="dialog" aria-modal="true" aria-labelledby="clearTitle" hidden></div>
