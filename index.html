@@ -155,12 +155,6 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
 :root[data-theme="dark"] .world,:root[data-theme="dark"] .lv.current .node{color:#17141f}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .world,:root:not([data-theme="light"]) .lv.current .node{color:#17141f}}
 
-/* ===== 課程總覽卡片 ===== */
-.ovgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 8px}
-.ovcard{background:var(--card);border:2px solid var(--stroke,var(--line));border-radius:20px;padding:14px 18px;box-shadow:0 3px 0 var(--stroke,var(--line))}
-.ovcard b{display:block;font-size:1rem;margin-bottom:4px}
-.ovcard p{margin:0;font-size:.88rem;line-height:1.6;color:var(--muted)}
-@media (max-width:620px){.ovgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -175,15 +169,6 @@ h2{font-size:1.35rem;margin:36px 0 4px;font-weight:900;display:flex;align-items:
   <div class="stats" id="stats"></div>
   <div class="cta" id="cta"></div>
 </header>
-<h2>📖 課程總覽</h2>
-<p class="lead2">開始之前，先知道這門課怎麼進行。</p>
-<section class="ovgrid" aria-label="課程總覽">
-  <div class="ovcard"><b>🗓️ 12 週，三個月</b><p>每週一關。第 1 個月打地基，第 2 個月開始被看見，第 3 個月走到被付費。最後一週加上復盤。</p></div>
-  <div class="ovcard"><b>🔁 每週的節奏</b><p>會談 → 學習單 → 老師回饋 → 下一關。學習單邊做邊存，內容只留在你的瀏覽器。</p></div>
-  <div class="ovcard"><b>✅ 只有「必填」算破關</b><p>選填題、週日回報、「用 AI 試試」都不影響破關。沒破關也沒關係，進度會留著。</p></div>
-  <div class="ovcard"><b>🤖 AI 是教練，不是代筆</b><p>先自己寫，再請 AI 看。它會說哪裡不錯、哪裡可以加強，給行動和改寫方向，由你決定。</p></div>
-</section>
-
 <h2>🗺️ 闖關地圖</h2>
 <p class="lead2">不用等所有人，照自己的節奏走。灰色的關卡還在準備中。</p>
 <div class="map" id="map"></div>
