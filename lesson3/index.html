@@ -412,6 +412,20 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
   #pdfHost{display:none}
   #printView{display:block}
 }
+.grid9{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.grid9 .field{margin:0;display:flex;flex-direction:column;border:2px solid var(--line);border-radius:14px;background:var(--field);padding:8px 8px 10px;min-width:0}
+.grid9 .field>label{font-size:.84rem;font-weight:800;margin-bottom:4px;color:var(--accent-deep)}
+.grid9 .field.req>label::before{content:"★";color:var(--gold);margin-right:3px}
+.grid9 .field .opt,.grid9 .field .hint{display:none}
+.grid9 .field.filled{border-color:var(--ok,#2fb68a)}
+.grid9 .field.filled>label::after{width:15px;height:15px;font-size:.6rem;margin-left:4px}
+.grid9 textarea{border:0;background:transparent;padding:4px 2px;min-height:96px;font-size:.88rem;line-height:1.55;flex:1;box-shadow:none!important;resize:none}
+.grid9 textarea:focus{background:var(--card)}
+.grid9 .gcenter{background:var(--accent-soft);border-color:var(--accent);border-width:3px}
+.grid9 .gcenter>label{color:var(--accent-deep);text-align:center}
+.grid9 .gcenter textarea{font-weight:800;text-align:center}
+@media (max-width:520px){.group.gridbox{padding:16px 10px}.grid9{gap:6px}.grid9 .field{padding:6px 6px 8px}.grid9 textarea{font-size:.82rem;min-height:104px}}
+@media print{.grid9 textarea{min-height:90px}}
 </style>
 </head>
 <body>
@@ -979,6 +993,36 @@ function renderField(f, idOverride) {
   }
   return wrap;
 }
+/* 九宮格：8 個切角欄位圍成 3×3，中間是主軸（和主軸欄位同一份資料，兩邊同步） */
+function renderGrid(g) {
+  const grid = el('div', { class: 'grid9' });
+  const cell = (f, i) => {
+    const node = renderField(Object.assign({}, f, { hint: '', placeholder: f.ph || '' }));
+    node.classList.add('gcell'); if (!f.optional) node.classList.add('req');
+    return node;
+  };
+  const center = el('div', { class: 'field gcell gcenter' });
+  const cid = 'f_mirror_' + g.center;
+  center.append(el('label', { for: cid, text: g.centerLabel || '主軸' }));
+  const ta = el('textarea', { id: cid, class: 'mirror', 'data-src': g.center, placeholder: '寫下這個九宮格的主軸' });
+  ta.value = state.values[g.center] || '';
+  ta.addEventListener('input', () => {
+    setVal(g.center, ta.value, true); fit(ta);
+    const other = document.getElementById('f_' + g.center); if (other && other !== ta) { other.value = ta.value; fit(other); }
+  });
+  ta.addEventListener('blur', flushProgress);
+  center.append(ta);
+  g.fields.forEach((f, i) => { if (i === 4) grid.append(center); grid.append(cell(f, i)); });
+  if (g.fields.length <= 4) grid.append(center);
+  setTimeout(() => fit(ta), 0);
+  return grid;
+}
+function syncMirrors() {
+  document.querySelectorAll('textarea.mirror').forEach(t => {
+    const v = state.values[t.getAttribute('data-src')] || '';
+    if (document.activeElement !== t && t.value !== v) { t.value = v; fit(t); }
+  });
+}
 function fit(t) { t.style.height = 'auto'; t.style.height = Math.max(84, t.scrollHeight + 2) + 'px'; }
 
 function countedFields(part) {
@@ -1107,6 +1151,7 @@ function updateProgress(silent) {
     if (info.done && !state.done[p.id]) { state.done[p.id] = true; if (info.list.length) newlyDone.push(p); }
     if (!info.done && state.done[p.id]) delete state.done[p.id];
   });
+  syncMirrors();
   document.querySelectorAll('.field[data-id]').forEach(w => w.classList.toggle('filled', isFilled(state.values[w.getAttribute('data-id')])));
   const overall = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
   const allDone = partsReq > 0 && partsDone === partsReq;
@@ -1247,7 +1292,10 @@ function renderPart(p) {
     const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
     if (g.gintro) box.append(el('p', { class: 'gintro', text: g.gintro }));
     const req = g.fields.filter(f => !f.optional), opt = g.fields.filter(f => f.optional);
-    if (!partHasReq || !opt.length) {
+    if (g.grid) {
+      box.classList.add('gridbox');
+      box.append(renderGrid(g));
+    } else if (!partHasReq || !opt.length) {
       g.fields.forEach(f => box.append(renderField(f)));
     } else {
       req.forEach(f => box.append(renderField(f)));
