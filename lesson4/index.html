@@ -1,0 +1,1682 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<script>try{var __t=localStorage.getItem("smcourse-theme");if(__t==="dark"||__t==="light")document.documentElement.setAttribute("data-theme",__t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>第 4 堂課學習單</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="theme-color" content="#4b3a9e">
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* 設計概念：像一本溫暖的手帳。奶油色紙張、紫色主色（跟小圖示一致）、金色只用在「重點」和「進度」。
+   卡片用柔和陰影取代粗框線，主要按鈕只有一個，其餘收進「更多」。 */
+:root{
+  --bg:#fbf8f3; --card:#ffffff; --ink:#2a2433; --muted:#6b6478; --line:#e9e2d9;
+  --field:#fbf8f3;
+  --accent:#6a55c9; --accent-deep:#4b3a9e; --accent-ink:#ffffff; --accent-soft:#f0ecfc;
+  --gold:#f2b84b; --gold-ink:#7a4e00; --gold-soft:#fff3d9;
+  --warn:#a35f00; --warn-soft:#fff1d6;
+  --hero:linear-gradient(135deg,#4b3a9e 0%,#6a55c9 58%,#8f72dc 100%);
+  --hero-ink:#ffffff;
+  --shadow:0 1px 2px rgba(42,36,51,.05),0 10px 28px -14px rgba(75,58,158,.28);
+  --radius:16px; --radius-sm:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15131a; --card:#1e1b26; --ink:#efecf5; --muted:#aaa5b8; --line:#352f40; --field:#16131d;
+    --accent:#a898f2; --accent-deep:#a898f2; --accent-ink:#17141f; --accent-soft:#2a2442;
+    --gold:#f2c46b; --gold-ink:#f2c46b; --gold-soft:#3a2f18;
+    --warn:#f0b14d; --warn-soft:#3a2f18;
+    --hero:linear-gradient(135deg,#2a2150 0%,#43348d 60%,#5b45b3 100%);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15131a; --card:#1e1b26; --ink:#efecf5; --muted:#aaa5b8; --line:#352f40; --field:#16131d;
+  --accent:#a898f2; --accent-deep:#a898f2; --accent-ink:#17141f; --accent-soft:#2a2442;
+  --gold:#f2c46b; --gold-ink:#f2c46b; --gold-soft:#3a2f18;
+  --warn:#f0b14d; --warn-soft:#3a2f18;
+  --hero:linear-gradient(135deg,#2a2150 0%,#43348d 60%,#5b45b3 100%);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:780px;margin:0 auto;padding-block:16px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* 上方導覽 */
+.topnav{display:flex;flex-wrap:wrap;gap:4px 20px;align-items:center;justify-content:space-between;font-size:.88rem;margin-bottom:10px}
+.topnav:empty{display:none}
+.topnav.bottom{margin:36px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+.topnav a{color:var(--accent-deep);text-decoration:none;padding:6px 10px;margin-left:-10px;border-radius:999px;min-height:32px;font-weight:600;transition:background .15s}
+.topnav a:hover,.topnav a:focus-visible{background:var(--accent-soft)}
+
+/* 頂部主視覺 */
+.hero{position:relative;overflow:hidden;background:var(--hero);color:var(--hero-ink);border-radius:24px;padding:26px 22px 20px;box-shadow:var(--shadow)}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero::before{width:220px;height:220px;right:-70px;top:-90px;background:radial-gradient(circle,rgba(242,184,75,.55),rgba(242,184,75,0) 68%)}
+.hero::after{width:260px;height:260px;left:-120px;bottom:-170px;background:radial-gradient(circle,rgba(255,255,255,.18),rgba(255,255,255,0) 70%)}
+.hero>*{position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;letter-spacing:.08em;background:rgba(255,255,255,.16);padding:3px 12px;border-radius:999px;margin:0 0 10px}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.hero h1{font-size:1.75rem;line-height:1.3;margin:0 0 6px;font-weight:800;letter-spacing:.01em;text-wrap:pretty}
+@media (max-width:520px){.hero{padding:22px 18px 18px;border-radius:20px}.hero h1{font-size:1.5rem}.notice{font-size:.86rem}}
+.hero h1 .lno{display:block;font-size:.95rem;font-weight:700;letter-spacing:.06em;color:var(--gold);margin-bottom:2px}
+.hero p#subtitle{margin:0;color:rgba(255,255,255,.82);font-size:.95rem}
+.heroprog{display:flex;align-items:center;gap:12px;margin-top:18px;font-size:.82rem;color:rgba(255,255,255,.88)}
+.heroprog .track{flex:1;height:8px;background:rgba(255,255,255,.22);border-radius:999px;overflow:hidden}
+.heroprog .fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffd98a);border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.heroprog .pct{min-width:5.5em;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+
+/* 說明、提交、按鈕列 */
+.notice{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--radius-sm);padding:12px 14px;margin:16px 0;font-size:.9rem;color:var(--muted);box-shadow:var(--shadow)}
+.notice::before{content:"🔒";flex:none;line-height:1.7}
+.notice strong{color:var(--ink)}
+.submitbox{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:center;background:var(--card);border:1.5px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin:14px 0;box-shadow:var(--shadow)}
+.submitbox::before{content:"✉";grid-row:1 / 3;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--accent-soft);color:var(--accent-deep);font-size:1.2rem}
+.submitbox .who{margin:0;font-weight:700;grid-column:2}
+.submitbox .hint{margin:0;grid-column:2}
+.submitbox .row{grid-column:3;grid-row:1 / 3}
+.submitbox.bad{border-color:var(--warn)}
+.submitbox.bad::before{background:var(--warn-soft);color:var(--warn)}
+@media (max-width:520px){
+  .submitbox{grid-template-columns:auto 1fr}
+  .submitbox .row{grid-column:1 / -1;grid-row:auto;margin-top:10px}
+  .submitbox .row button{width:100%}
+}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;align-items:center}
+button{font:inherit;font-size:.9rem;font-weight:600;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:42px;transition:transform .12s,box-shadow .15s,border-color .15s,background .15s}
+button:hover{border-color:var(--accent);box-shadow:0 4px 14px -8px rgba(75,58,158,.5)}
+button:active{transform:translateY(1px)}
+button.primary{background:var(--accent-deep);color:var(--accent-ink);border-color:var(--accent-deep)}
+button.primary:hover{background:var(--accent);border-color:var(--accent)}
+button.danger{color:var(--warn)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+details.tools{position:relative}
+details.tools>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;min-height:42px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:.9rem;font-weight:600;color:var(--ink)}
+details.tools>summary::-webkit-details-marker{display:none}
+details.tools>summary::after{content:"▾";font-size:.8em;color:var(--muted)}
+details.tools[open]>summary{border-color:var(--accent)}
+details.tools .menu{position:absolute;z-index:6;top:calc(100% + 8px);left:0;display:grid;gap:6px;min-width:230px;padding:10px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:0 18px 40px -16px rgba(42,36,51,.45)}
+@media (max-width:520px){.toolbar{position:relative}details.tools{position:static}details.tools .menu{left:0;right:0;min-width:0}}
+details.tools .menu button{text-align:left;border-radius:10px;border-color:transparent;background:transparent;font-weight:500}
+details.tools .menu button:hover{background:var(--accent-soft);box-shadow:none}
+details.tools .menu hr{border:0;border-top:1px solid var(--line);margin:2px 0;width:100%}
+#status{font-size:.82rem;color:var(--muted);min-height:1.4em;margin:6px 4px 0}
+.confirm,.exportbox{background:var(--warn-soft);border-radius:var(--radius-sm);padding:14px 16px;margin:12px 0;border:1px solid rgba(163,95,0,.18)}
+.confirm p,.exportbox p{margin:0 0 8px}
+.confirm .row{display:flex;gap:8px;flex-wrap:wrap}
+.exportbox textarea{min-height:200px;font-size:.9rem}
+.exportbox .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.exportbox ol.steps{margin:6px 0 8px;padding-left:1.4em}
+.exportbox ol.steps li{margin:4px 0}
+
+/* 分頁 */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 2px;margin:14px -2px 0;position:sticky;top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:5;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;border-radius:999px;display:flex;gap:8px;align-items:center;padding:7px 14px;font-weight:600;color:var(--muted);background:var(--card)}
+.tab[aria-selected="true"]{background:var(--accent-deep);color:var(--accent-ink);border-color:var(--accent-deep);box-shadow:0 8px 18px -10px rgba(75,58,158,.8)}
+.tab .pct{font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--accent-soft);color:var(--accent-deep);font-variant-numeric:tabular-nums}
+.tab[aria-selected="true"] .pct{background:rgba(255,255,255,.22);color:inherit}
+.tab .pct:empty{display:none}
+
+/* 內容 */
+.panel{display:none;padding-top:20px}
+.panel.active{display:block;animation:rise .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.panel.active{animation:none}html{scroll-behavior:auto}*{transition:none!important}}
+.when{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;background:var(--gold-soft);color:var(--gold-ink);padding:3px 12px;border-radius:999px;margin-bottom:8px}
+.when::before{content:"◔";font-size:1em}
+.panel h2{font-size:1.45rem;line-height:1.35;margin:2px 0 6px;font-weight:800;text-wrap:balance}
+.intro{color:var(--muted);margin:0 0 14px}
+.group{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;margin:16px 0;box-shadow:var(--shadow)}
+.group h3{font-size:1.08rem;margin:0 0 4px;display:flex;align-items:center;gap:10px;font-weight:800}
+.group h3::before{content:"";flex:none;width:5px;height:1.1em;border-radius:3px;background:linear-gradient(var(--gold),var(--accent))}
+.group .gintro{color:var(--muted);font-size:.9rem;margin:0 0 6px}
+.field{margin:18px 0 0}
+.field>label,.field>fieldset>legend{display:block;font-weight:700;font-size:.96rem;margin-bottom:6px;padding:0}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+.hint{font-weight:400;color:var(--muted);font-size:.85rem}
+.opt{font-weight:500;color:var(--muted);font-size:.78rem;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--accent-soft)}
+input[type=text],textarea{width:100%;font:inherit;padding:11px 14px;border:1.5px solid var(--line);border-radius:var(--radius-sm);background:var(--field);color:var(--ink);transition:border-color .15s,box-shadow .15s,background .15s}
+input[type=text]::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--muted) 70%,transparent)}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--accent);background:var(--card);box-shadow:0 0 0 4px var(--accent-soft)}
+textarea{resize:vertical;min-height:84px;line-height:1.7}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:7px 16px 7px 12px;cursor:pointer;min-height:44px;background:var(--field);transition:border-color .15s,background .15s}
+.choice:hover{border-color:var(--accent)}
+.choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft);font-weight:700;color:var(--accent-deep)}
+.choice input{width:18px;height:18px;accent-color:var(--accent)}
+details.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin:12px 0;padding:0;box-shadow:var(--shadow);overflow:hidden}
+details.card>summary{cursor:pointer;padding:15px 18px;font-weight:800;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"＋";display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent-deep);font-weight:700}
+details.card[open]>summary::after{content:"－"}
+details.card>summary .hint{margin-left:auto;font-weight:500}
+details.card[open]>summary{border-bottom:1px solid var(--line)}
+details.card .body{padding:2px 18px 18px}
+details.more{margin-top:14px;border-top:1px dashed var(--line);padding-top:6px}
+details.more>summary{cursor:pointer;color:var(--accent-deep);font-size:.9rem;font-weight:600;padding:8px 0}
+ul.clean{margin:8px 0 0;padding-left:1.2em}
+ul.clean li{margin:4px 0}
+ul.clean li::marker{color:var(--gold)}
+
+
+/* 用 AI 試試 */
+details.card.ai>summary .hint{margin-left:auto}
+.aiwarn{margin:8px 0;padding:8px 12px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-size:.88rem;font-weight:600}
+ol.steps{margin:8px 0 12px;padding-left:1.4em}
+ol.steps li{margin:4px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.promptpre{white-space:pre-wrap;word-break:break-word;font:.85rem/1.65 ui-monospace,SFMono-Regular,Menlo,"PingFang TC",monospace;background:var(--field);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;max-height:340px;overflow:auto;margin:8px 0 0}
+.tablewrap{overflow-x:auto;margin:6px 0 4px}
+table.frame{border-collapse:collapse;width:100%;font-size:.9rem;min-width:420px}
+table.frame th,table.frame td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+table.frame th{background:var(--accent-soft);color:var(--accent-deep);font-weight:700}
+
+
+/* ================= 破關版型（遊戲層）：覆蓋上面的基本樣式 ================= */
+:root{--ok:#2fa37f;--ok-soft:#e1f6ee;--pop:#ff7a8a;--sh:#3a2b86;--stroke:#e2dbd0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ok:#52d1a6;--ok-soft:#173a30;--pop:#ff8f9d;--sh:#5a4bb0;--stroke:#3d3648}}
+:root[data-theme="dark"]{--ok:#52d1a6;--ok-soft:#173a30;--pop:#ff8f9d;--sh:#5a4bb0;--stroke:#3d3648}
+body{background-image:radial-gradient(circle at 10% -4%,rgba(106,85,201,.12),transparent 38%),radial-gradient(circle at 98% 2%,rgba(242,184,75,.18),transparent 34%);background-attachment:fixed}
+
+/* 主視覺：關卡標題、小星星關主、XP 與星星 */
+.hero{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center;padding:24px 22px 20px;box-shadow:0 6px 0 var(--sh)}
+.hero>*{position:relative;z-index:1}
+.hero-text{min-width:0}
+.eyebrow{background:rgba(255,255,255,.2);font-weight:800}
+.mascot{width:108px;height:108px;flex:none;animation:bob 3.4s ease-in-out infinite}
+.mascot svg{width:100%;height:100%;filter:drop-shadow(0 6px 0 rgba(0,0,0,.2))}
+@keyframes bob{50%{transform:translateY(-7px) rotate(4deg)}}
+.herostats{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:6px}
+.xpchip{display:inline-flex;align-items:baseline;gap:5px;background:rgba(255,255,255,.2);padding:4px 16px;border-radius:999px;font-weight:800;font-size:.9rem}
+.xpchip b{font-size:1.3rem;color:var(--gold)}
+.stars{font-size:1.55rem;letter-spacing:3px;color:var(--gold);text-shadow:0 2px 0 rgba(0,0,0,.25);line-height:1}
+.stars .off{opacity:.35}
+.herostats .heroprog{flex:1;min-width:190px;margin-top:0}
+.heroprog .track{height:12px}
+.hero::before{width:260px;height:260px;right:-60px;top:-110px}
+@media (max-width:520px){.mascot{width:78px;height:78px}.hero{padding:20px 16px 16px}}
+
+/* 徽章列 */
+.badges{margin:14px 0 0;background:var(--card);border:2px solid var(--stroke);border-radius:22px;padding:12px 14px 10px;box-shadow:0 4px 0 var(--stroke)}
+.badges-title{margin:0 0 8px;font-size:.8rem;font-weight:800;color:var(--muted);letter-spacing:.08em}
+.badge-row{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.badge-row::-webkit-scrollbar{display:none}
+.bdg{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px;width:78px;text-align:center}
+.bdg .ico{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:1.65rem;background:linear-gradient(145deg,#ffe29a,#f2b84b);box-shadow:0 4px 0 #c9922b;color:#3a2900}
+.bdg .nm{font-size:.72rem;font-weight:800;line-height:1.25}
+.bdg.locked .ico{background:var(--field);box-shadow:0 4px 0 var(--stroke);filter:grayscale(1);opacity:.5}
+.bdg.locked .nm{color:var(--muted);font-weight:600}
+.bdg.pop .ico{animation:pop .7s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.2) rotate(-20deg)}100%{transform:none}}
+
+/* 通知、按鈕：貼紙感 */
+.notice{border-radius:18px;border:2px solid var(--stroke);border-left:6px solid var(--gold);box-shadow:0 4px 0 var(--stroke)}
+button{border:2px solid var(--stroke);box-shadow:0 3px 0 var(--stroke);font-weight:800}
+button:hover{box-shadow:0 3px 0 var(--accent)}
+button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--stroke)}
+button.primary{border-color:var(--sh);box-shadow:0 4px 0 var(--sh)}
+button.primary:hover{box-shadow:0 4px 0 var(--sh)}
+button.primary:active{box-shadow:0 1px 0 var(--sh)}
+details.tools>summary{border:2px solid var(--stroke);box-shadow:0 3px 0 var(--stroke);font-weight:800}
+
+/* 闖關步驟條（取代原本的分頁） */
+.tabs{gap:10px;padding:14px 4px 12px;align-items:stretch}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px;min-width:86px;max-width:110px;padding:10px 10px 9px;border-radius:20px;border:2px solid var(--stroke);background:linear-gradient(90deg,var(--accent-soft) var(--p,0%),var(--card) var(--p,0%));box-shadow:0 4px 0 var(--stroke);color:var(--ink);font-weight:800;white-space:normal}
+.tab .no{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--accent-deep);font-size:.98rem;font-weight:900;border:2px solid var(--accent)}
+.tab .lb{font-size:.76rem;line-height:1.25;text-align:center;word-break:keep-all}
+.tab .pct{font-size:.68rem;font-weight:800;color:var(--muted);background:none;padding:0;margin:0}
+.tab .pct:empty{display:none}
+.tab.done .no{background:var(--ok);border-color:var(--ok);color:#fff;font-size:0}
+.tab.done .no::before{content:"✓";font-size:1.05rem}
+.tab.done{border-color:var(--ok);box-shadow:0 4px 0 var(--ok)}
+.tab[aria-selected="true"]{border-color:var(--accent-deep);box-shadow:0 4px 0 var(--sh);transform:translateY(-3px);background:linear-gradient(90deg,var(--accent-soft) var(--p,0%),var(--card) var(--p,0%))}
+.tab[aria-selected="true"] .no{background:var(--accent-deep);color:var(--accent-ink);border-color:var(--accent-deep)}
+.tab[aria-selected="true"].done .no{background:var(--ok);border-color:var(--ok);color:#fff}
+.tab[aria-selected="true"] .lb{color:var(--accent-deep)}
+
+/* 任務橫幅與關主說 */
+.mission{margin:2px 0 16px;padding:14px 16px 12px;border-radius:22px;border:2px solid var(--gold);background:linear-gradient(135deg,var(--gold-soft),var(--card));box-shadow:0 4px 0 var(--gold)}
+.mtop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mno{display:inline-flex;gap:8px;align-items:center;font-size:1.02rem;font-weight:900;color:var(--gold-ink)}
+.mno::before{content:"🎯"}
+.mxp{font-size:.8rem;font-weight:800;color:var(--gold-ink);white-space:nowrap}
+.mbar{height:12px;border-radius:999px;background:rgba(0,0,0,.09);overflow:hidden;margin:10px 0 6px}
+.mfill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.mprog{margin:0;font-size:.82rem;color:var(--muted);font-weight:600}
+.mission.done{border-color:var(--ok);background:linear-gradient(135deg,var(--ok-soft),var(--card));box-shadow:0 4px 0 var(--ok)}
+.mission.done .mno{color:var(--ok)}
+.mission.done .mno::before{content:"✅"}
+.mission.done .mxp{color:var(--ok)}
+.coach{display:flex;gap:12px;align-items:flex-start;margin:4px 0 18px}
+.coach-face{flex:none;width:56px;height:56px}
+.coach-face svg{width:100%;height:100%;filter:drop-shadow(0 3px 0 rgba(0,0,0,.15))}
+.coach-say{position:relative;background:var(--card);border:2px solid var(--stroke);border-radius:20px;padding:10px 16px;box-shadow:0 3px 0 var(--stroke);font-size:.95rem;line-height:1.6}
+.coach-say::before{content:"";position:absolute;left:-9px;top:20px;width:14px;height:14px;background:var(--card);border-left:2px solid var(--stroke);border-bottom:2px solid var(--stroke);transform:rotate(45deg)}
+.coach-say b{display:block;font-size:.72rem;color:var(--accent-deep);letter-spacing:.1em;margin-bottom:1px}
+
+/* 區塊：編號圓圈、貼紙陰影 */
+.panel{counter-reset:g}
+.panel h2{font-size:1.5rem;font-weight:900}
+.group{border:2px solid var(--stroke);border-radius:24px;box-shadow:0 5px 0 var(--stroke);padding:20px 18px 22px}
+.group h3::before{counter-increment:g;content:counter(g);flex:none;width:32px;height:32px;border-radius:50%;background:var(--accent-deep);color:var(--accent-ink);display:grid;place-items:center;font-size:.92rem;font-weight:900}
+.group.note{background:var(--gold-soft);border-color:var(--gold);box-shadow:0 5px 0 var(--gold)}
+.group.note h3::before{content:attr(data-ico);counter-increment:none;background:none;width:auto;height:auto;font-size:1.3rem}
+.field.filled>label::after,.field.filled>fieldset>legend::after{content:"✓";display:inline-grid;place-items:center;width:18px;height:18px;margin-left:8px;border-radius:50%;background:var(--ok);color:#fff;font-size:.7rem;font-weight:900;vertical-align:2px}
+details.card{border:2px solid var(--stroke);border-radius:22px;box-shadow:0 5px 0 var(--stroke)}
+details.card.ai{border-color:var(--accent);box-shadow:0 5px 0 var(--accent)}
+details.card.ai>summary::before{content:"🤖";margin-right:8px}
+.choice{border-width:2px}
+.choice:has(input:checked){box-shadow:0 3px 0 var(--accent)}
+input[type=text],textarea{border-width:2px}
+
+/* 慶祝：提示、紙花、破關視窗 */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,28px);opacity:0;pointer-events:none;background:#231f3a;color:#fff;padding:12px 22px;border-radius:999px;font-weight:800;z-index:60;box-shadow:0 6px 0 rgba(0,0,0,.2);transition:opacity .25s,transform .25s;max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.win{background:linear-gradient(135deg,#6a55c9,#8f72dc)}
+.toast.gold{background:#f2b84b;color:#3a2900}
+canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+.clear{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(20,16,36,.64);padding:16px;backdrop-filter:blur(4px)}
+.clear-card{max-width:440px;width:100%;background:var(--card);border-radius:30px;padding:30px 24px 24px;text-align:center;box-shadow:0 10px 0 var(--sh);border:3px solid var(--gold);margin-top:60px}
+.clear-card .mascot{margin:-92px auto 8px;width:116px;height:116px}
+.clear-card h2{margin:0;font-size:1.8rem;font-weight:900}
+.clear-card p{margin:6px 0;color:var(--muted)}
+.clear-stars{font-size:2.3rem;color:var(--gold);letter-spacing:6px;margin:4px 0;text-shadow:0 3px 0 rgba(0,0,0,.15)}
+.clear-xp{display:inline-block;background:var(--gold-soft);color:var(--gold-ink);font-weight:900;padding:4px 18px;border-radius:999px;margin:4px 0 10px}
+.clear-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:10px 0}
+.clear-card .row{justify-content:center;margin-top:16px}
+@media print{.suggest{display:none!important}.toast,canvas#confetti,.clear,.badges{display:none!important}}
+@media (prefers-reduced-motion: reduce){.mascot,.bdg.pop .ico{animation:none}}
+.mission.exp .mno::before{content:"🤖"}
+.mission.exp.done .mno::before{content:"✅"}
+
+.tab.done .pct{display:none}
+
+/* ===== 版面調整（11/11）：題目往上拉，存檔／提交／隱私放最底下 ===== */
+.hero{padding:16px 18px 14px;gap:2px 12px}
+.hero h1{font-size:1.5rem;margin-bottom:2px}
+.hero p#subtitle{font-size:.88rem}
+.eyebrow{margin-bottom:6px;font-size:.72rem}
+.mascot{width:84px;height:84px}
+.herostats{margin-top:2px;gap:8px 12px}
+.xpchip{padding:2px 12px}
+.xpchip b{font-size:1.1rem}
+.stars{font-size:1.3rem}
+.saved{grid-column:1 / -1;margin:0;font-size:.74rem;color:rgba(255,255,255,.78);min-height:1.2em}
+@media (max-width:520px){.hero{padding:14px 14px 12px}.hero h1{font-size:1.3rem}.mascot{width:62px;height:62px}.herostats .heroprog{min-width:150px}}
+
+/* 徽章：一排小圖示（點一下看名稱） */
+.badges{display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 12px;border-radius:18px;box-shadow:0 3px 0 var(--stroke)}
+.badges-title{margin:0;white-space:nowrap;font-size:.78rem}
+.badge-row{gap:8px;padding:2px 2px 4px;flex:1}
+.badge-row .bdg{width:auto;cursor:pointer}
+.badge-row .bdg .ico{width:40px;height:40px;font-size:1.2rem;box-shadow:0 3px 0 #c9922b}
+.badge-row .bdg.locked .ico{box-shadow:0 3px 0 var(--stroke)}
+.badge-row .bdg .nm{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 每個任務最後：往下一個任務走 */
+.nextbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:24px 0 4px}
+.nextbar .hint{margin:0}
+
+/* 最底下的「存檔與提交」 */
+.wrapup{margin-top:36px;padding:18px 16px 18px;border-radius:26px;background:var(--card);border:2px solid var(--stroke);box-shadow:0 5px 0 var(--stroke)}
+.wrapup h2{margin:0 0 4px;font-size:1.25rem;font-weight:900}
+.wrapup>.hint{margin:0 0 6px}
+.wrapup .submitbox{margin-top:10px}
+
+/* 頁尾：隱私說明與 IG */
+.foot{margin-top:26px;display:grid;gap:16px}
+.privacy{background:var(--ok-soft);border:2px solid var(--ok);border-radius:24px;padding:16px 18px 14px;box-shadow:0 4px 0 var(--ok)}
+.privacy h2{margin:0 0 6px;font-size:1.08rem;font-weight:900}
+.privacy ul{margin:0;padding-left:1.2em}
+.privacy li{margin:4px 0;font-size:.92rem}
+.privacy li::marker{color:var(--ok)}
+.follow{display:flex;align-items:center;gap:14px;background:var(--card);border:2px solid var(--stroke);border-radius:24px;padding:14px 18px;box-shadow:0 4px 0 var(--stroke)}
+.follow .mascot{width:56px;height:56px;animation:none;flex:none}
+.follow p{margin:0;font-size:.9rem;color:var(--muted)}
+.follow b{color:var(--ink)}
+.igbtn{display:inline-block;margin-top:6px;padding:8px 20px;border-radius:999px;background:linear-gradient(135deg,#f2b84b,#ff7a8a);color:#3a1a00;text-decoration:none;font-weight:900;border:2px solid #c9922b;box-shadow:0 4px 0 #c9922b;min-height:42px}
+.igbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #c9922b}
+@media print{.wrapup,.foot,.nextbar{display:none!important}}
+
+
+/* ===== 精簡（11/11）：流程闖關，不放徽章與 XP ===== */
+.hero .rule{margin:6px 0 0;font-size:.78rem;color:rgba(255,255,255,.78)}
+.optfold{margin-top:16px;border:2px dashed var(--stroke);border-radius:16px;padding:2px 14px 6px;background:var(--field)}
+.optfold>summary{cursor:pointer;padding:10px 0;font-weight:800;font-size:.9rem;color:var(--accent-deep);list-style:none}
+.optfold>summary::-webkit-details-marker{display:none}
+.optfold[open]>summary{border-bottom:1px dashed var(--stroke);margin-bottom:4px}
+.optfold .opt{display:none}
+.mxp{font-size:.8rem}
+.mprog{display:none}
+.mission{padding-top:10px;padding-bottom:12px}
+
+/* ===== 頁尾：收合的隱私說明＋版權 ===== */
+.foot{margin-top:32px;display:block}
+.privacy{background:none;border:0;box-shadow:none;border-radius:0;padding:0}
+.privacy>summary{cursor:pointer;list-style:none;display:inline-block;font-size:.82rem;font-weight:600;color:var(--muted);padding:6px 2px}
+.privacy>summary::-webkit-details-marker{display:none}
+.privacy[open]>summary{color:var(--ink)}
+.privacy ul{margin:6px 0 0;padding:10px 16px 10px 2.2em;background:var(--field);border-radius:14px;font-size:.84rem;color:var(--muted)}
+.privacy li{margin:4px 0}
+.foot .copy{margin:10px 0 0;font-size:.78rem;color:var(--muted);text-align:center}
+
+/* ===== 淺色／深色切換鈕 ===== */
+.themebtn{position:fixed;right:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:40;width:46px;height:46px;border-radius:50%;border:2px solid var(--stroke,var(--line));background:var(--card);color:var(--ink);font-size:1.3rem;line-height:1;cursor:pointer;box-shadow:0 4px 0 var(--stroke,var(--line)),0 8px 20px -8px rgba(0,0,0,.35);display:grid;place-items:center;padding:0}
+.themebtn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--stroke,var(--line))}
+.themebtn:focus-visible{outline:3px solid var(--accent,#6a55c9);outline-offset:2px}
+@media print{.themebtn{display:none}}
+/* 深色模式的補強：進度條底色、分頁上的百分比 */
+.mbar{background:var(--line)}
+.tab[aria-selected="true"] .pct{background:none;color:var(--accent-deep)}
+.hero .lno{color:#ffd98a}
+.hero .eyebrow{background:rgba(0,0,0,.18)}
+
+/* 提案勾勾勾：預設收合，只有一個小小的「💡 提案」 */
+.suggest{margin-top:6px}
+.suggest>summary{display:inline-block;cursor:pointer;list-style:none;font-size:.8rem;font-weight:700;color:var(--muted);padding:2px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--field)}
+.suggest>summary::-webkit-details-marker{display:none}
+.suggest>summary:hover{color:var(--accent-deep);border-color:var(--accent)}
+.suggest[open]>summary{color:var(--accent-deep);border-color:var(--accent)}
+.suggest .choices{margin-top:8px;flex-direction:column;gap:6px}
+.suggest .choice{border-radius:14px;align-items:flex-start;line-height:1.5;padding:9px 14px 9px 12px;min-height:0}
+.suggest .choice input{margin-top:4px;flex:none}
+.mission.fbk .mno::before{content:"💬"}
+.mission.fbk.done .mno::before{content:"✅"}
+/* 列印與 PDF（維持純白、黑字） */
+.pv{font:11pt/1.6 "PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#000;background:#fff}
+.pv h1{font-size:20pt;margin:0 0 4pt}
+.pv .pv-sub{color:#555;font-size:10pt;margin:0 0 14pt}
+.pv h2{font-size:14pt;margin:18pt 0 6pt;padding-bottom:3pt;border-bottom:1px solid #999;break-after:avoid}
+.pv h3{font-size:11.5pt;margin:12pt 0 4pt;color:#333;break-after:avoid}
+.pv .pv-f{margin:0 0 7pt;break-inside:avoid}
+.pv .pv-l{font-weight:700;font-size:10pt;color:#333}
+.pv .pv-v{white-space:pre-wrap;word-break:break-word;border:1px solid #bbb;border-radius:4pt;padding:5pt 7pt;min-height:16pt}
+.pv .pv-v.empty{color:#888}
+#printView{display:none}
+#pdfHost{position:fixed;left:-10000px;top:0;width:700px}
+@page{size:A4;margin:16mm}
+@media print{
+  html,body{background:#fff!important;color:#000!important}
+  body::before{display:none}
+  .wrap{display:none!important}
+  #pdfHost{display:none}
+  #printView{display:block}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="topnav" id="topnav" aria-label="課程導覽"></nav>
+  <header class="hero">
+    <div class="hero-text">
+      <p class="eyebrow" id="eyebrow">自媒體陪跑　學習單</p>
+      <h1 id="title"></h1>
+      <p id="subtitle"></p>
+      <p class="rule">只有標「必填」的題目算破關；選填的不影響。沒破關也沒關係，進度會幫你留著。</p>
+    </div>
+    <div class="mascot" id="heroMascot" aria-hidden="true"></div>
+    <p class="saved" id="savedMini"></p>
+    <div class="herostats">
+      <span class="stars" id="stars" role="img" aria-label="星星 0 顆"></span>
+      <div class="heroprog" aria-label="這一關的必填完成度">
+        <div class="track"><div class="fill" id="heroFill"></div></div>
+        <span class="pct" id="heroPct">尚未開始</span>
+      </div>
+    </div>
+  </header>
+  
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="學習單分頁"></nav>
+  <main id="panels"></main>
+
+  <section class="wrapup" id="wrapup" aria-labelledby="wrapTitle">
+    <h2 id="wrapTitle">🎒 存檔、交給 Jasmine</h2>
+    <p class="hint">全部填完，或今天先到這裡，再來這裡存檔、提交。</p>
+    <div class="submitbox" id="submitBox" hidden>
+    <p class="who" id="submitWho"></p>
+    <p class="hint" id="submitInfo"></p>
+    <div class="row"><button class="primary" id="btnSubmit">提交給 Jasmine</button></div>
+  </div>
+
+    <div class="toolbar">
+    <button class="primary" id="btnCopy">複製全部文字</button>
+    <button id="btnPdf">下載 PDF</button>
+    <details class="tools" id="moreTools">
+      <summary>更多</summary>
+      <div class="menu">
+        <button id="btnPrint">列印成 PDF（可複製文字）</button>
+        <button id="btnMd">下載文字檔（.md）</button>
+        <button id="btnJson">下載備份（.json）</button>
+        <button id="btnImport">匯入備份</button>
+        <hr>
+        <button class="danger" id="btnReset">清除全部</button>
+      </div>
+    </details>
+    <input type="file" id="fileIn" accept=".json,application/json" hidden>
+  </div>
+
+    <div class="confirm" id="confirmBar" role="alertdialog" aria-labelledby="confirmMsg" hidden>
+    <p id="confirmMsg"></p>
+    <div class="row"><button class="danger" id="confirmYes"></button><button id="confirmNo">取消</button></div>
+  </div>
+  <div class="exportbox" id="printGuide" hidden>
+    <p><strong>列印成 PDF：文字可以選取複製，檔案也比較小</strong></p>
+    <p id="printName"></p>
+    <ol class="steps">
+      <li>按下面的「開啟列印視窗」。</li>
+      <li><strong>電腦（Chrome、Edge）：</strong>「目的地」選「另存為 PDF」，按「儲存」。</li>
+      <li><strong>Mac 的 Safari：</strong>左下角的「PDF」選單選「儲存為 PDF」。</li>
+      <li><strong>iPhone、iPad：</strong>在預覽縮圖上用兩指放大，再按分享，選「儲存到檔案」。</li>
+      <li><strong>Android 的 Chrome：</strong>「選擇印表機」選「儲存為 PDF」，再按下載圖示。</li>
+    </ol>
+    <p class="hint">如果你是在 LINE、IG 或 Claude 這類 App 裡面開的，可能沒有列印功能，或檔名會不對。請改用 Chrome 或 Safari 打開，或改按「下載 PDF」。</p>
+    <div class="row"><button class="primary" id="btnPrintGo">開啟列印視窗</button><button id="printClose">關閉</button></div>
+  </div>
+  <div class="exportbox" id="exportBox" hidden>
+    <p id="exportMsg"></p>
+    <textarea id="exportText" readonly aria-label="匯出內容"></textarea>
+    <button id="exportClose">關閉</button>
+  </div>
+
+  <div id="status" role="status" aria-live="polite"></div>
+  </section>
+
+  <footer class="foot" id="foot">
+    <details class="privacy">
+      <summary>🔒 隱私小說明</summary>
+      <ul>
+        <li>你填的內容只存在這台裝置的瀏覽器，換裝置或清除瀏覽資料就會不見，記得偶爾下載備份。</li>
+        <li>只有按下「提交給 Jasmine」，內容才會送出給 Jasmine 看；沒按，Jasmine 看不到。</li>
+        <li>這個頁面沒有登入，也沒有追蹤你的瀏覽紀錄。</li>
+        <li>「複製 prompt」只會複製到剪貼簿，貼給 AI 之前，記得先刪掉真名和別人的個資。</li>
+        <li>想清掉資料：「更多」→「清除全部」。</li>
+      </ul>
+    </details>
+    <p class="copy">© Jasmine Tsai 2026</p>
+  </footer>
+  <div class="notice" id="notice" hidden></div>
+  <nav class="topnav bottom" id="botnav" aria-label="課程導覽"></nav>
+</div>
+
+<script>
+(function () {
+  var KEY = 'smcourse-theme', root = document.documentElement;
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'themebtn';
+  function isDark() {
+    var t = root.getAttribute('data-theme');
+    return t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function paint() {
+    var d = isDark();
+    b.textContent = d ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    b.setAttribute('aria-label', d ? '\u5207\u63DB\u6210\u6DFA\u8272\u6A21\u5F0F' : '\u5207\u63DB\u6210\u6DF1\u8272\u6A21\u5F0F');
+    b.title = d ? '\u6DFA\u8272\u6A21\u5F0F' : '\u6DF1\u8272\u6A21\u5F0F';
+  }
+  b.addEventListener('click', function () {
+    var next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+    paint();
+  });
+  try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint); } catch (e) {}
+  paint();
+  document.body.appendChild(b);
+})();
+</script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas id="confetti" hidden></canvas>
+<div class="clear" id="clearModal" role="dialog" aria-modal="true" aria-labelledby="clearTitle" hidden></div>
+<div id="printView" class="pv" aria-hidden="true"></div>
+<div id="pdfHost" aria-hidden="true"><div id="pdfRoot" class="pv"></div></div>
+<script src="../config.js"></script>
+<script>
+/* ============================================================
+   第 4 堂：內容策略。課程內容都在這個 COURSE 物件裡。
+   欄位類型 type：text 單行 / area 多行 / radio 單選 / check 多選 / scale 1–5
+   ============================================================ */
+const L1 = 'smcourse-lesson1-v1';
+const L2 = 'smcourse-lesson2-v1';
+const L3 = 'smcourse-lesson3-v1';
+const lgIds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(n => 'lg' + n);
+const ANGLES = [
+  ['1 迷思', '她以為什麼？其實呢？（最容易放進你的立場）'],
+  ['2 步驟', '從 0 做到，第一步、第二步是什麼？'],
+  ['3 案例', '誰（我、學員、對標帳號）做了什麼，發生什麼變化？要真實，沒有就跳過'],
+  ['4 失敗', '我踩過什麼坑？'],
+  ['5 比較', '兩個選項的差別？以前和現在的差別？'],
+  ['6 清單', '3–5 個什麼？'],
+  ['7 問答', '她最常問、留言區最常出現的那一題？'],
+  ['8 感受', '那個當下，她（或我）心裡那句話是什麼？直接用語言庫的原話'],
+];
+const gridFields = (g, reqIdx) => ANGLES.map((a, i) => ({
+  id: `g${g}_${i + 1}`, type: 'area', label: a[0], hint: a[1], optional: !(reqIdx || []).includes(i + 1),
+}));
+const gridMat = g => ({ label: `主軸 ${g} 的九宮格`, ids: ANGLES.map((a, i) => `g${g}_${i + 1}`), lab: ANGLES.map(a => a[0].slice(2)) });
+
+const COURSE = {
+  key: 'smcourse-lesson4-v1',
+  nav: { home: '../', prev: { label: '第 3 堂', href: '../lesson3/' } },
+  title: '第 4 堂課：內容策略',
+  subtitle: '三個月自媒體陪跑・第 4 週學習單',
+  prefill: [
+    { from: L2, fromId: 'n4', to: 'v1' },
+    { from: L1, fromId: 'r1', to: 'hours' },
+    { from: L1, fromId: 'g3', to: 'min_l' },
+    { from: L3, fromId: 'bio1', to: 'bio1' },
+    { from: L3, fromId: 'platform', to: 'pl_main' },
+  ],
+
+  parts: [
+    {
+      id: 'r1', tab: '① 上週回顧', when: '上課前先想一想',
+      title: '上週回顧：今天要用的材料',
+      intro: '前三堂你已經寫好了你是誰、對誰說、怎麼說。今天決定「你要說什麼」，而且不會斷糧。如果你用同一個瀏覽器填過前面幾堂，下面幾格會自動帶進來。',
+      groups: [
+        { title: '前三堂寫的東西', fields: [
+          { id: 'v1', optional: true, type: 'area', label: '我的定位 v1', hint: '我幫誰、解決什麼問題、因為我…' },
+          { id: 'bio1', optional: true, type: 'area', label: '我簡介的第 1 行', hint: '內容要兌現這一行的承諾' },
+          { id: 'lg_fav', optional: true, type: 'area', label: '語言庫裡，最有畫面的 5 條', hint: '今天會用在九宮格' },
+        ]},
+        { title: '第 1 堂寫的數字', fields: [
+          { id: 'min_l', optional: true, type: 'area', label: '我的最低標準', hint: '目標卡寫的，做到什麼程度你會覺得這 3 個月沒白費' },
+          { id: 'hours', optional: true, type: 'text', label: '每週可投入的時數（保守版）', hint: '資源清單寫的' },
+        ]},
+        { title: '開場 60 秒挑戰', gintro: '上課開始時倒數 60 秒：寫下「這週我能發的題目」，越多越好。下課前會再數一次。', fields: [
+          { id: 'cnt_start', type: 'text', label: '開場 60 秒，我寫了幾個題目？', hint: '憑感覺寫就好，數字不用漂亮' },
+        ]},
+      ],
+    },
+    {
+      id: 'r2', tab: '② 三個內容主軸', when: '上課中，約 15 分鐘',
+      title: '三個內容主軸，每個都有一句立場',
+      intro: '你的定位有三格：我幫誰、解決什麼、因為我。每一格長出一個主軸：懂她、教她、我是誰。每個主軸再寫一句你敢署名的立場，內容才不會只是「正確」，而是有人記得。',
+      cards: [
+        { title: '定位三格 → 三個主軸', items: [
+          '我幫（誰）→ ① 懂她：她的煩惱、她的處境、她說的話（讓她覺得「這個人懂我」）',
+          '解決（什麼問題）→ ② 教她：我的做法、方法、第一步（讓她覺得「他真的有東西」）',
+          '因為我（經歷）→ ③ 我是誰：我的故事、我怎麼走過來、日常（讓她覺得「我可以信他」）',
+        ], note: '三個主軸夠了：太少會單調，太多會散。「教她」不是整套方法論，是她現在做得到的第一步。' },
+        { title: '立場：大家都說…，我不同意…', intro: '立場是你相信什麼、不同意什麼。三種寫法，選你最自然的：', items: [
+          '不同意（最有力）：「大家都說…，我不同意，我認為…」',
+          '偏好（最溫和）：「如果是我，我只會推薦…，因為…」',
+          '底線（最像人設）：「我不會…，因為…」',
+        ], note: '針對「說法」，不針對人，不點名同業。不保證結果，不用療效字眼，不貶低其他方法。要是你真的相信、有自己的經驗支持的，不是為了吵。不敢說「不同意」，可以先用偏好或底線，慢慢加強。' },
+        { title: '小安的三個主軸（虛構示範）', intro: '小安是副業做 AI 影片剪輯的上班族，想幫的是下班後想開始的人（小美）。', items: [
+          '① 懂她：小美的煩惱「我是不是太晚了」｜立場：大家都說年紀是問題，我不同意，卡住的是不知道第一步',
+          '② 教她：AI 剪輯的第一步｜立場：大家都說要買貴的軟體，我不同意，第一支用手機就夠',
+          '③ 我是誰：我從零開始的這半年｜立場：大家都說先學完再做，我不同意，我是做完一支再學下一個',
+        ] },
+        { title: '每個主軸的三個檢查', items: [
+          '一句話說得清楚嗎？',
+          '讀到我簡介第 1 行的人，會期待看到這個嗎？',
+          '我寫得出 8 個以上不同的題目嗎？',
+        ] },
+      ],
+      groups: [
+        { title: '主軸 ① 懂她', gintro: '她的煩惱、處境、她說的話。原料：受眾輪廓、10 個煩惱、語言庫。', fields: [
+          { id: 'ax1', type: 'text', label: '主軸名稱（一句話）', hint: '例如：小美的煩惱「我是不是太晚了」' },
+          { id: 'st1', type: 'area', label: '我的立場', hint: '大家都說…，我不同意…', suggest: ['大家都說…，我不同意，我認為…', '如果是我，我只會推薦…，因為…', '我不會…，因為…'] },
+        ]},
+        { title: '主軸 ② 教她', gintro: '我的做法、第一步、方法。她現在做得到的，不是整套方法論。', fields: [
+          { id: 'ax2', type: 'text', label: '主軸名稱（一句話）', hint: '例如：AI 剪輯的第一步' },
+          { id: 'st2', type: 'area', label: '我的立場', hint: '大家都說…，我不同意…', suggest: ['大家都說…，我不同意，我認為…', '如果是我，我只會推薦…，因為…', '我不會…，因為…'] },
+        ]},
+        { title: '主軸 ③ 我是誰', gintro: '我的故事、我怎麼走過來、日常。原料：故事 300 字、語氣指南。', fields: [
+          { id: 'ax3', type: 'text', label: '主軸名稱（一句話）', hint: '例如：我從零開始的這半年' },
+          { id: 'st3', type: 'area', label: '我的立場', hint: '大家都說…，我不同意…', suggest: ['大家都說…，我不同意，我認為…', '如果是我，我只會推薦…，因為…', '我不會…，因為…'] },
+        ]},
+        { title: '檢查', fields: [
+          { id: 'ax_ck', optional: true, type: 'check', label: '三個主軸，我都能做到：', options: ['一句話說得清楚', '符合簡介第 1 行', '各寫得出 8 個題目', '三句立場我都敢署名'] },
+        ]},
+      ],
+    },
+    {
+      id: 'r3', tab: '③ 九宮格', when: '上課中，約 27 分鐘（示範＋動手＋看成果）',
+      title: '九宮格：一個主軸長成 8 個題目',
+      promptsEnd: true,
+      prompts: [
+        {
+          title: '🤖 請 AI 發散九宮格', when: '選填，先自己填至少 3 格再用',
+          purpose: '用你已經寫好的材料，請 AI 把一個主軸的 8 個切角各發散成 3 個題目句。你挑、你改，題目裡「我的角度和立場」要你自己補。',
+          steps: ['先自己填好至少 3 格，再請 AI 發散，不然 AI 給的都是「大家都會寫」的題目。', '在下面的「這次請 AI 發散哪個主軸」寫上主軸名稱。', '按「複製 prompt（已帶入我的內容）」，到 AI 貼上。', '標「需要你補」的格子，是你的真人真事，請自己補，不要讓 AI 編。'],
+          materials: [
+            { label: '我的定位 v1', ids: ['v1'] },
+            { label: '我的三個主軸與立場', ids: ['ax1', 'st1', 'ax2', 'st2', 'ax3', 'st3'], lab: ['主軸 ① 懂她', '立場 ①', '主軸 ② 教她', '立場 ②', '主軸 ③ 我是誰', '立場 ③'] },
+            { label: '受眾輪廓', src: L2, ids: ['a_name', 'a_age', 'a_state', 'a_say'] },
+            { label: '語言庫', src: L2, ids: lgIds, numbered: true },
+            { label: '我的故事', src: L2, ids: ['sy1', 'sy2', 'sy3', 'sy4'] },
+            { label: '我會這樣說', src: L3, ids: ['say1', 'say2', 'say3', 'say4', 'say5'] },
+            { label: '我不會這樣說', src: L3, ids: ['no1', 'no2', 'no3', 'no4', 'no5'] },
+          ],
+          body: `你是我的自媒體陪跑教練，溫暖、專業，不是代筆。請用我「已經寫好的材料」幫我發散題目，不編造。
+
+【原則】
+1. 只用我的材料裡有的內容。沒寫的經歷、案例、數字、頭銜，請不要加；需要我補的，標「需要你補」。
+2. 每個題目句要有「她的話」（我的受眾說的話，優先用語言庫）和「我的立場」（延續我寫的，不要自己加更強烈的立場）。
+3. 不寫保證結果，不暗示療效，不貶低其他方法，不針對特定的人或同業。
+4. 不用我不會說的詞（例如「賦能」「底層邏輯」），也不要三個一組的排比。
+5. 每個題目句 25 字內，口語。
+
+【任務】
+我今天要發散的主軸是「{{ax_pick|（請先在學習單填這次要發散的主軸）}}」。立場請看下面材料裡我寫的立場。
+請先用 1–2 句話告訴我，我的立場裡你覺得最有力的是哪一句。
+接著依下面 8 個切角，各給我 3 個「題目句」（只是這篇要講什麼，不用寫標題，也不用寫內容）：
+迷思、步驟、案例、失敗、比較、清單、問答、感受。
+「案例」和「失敗」要用我的真實經歷，我沒寫的請標「需要你補」，不要編。
+
+【輸出格式】
+表格：切角｜題目句 1、2、3｜用到我的哪一段材料。
+最後用 3 句話告訴我：哪幾個切角和我的材料最搭？哪些題目是「大家都會寫」的？`,
+        },
+      ],
+      intro: '中心是你在「② 三個內容主軸」寫的主軸，周圍 8 格是 8 個切角。每格只寫一句題目句，不用寫完整內容。不用填滿，先填 6 格以上，卡住就跳下一格。',
+      cards: [
+        { title: '8 個切角，各問自己一個問題', items: ANGLES.map(a => `${a[0]}：${a[1]}`), note: '至少 3 格用到語言庫的原話，至少 2 格放進你的立場。案例要真實，不要編造經歷或數字，沒有就跳過。今天先做第一個九宮格，另外兩個當作業。' },
+        { title: '延伸：一格再長成新的九宮格', items: [
+          '挑一格最有感覺的，把它放到中心，再長 8 個。',
+          '例如「迷思：我是不是太晚了」→ 年紀的迷思、時間的迷思、設備的迷思…',
+          '一個主軸 8 題，三個主軸 24 題，再加 6 個機動題，就是 30 題。',
+        ] },
+        { title: '小安的九宮格（虛構示範：主軸 ① 懂她「我是不是太晚了」，只列 5 格）', items: [
+          '迷思：大家都說年紀大就學不會，我不同意，我 30 歲才開始，卡住的是不知道第一步',
+          '失敗：我也曾經買了一堆課，結果一支都沒剪',
+          '問答：她問我：現在才開始，會不會太晚？',
+          '感受：晚上 9 點滑到別人的作品，心裡那句「別人怎麼這麼厲害」',
+          '比較：看別人分享，和自己剪 10 秒，哪個比較不焦慮？',
+        ], note: '案例格要用真人真事，這裡不編。' },
+      ],
+      groups: [
+        { title: '這次請 AI 發散哪個主軸（選填）', fields: [
+          { id: 'ax_pick', optional: true, type: 'text', label: '主軸名稱', hint: '貼上你在「② 三個內容主軸」寫的主軸名稱' },
+        ]},
+        { title: '主軸 ① 懂她　九宮格（今天當場做這一個）', gintro: '至少填 6 格。迷思、問答、感受三格是今天的基本款。', fields: gridFields(1, [1, 7, 8]) },
+        { title: '主軸 ② 教她　九宮格（作業）', fields: gridFields(2, []) },
+        { title: '主軸 ③ 我是誰　九宮格（作業）', fields: gridFields(3, []) },
+      ],
+    },
+    {
+      id: 'r4', tab: '④ 30 題與本週 3 題', when: '上課中，約 12 分鐘',
+      title: '30 題選題庫與本週 3 題',
+      promptsEnd: true,
+      prompts: [
+        {
+          title: '🤖 請 AI 當我的受眾，幫我挑題目', when: '選填，題目有 10 個以上再用',
+          purpose: '請 AI 扮演你的受眾，看你的題目清單，說出她會先點哪些、哪些沒感覺、哪些換成別人也寫得出來。它比真人客氣，所以只是前測。',
+          warn: '請把 AI 說「她會點」的題目，再問 3 個真人。真人的反應比 AI 準。',
+          steps: ['先在「③ 九宮格」填好題目，並在下面填好「機動題」與「本週優先題」。', '開一個全新的 AI 對話。', '按「複製 prompt（已帶入我的內容）」貼上。', '把 AI 說她會點的前 5 題，再問 3 個真人，看他們會點哪個。'],
+          materials: [
+            { label: '受眾輪廓', src: L2, ids: ['a_name', 'a_age', 'a_state', 'a_say'] },
+            { label: '她平常會說的話（語言庫）', src: L2, ids: lgIds, numbered: true },
+            { label: '我的三個主軸', ids: ['ax1', 'ax2', 'ax3'], lab: ['① 懂她', '② 教她', '③ 我是誰'] },
+            gridMat(1), gridMat(2), gridMat(3),
+            { label: '機動題', ids: ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'], numbered: true },
+          ],
+          body: `你是我的自媒體陪跑教練，溫暖、坦白。請你扮演我的受眾，我先不告訴你我想表達什麼。
+
+下面是我的受眾描述、她平常會說的話，還有我的題目清單。請依照這個順序回覆：
+1. 我看到的你：這份清單整體給你的感覺，一兩句。
+2. ✅ 她會先點的 5 題，各說一句為什麼。
+3. 🔧 她看不懂或沒感覺的 5 題，各說一句為什麼。
+4. 哪些題目「換成別人也寫得出來」？（沒有我的角度和立場）
+5. 三個主軸的比例，有沒有失衡？
+6. 👉 建議行動：我這週先做哪 3 題？
+不要代我改寫，只告訴我你的判斷。如果我的題目少於 10 個，請先告訴我，並問我願不願意多寫一些再來。`,
+        },
+      ],
+      intro: '清單不用全做。三勾檢查：她看到會覺得「這是在說我」嗎？有我自己的材料和立場嗎？這週做得到嗎？三個都勾，就是本週優先題。課堂上有「點擊投票」：每人貼一題到聊天室，其他人 +1，看真人會點哪一個。',
+      cards: [
+        { title: '三勾檢查', items: [
+          '她：我的受眾看到，會覺得「這是在說我」嗎？',
+          '我：有我自己的材料和立場嗎？換成別人寫會一樣嗎？',
+          '做得到：這週我有素材、有時間做出來嗎？',
+        ], note: '三個都勾，才是本週優先題。三勾都過的只有 1 題也沒關係，其餘留作下週。' },
+        { title: '機動題的來源', items: [
+          '留言與私訊：這週最多人問我的一個問題',
+          '時事與節日：和我的受眾有關的時間點',
+          '幕後與日常：我今天在做的事',
+          '對標帳號有回應的內容：改成我自己的角度，不要照抄',
+          'AI 發散：挑出最有我角度的一題',
+          '數據（第 8 週之後）：表現最好的那一則，換個切角再說一次',
+        ] },
+      ],
+      groups: [
+        { title: '機動題（6 個，隨時補）', gintro: '不用一次寫完。想到再補。', fields: [1, 2, 3, 4, 5, 6].map(n => ({ id: 'm' + n, type: 'text', label: `機動題 ${n}`, optional: true })) },
+        { title: '課堂投票', fields: [
+          { id: 'vote', optional: true, type: 'area', label: '同學最想點的是哪一題？為什麼？', hint: '得票高的題目，通常有她的話、有立場、有畫面' },
+        ]},
+      ],
+      repeat: {
+        count: 3, cardTitle: '本週優先題', fullCount: 3, basicFields: 1, reqCards: 1,
+        fields: [
+          { id: 'tp_topic', type: 'area', label: '題目句', hint: '她的話＋我的材料＋我的立場' },
+          { id: 'tp_ticks', type: 'check', label: '三勾', options: ['她', '我（材料與立場）', '做得到'], optional: true },
+          { id: 'tp_vote', type: 'text', label: '課堂投票：有幾個人 +1', optional: true },
+        ],
+      },
+    },
+    {
+      id: 'r5', tab: '⑤ 3 行草稿', when: '上課中，寫 5 分鐘',
+      title: '3 行草稿：下課前，帶走一則動筆的內容',
+      intro: '清單不是終點。用最有把握的一題，寫 3 行粗草稿。不修、不求好，第 5 堂才學怎麼把第 1 行改成讓人停下來的鉤子。開始前看一下時間，寫完記下花了幾分鐘，這就是你「一則要花多久」的第一次實測。',
+      cards: [
+        { title: '3 行怎麼寫', items: [
+          '第 1 行：她的話。（語言庫的原話，例如「我是不是太晚了？」）',
+          '第 2 行：我的材料＋我的立場。（「我 30 歲才開始剪片，我不同意年紀是問題。」）',
+          '第 3 行：她現在可以做的一個小動作，或一個問題。（「今晚先剪 10 秒就好，你想剪什麼？」）',
+        ], note: '例子是虛構的小安。每行一件事，只要 3 行。想一直修第 1 行？下週專門修，今天先把三行寫完。' },
+      ],
+      groups: [
+        { title: '選一題', fields: [
+          { id: 'dr_topic', type: 'text', label: '我用哪一題寫？', hint: '從「④ 30 題與本週 3 題」挑最有把握的' },
+        ]},
+        { title: '我的 3 行草稿', fields: [
+          { id: 'dr1', type: 'area', label: '第 1 行：她的話' },
+          { id: 'dr2', type: 'area', label: '第 2 行：我的材料＋我的立場' },
+          { id: 'dr3', type: 'area', label: '第 3 行：她可以做的一個小動作，或一個問題' },
+        ]},
+        { title: '實測', fields: [
+          { id: 'dr_min', optional: true, type: 'text', label: '寫這 3 行，花了幾分鐘？', hint: '用在「⑥ 配比、平台與頻率」算每週則數' },
+        ]},
+        { title: '再數一次', gintro: '回到開場的 60 秒挑戰：現在請你再寫一次「這週我能發的題目」。', fields: [
+          { id: 'cnt_end', optional: true, type: 'text', label: '現在，我有幾個題目？', hint: '和開場比一比' },
+        ]},
+      ],
+    },
+    {
+      id: 'r6', tab: '⑥ 配比、平台與頻率', when: '上課中，約 12 分鐘',
+      title: '內容配比、主平台與每週頻率',
+      intro: '三個數字決定你能不能做滿 12 週：每種內容各占多少、先選哪一個平台、每週做幾則。用你前面已經寫過的資料來算。穩定比頻繁重要。',
+      cards: [
+        { title: '起始配比（不是定律，只是起點）', items: [
+          '每 10 則：懂她 4、教她 4、我是誰 2',
+          '想先被看見、被追蹤：懂她多一點',
+          '想累積專業、接案或被詢問：教她多一點',
+          '不太敢露臉或說自己的事：我是誰先少一點，不勉強，之後慢慢加',
+        ], note: '第 8 週看過數據，再根據實際反應調整。配比是用來避免「全部都在教」或「全部都在抒發」，不要變成數學題。' },
+        { title: '主平台：三個問題找交集', items: [
+          '她平常在哪裡找答案、滑什麼？（第 2 堂受眾輪廓）',
+          '我能穩定做哪種形式？（第 1 堂曝光決定、設備、時數）',
+          '對標帳號在哪裡做起來？（第 1 堂對標帳號）',
+        ], note: '三題重疊最多的那個平台，就是主平台。這 3 個月先用一個，最多再加一個副平台（同一份內容改格式轉貼）。' },
+        { title: '每週頻率怎麼算', items: [
+          '每週則數 ＝ 每週可投入時數 ÷ 做一則所需的時間',
+          '做一則要多久，用「⑤ 3 行草稿」實測的時間',
+          '寫「最低標準」（你最忙的那週也做得到）和「理想」（做得順的時候）',
+        ], note: '寧可每週 2 則做 12 週，也不要每週 7 則做兩週就停。' },
+      ],
+      groups: [
+        { title: '內容配比', fields: [
+          { id: 'mix', type: 'radio', label: '我的起始配比（懂她：教她：我是誰）', options: ['4:4:2（預設）', '3:3:4（我是誰多一點）', '我自己調整'] },
+          { id: 'mix_why', optional: true, type: 'area', label: '如果自己調整，我調成多少？為什麼？' },
+        ]},
+        { title: '主平台（先選一個）', fields: [
+          { id: 'pl1', optional: true, type: 'area', label: '她平常在哪裡找答案、滑什麼？' },
+          { id: 'pl2', optional: true, type: 'area', label: '我能穩定做哪種形式？', hint: '露臉或不露臉、文字或影片、一次多久' },
+          { id: 'pl3', optional: true, type: 'area', label: '對標帳號在哪裡做起來？' },
+          { id: 'pl_main', type: 'text', label: '我的主平台（先選一個）' },
+          { id: 'pl_sub', optional: true, type: 'text', label: '副平台（最多一個，同一份內容轉貼）' },
+        ]},
+        { title: '每週頻率', fields: [
+          { id: 'hours', optional: true, type: 'text', label: '每週可投入時數（保守版）', hint: '第 1 堂資源清單寫的；如果沒有自動帶入，請自己填' },
+          { id: 'per_one', optional: true, type: 'text', label: '做一則大約要多久？', hint: '用「⑤ 3 行草稿」實測的時間，再加上修改與發布' },
+          { id: 'wk_min', type: 'text', label: '最低標準：每週最少幾則', hint: '你最忙的那一週也做得到的數字' },
+          { id: 'wk_ideal', optional: true, type: 'text', label: '理想：每週幾則', hint: '做得順的時候' },
+        ]},
+      ],
+    },
+    {
+      id: 'r7', tab: '⑦ 本週作業', when: '做完帶來上課一起看',
+      title: '本週作業',
+      intro: '不訂統一的交件日，請自己決定哪一天能交。做不到就縮小，先保留前兩項：挑 3 題帶來、完成九宮格。',
+      tipsTitle: '本週要完成',
+      tips: [
+        '挑 3 題帶來：從九宮格選本週優先題（三勾都過），連同今天的 3 行草稿，下堂課寫鉤子用',
+        '完成 3 個主軸的九宮格（至少 2 個）：每個填 6 格以上，至少 2 格放進立場',
+        '決定主平台與每週頻率（用 3 行草稿的實測時間修正）',
+        '海巡驗證：對你挑的 3 題，各花約 10 分鐘，去看真的有沒有人在問（下面三張卡）',
+        '週日回報（選填）',
+        '選做：用「🤖 請 AI 發散九宮格」和「🤖 請 AI 當我的受眾，幫我挑題目」各跑一次；機動題補到 6 個；把今天的草稿換一個切角或形式再寫一次',
+      ],
+      cards: [
+        { title: '海巡驗證：去哪裡看', items: [
+          '對標帳號的留言區',
+          '平台上搜尋關鍵字，看有沒有人在討論或抱怨這件事',
+          '社團或論壇（PTT、Dcard、臉書社團）',
+        ], note: '找到的原話，抄進你的語言庫。找不到不代表放棄：記下「還沒驗證」，先做看看，第 8 週用數據再判斷。' },
+        { title: '一題多用（選做）', items: [
+          '同題換形式：同一個題目，做成文字貼文＋短影片',
+          '同題換切角：同一個題目，迷思版＋問答版',
+          '這週先做一種，第二種是加分。',
+        ] },
+      ],
+      groups: [
+        { title: '選做：一題多用', fields: [
+          { id: 'mu1', optional: true, type: 'area', label: '同題換形式：我會把今天的草稿再做成什麼？' },
+          { id: 'mu2', optional: true, type: 'area', label: '同題換切角：我會換成哪一個切角？寫一句題目句' },
+        ]},
+      ],
+      repeat: {
+        count: 3, cardTitle: '海巡驗證', fullCount: 3, basicFields: 2, reqCards: 1,
+        fields: [
+          { id: 'hx_topic', type: 'text', label: '驗證的題目' },
+          { id: 'hx_found', type: 'radio', label: '有沒有人在問？', options: ['有', '找不到', '不確定'] },
+          { id: 'hx_where', type: 'check', label: '我去了哪裡看', options: ['對標帳號留言區', '平台搜尋', '社團或論壇'], optional: true },
+          { id: 'hx_quote', type: 'area', label: '找到的原話', hint: '抄下來，之後放進語言庫', optional: true },
+        ],
+      },
+    },
+    {
+      id: 'r8', tab: '⑧ 週日回報', when: '選填，每週日晚上 3 分鐘',
+      title: '週日回報',
+      intro: '每週日填一次。下週開始新的一份之前，先下載備份。',
+      groups: [
+        { title: '這週的我', fields: [
+          { id: 'w1', optional: true, type: 'area', label: '這週做了什麼？', hint: '完成的作業、發的內容' },
+          { id: 'w2', optional: true, type: 'text', label: '這週實際花了幾小時？', hint: '和你預估的差多少？' },
+          { id: 'w3', optional: true, type: 'area', label: '這週最卡的是什麼？' },
+          { id: 'w4', optional: true, type: 'area', label: '這週有什麼讓你驚喜或有成就感的事？' },
+          { id: 'w5', optional: true, type: 'area', label: '下週我要完成…' },
+          { id: 'w6', optional: true, type: 'scale', label: '心情溫度', hint: '1 很低，5 很好' },
+          { id: 'w7', type: 'area', label: '想補充的', optional: true },
+        ]},
+      ],
+    },
+    {
+      id: 'fb', tab: '💬 課後回饋', when: '選填，約 1 分鐘',
+      title: '這一堂的小回饋',
+      intro: '給我一點方向，我會用來調整下一堂。不用寫很多，也可以不填。',
+      groups: [
+        { title: '這一堂的感覺', fields: [
+          { id: 'fb1', optional: true, type: 'scale', label: '難易度', hint: '1 很簡單，3 剛好，5 很難' },
+          { id: 'fb2', optional: true, type: 'scale', label: '理解度：這一堂的內容，我懂了多少？', hint: '1 還很模糊，5 完全懂' },
+          { id: 'fb3', optional: true, type: 'area', label: '這一堂，印象深刻的重點', hint: '至少寫一句，想寫幾個都可以' },
+          { id: 'fb4', optional: true, type: 'area', label: '想對我說的話', hint: '哪裡很好、哪裡可以更好，都可以寫' },
+        ]},
+      ],
+    },
+  ],
+};
+
+/* ---- 破關設定 ---- */
+COURSE.level = 4; COURSE.world = '第 1 個月・打地基';
+COURSE.clearMsg = '第 4 關的必填任務都完成了：你有 3 個主軸和立場、第一個九宮格、本週 3 題和一則草稿，也決定了平台與頻率。第一個月打好地基了。';
+const TIPS = {
+  r1: '前三堂的材料，就是今天的原料。不用從零開始。',
+  r2: '每個主軸都要有一句你敢署名的話。針對說法，不針對人。',
+  r3: '不用填滿，先填 6 格。卡住就跳下一格，最容易的是「感受」和「問答」。',
+  r4: '三個勾都過，才是本週優先題。真人的反應比 AI 準。',
+  r5: '粗草稿就好。寫一則醜的，比想著完美的十則更有用。',
+  r6: '穩定比頻繁重要。寫你最忙的那週也做得到的數字。',
+  r7: '做不到就縮小。先保留：挑 3 題帶來、完成九宮格。',
+  r8: '這份是選填的，不影響破關。想讓我知道你這週的狀態，再寫就好。',
+};
+COURSE.parts.forEach(p => { if (TIPS[p.id]) p.tip = TIPS[p.id]; });
+/* ============================ 程式 ============================ */
+const $ = (s, r = document) => r.querySelector(s);
+let state = { values: {}, tab: 'p1' };
+let saveTimer = null;
+let dlCap = null;
+let pendingYes = null;
+
+function loadState() {
+  try { const s = localStorage.getItem(COURSE.key); if (s) state = Object.assign(state, JSON.parse(s)); } catch (e) {}
+}
+function setStatus(t) { $('#status').textContent = t; const m = $('#savedMini'); if (m) m.textContent = /^已自動儲存/.test(t) ? '✓ ' + t : ''; }
+function saveNow() {
+  try { localStorage.setItem(COURSE.key, JSON.stringify(state)); setStatus('已自動儲存在這台裝置　' + new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })); }
+  catch (e) { setStatus('這個瀏覽器無法自動儲存，請用「複製全部文字」或「下載備份」保存'); }
+}
+function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 400); }
+var progTimer;
+// soft = 正在打字：先不判定，等停下來（約 1.5 秒）或離開欄位才更新進度與慶祝，避免才打一個字就跳動畫
+function setVal(id, v, soft) {
+  state.values[id] = v; scheduleSave();
+  clearTimeout(progTimer);
+  if (soft) progTimer = setTimeout(() => updateProgress(), 1500); else updateProgress();
+}
+function flushProgress() { clearTimeout(progTimer); updateProgress(); }
+function isFilled(v) { return Array.isArray(v) ? v.length > 0 : (typeof v === 'boolean' ? v : !!(v && String(v).trim())); }
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    if (k === 'class') e.className = attrs[k];
+    else if (k === 'text') e.textContent = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  }
+  kids.flat().forEach(c => c != null && e.append(c));
+  return e;
+}
+
+function labelNode(f) {
+  const frag = document.createDocumentFragment();
+  frag.append(f.label);
+  if (f.optional) frag.append(el('span', { class: 'opt', text: '（選填）' }));
+  if (f.hint) frag.append(' ', el('span', { class: 'hint', text: f.hint }));
+  return frag;
+}
+
+function renderField(f, idOverride) {
+  const id = idOverride || f.id;
+  const wrap = el('div', { class: 'field', 'data-id': id });
+  const v = state.values[id];
+  if (f.type === 'text' || f.type === 'area') {
+    wrap.append(el('label', { for: 'f_' + id }, labelNode(f)));
+    const inp = f.type === 'text' ? el('input', { type: 'text', id: 'f_' + id }) : el('textarea', { id: 'f_' + id });
+    if (f.placeholder) inp.setAttribute('placeholder', f.placeholder);
+    inp.value = v || '';
+    inp.addEventListener('input', () => { setVal(id, inp.value, true); if (f.type === 'area') fit(inp); });
+    inp.addEventListener('blur', flushProgress);
+    wrap.append(inp);
+    if (f.type === 'area') setTimeout(() => fit(inp), 0);
+    if (f.suggest && f.suggest.length) {
+      const box = el('details', { class: 'suggest' }, el('summary', { text: '💡 提案' }));
+      const list = el('div', { class: 'choices' });
+      const lines = () => (inp.value || '').split('\n').map(s => s.trim());
+      const boxes = [];
+      f.suggest.forEach(o => {
+        const c = el('input', { type: 'checkbox' });
+        c.checked = lines().includes(o);
+        c.addEventListener('change', () => {
+          let ls = (inp.value || '').split('\n').filter(s => s.trim() !== '');
+          if (c.checked) { if (!ls.map(s => s.trim()).includes(o)) ls.push(o); }
+          else ls = ls.filter(s => s.trim() !== o);
+          inp.value = ls.join('\n');
+          setVal(id, inp.value); if (f.type === 'area') fit(inp);
+        });
+        boxes.push([c, o]);
+        list.append(el('label', { class: 'choice' }, c, o));
+      });
+      inp.addEventListener('input', () => { const ls = lines(); boxes.forEach(([c, o]) => { c.checked = ls.includes(o); }); });
+      box.append(list); wrap.append(box);
+      if (boxes.some(([c]) => c.checked)) box.setAttribute('open', '');
+    }
+    if (f.counter) {
+      const cnt = el('p', { class: 'hint' });
+      const upd = () => { cnt.textContent = `${[...(inp.value || '').replace(/\s/g, '')].length} / 約 ${f.counter} 字`; };
+      inp.addEventListener('input', upd); upd(); wrap.append(cnt);
+    }
+  } else if (f.type === 'radio' || f.type === 'scale') {
+    const opts = f.type === 'scale' ? ['1', '2', '3', '4', '5'] : f.options;
+    const fs = el('fieldset', null, el('legend', null, labelNode(f)));
+    const box = el('div', { class: 'choices' });
+    opts.forEach(o => {
+      const r = el('input', { type: 'radio', name: 'f_' + id, value: o });
+      r.checked = v === o;
+      r.addEventListener('change', () => setVal(id, o));
+      box.append(el('label', { class: 'choice' }, r, o));
+    });
+    fs.append(box); wrap.append(fs);
+  } else if (f.type === 'check') {
+    const fs = el('fieldset', null, el('legend', null, labelNode(f)));
+    const box = el('div', { class: 'choices' });
+    f.options.forEach(o => {
+      const c = el('input', { type: 'checkbox', value: o });
+      c.checked = Array.isArray(v) && v.includes(o);
+      c.addEventListener('change', () => {
+        const cur = new Set(state.values[id] || []);
+        c.checked ? cur.add(o) : cur.delete(o);
+        setVal(id, f.options.filter(x => cur.has(x)));
+      });
+      box.append(el('label', { class: 'choice' }, c, o));
+    });
+    fs.append(box); wrap.append(fs);
+  }
+  return wrap;
+}
+function fit(t) { t.style.height = 'auto'; t.style.height = Math.max(84, t.scrollHeight + 2) + 'px'; }
+
+function countedFields(part) {
+  const out = [];
+  (part.groups || []).forEach(g => g.fields.forEach(f => { if (!f.optional) out.push({ id: f.id, f }); }));
+  if (part.repeat) {
+    const r = part.repeat;
+    for (let n = 1; n <= r.count; n++) {
+      if (r.reqCards && n > r.reqCards) continue;
+      r.fields.forEach((f, i) => {
+        const basicOnly = n > r.fullCount;
+        if (f.optional) return;
+        if (!basicOnly || i < r.basicFields) out.push({ id: `${part.id}_${n}_${f.id}`, f });
+      });
+    }
+  }
+  return out;
+}
+function saveOverall(o) {
+  try {
+    const k = 'smcourse-progress';
+    const all = JSON.parse(localStorage.getItem(k) || '{}');
+    all[COURSE.key] = o;
+    localStorage.setItem(k, JSON.stringify(all));
+  } catch (e) {}
+}
+function renderNav() {
+  const n = COURSE.nav;
+  if (!n) return;
+  ['topnav', 'botnav'].forEach(id => {
+    const box = $('#' + id);
+    if (!box) return;
+    box.replaceChildren();
+    const left = el('span', null, el('a', { href: withCode(n.home), text: '← 回到總覽' }));
+    if (n.prev) left.append('　', el('a', { href: withCode(n.prev.href), text: '‹ ' + n.prev.label }));
+    box.append(left);
+    if (n.next) box.append(el('a', { href: withCode(n.next.href), text: n.next.label + ' ›' }));
+  });
+}
+
+/* ---------- 闖關系統：XP、星星、徽章、慶祝 ---------- */
+var XP_FIELD = 10, XP_PART = 20, XP_AI = 15, XP_CLEAR = 100;
+var MASCOT = '<svg viewBox="0 0 100 100" role="img" aria-label="小星星關主"><polygon points="50,10 61.17,36.63 89.95,39.02 68.07,57.87 74.69,85.98 50,71 25.31,85.98 31.93,57.87 10.05,39.02 38.83,36.63" fill="#F2B84B" stroke="#F2B84B" stroke-width="8" stroke-linejoin="round"/><circle cx="41" cy="52" r="3.2" fill="#4a3410"/><circle cx="59" cy="52" r="3.2" fill="#4a3410"/><path d="M42 61 Q50 68 58 61" fill="none" stroke="#4a3410" stroke-width="2.6" stroke-linecap="round"/><circle cx="35" cy="59" r="3.6" fill="#ff9aa8" opacity=".7"/><circle cx="65" cy="59" r="3.6" fill="#ff9aa8" opacity=".7"/></svg>';
+
+function partName(p) { return p.tab.replace(/^\S+\s+/, ''); }
+function partInfo(p) {
+  const list = countedFields(p);
+  const filled = list.filter(x => isFilled(state.values[x.id])).length;
+  const prompts = p.prompts || [];
+  const copied = prompts.filter(pr => (state.ai || {})[pr.title]).length;
+  let done;
+  if (list.length) done = filled === list.length;
+  else done = copied > 0 || (p.groups || []).some(g => g.fields.some(f => isFilled(state.values[f.id])));
+  const max = list.length * XP_FIELD + XP_PART + prompts.length * XP_AI;
+  const xp = filled * XP_FIELD + (done ? XP_PART : 0) + copied * XP_AI;
+  return { list, filled, copied, done, max, xp, pct: list.length ? Math.round(filled / list.length * 100) : (done ? 100 : 0) };
+}
+function lessonNo2() { const m = /lesson(\d+)/.exec(COURSE.key); return m ? Number(m[1]) : 0; }
+function lessonBadges() { return (window.SMBADGES || []).filter(b => b.lesson === lessonNo2()); }
+function stateForBadges() { return { values: state.values, ai: state.ai || {}, cleared: !!state.cleared }; }
+function badgeOn(b) { return window.SMBADGE_EVAL ? window.SMBADGE_EVAL(b, stateForBadges()) : false; }
+
+var toastQ = [], toastBusy = false;
+function toast(msg, kind) { toastQ.push({ msg, kind }); if (!toastBusy) nextToast(); }
+function nextToast() {
+  const t = toastQ.shift(), box = $('#toast');
+  if (!t || !box) { toastBusy = false; return; }
+  toastBusy = true; box.textContent = t.msg; box.className = 'toast show ' + (t.kind || '');
+  setTimeout(() => { box.classList.remove('show'); setTimeout(nextToast, 260); }, 2300);
+}
+function confetti(n) {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cv = $('#confetti'); if (!cv) return;
+  const ctx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight; cv.hidden = false;
+  const cols = ['#f2b84b', '#6a55c9', '#ff7a8a', '#3fc1a5', '#8f72dc'];
+  const ps = Array.from({ length: n || 70 }, () => ({ x: innerWidth / 2 + (Math.random() - .5) * 240, y: innerHeight * .38, vx: (Math.random() - .5) * 13, vy: -Math.random() * 12 - 4, s: 7 + Math.random() * 6, c: cols[Math.floor(Math.random() * cols.length)], r: Math.random() * 6, vr: (Math.random() - .5) * .4 }));
+  let f = 0;
+  (function tick() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ps.forEach(q => { q.x += q.vx; q.y += q.vy; q.vy += .36; q.r += q.vr; ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.r); ctx.fillStyle = q.c; ctx.fillRect(-q.s / 2, -q.s / 2, q.s, q.s * .6); ctx.restore(); });
+    if (++f < 120) requestAnimationFrame(tick); else { ctx.clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
+  })();
+}
+function closeClear() { const m = $('#clearModal'); if (m) { m.hidden = true; m.replaceChildren(); } }
+function showClear(info) {
+  const m = $('#clearModal'); if (!m) return;
+  const next = COURSE.nav && COURSE.nav.next;
+  const earned = lessonBadges().filter(b => badgeOn(b));
+  const card = el('div', { class: 'clear-card' });
+  const mas = el('div', { class: 'mascot' }); mas.innerHTML = MASCOT;
+  const stars = el('div', { class: 'clear-stars', text: '★★★' });
+  const bd = el('div', { class: 'clear-badges' });
+  earned.forEach(b => bd.append(el('div', { class: 'bdg', title: b.desc }, el('span', { class: 'ico', text: b.icon }), el('span', { class: 'nm', text: b.name }))));
+  const row = el('div', { class: 'row' });
+  if (next) { const go = el('button', { class: 'primary', type: 'button', text: '前往' + next.label + ' ›' }); go.addEventListener('click', () => { location.href = withCode(next.href); }); row.append(go); }
+  const stay = el('button', { type: 'button', text: '先留在這裡' }); stay.addEventListener('click', closeClear);
+  row.append(stay);
+  card.append(mas, el('h2', { id: 'clearTitle', text: '破關！第 ' + (COURSE.level || '') + ' 關完成' }), stars, el('p', { text: COURSE.clearMsg || '你把這一關的必填任務都完成了。先休息一下，再往下一關走。' }), row);
+  m.replaceChildren(card); m.hidden = false;
+  confetti(140);
+  const first = card.querySelector('button'); if (first) first.focus();
+}
+
+function updateProgress(silent) {
+  state.done = state.done || {}; state.badges = state.badges || {}; state.ai = state.ai || {};
+  let totalAll = 0, doneAll = 0, xp = 0, max = 0, partsDone = 0, partsReq = 0;
+  const newlyDone = [];
+  COURSE.parts.forEach(p => {
+    const info = partInfo(p);
+    totalAll += info.list.length; doneAll += info.filled; xp += info.xp; max += info.max;
+    if (info.list.length) { partsReq++; if (info.done) partsDone++; }
+    const tab = $('#tab_' + p.id);
+    if (tab) {
+      tab.style.setProperty('--p', info.pct + '%');
+      tab.classList.toggle('done', info.done);
+      const pc = tab.querySelector('.pct'); if (pc) pc.textContent = info.list.length ? info.pct + '%' : '';
+    }
+    const ms = $('#ms_' + p.id);
+    if (ms) {
+      ms.querySelector('.mfill').style.width = info.pct + '%';
+      ms.querySelector('.xpnow').textContent = info.list.length ? '必填 ' + info.filled + ' / ' + info.list.length : '';
+      ms.classList.toggle('done', info.done);
+      ms.querySelector('.mprog').textContent = info.list.length ? (info.done ? '任務完成！' : '只算標「必填」的題目，選填的可以先跳過') : (info.done ? '已經試過了 ✓' : '選填，想寫再寫，不影響破關');
+    }
+    if (info.done && !state.done[p.id]) { state.done[p.id] = true; if (info.list.length) newlyDone.push(p); }
+    if (!info.done && state.done[p.id]) delete state.done[p.id];
+  });
+  document.querySelectorAll('.field[data-id]').forEach(w => w.classList.toggle('filled', isFilled(state.values[w.getAttribute('data-id')])));
+  const overall = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
+  const allDone = partsReq > 0 && partsDone === partsReq;
+  state.cleared = allDone;
+  if (allDone) xp += XP_CLEAR;
+  max += XP_CLEAR;
+  const stars = allDone ? 3 : overall >= 66 ? 2 : overall >= 33 ? 1 : 0;
+
+  const all = lessonBadges(), earned = [], fresh = [];
+  all.forEach(b => {
+    const on = badgeOn(b);
+    if (on) { earned.push(b.id); if (!state.badges[b.id]) { fresh.push(b); state.badges[b.id] = true; } }
+    else delete state.badges[b.id];
+  });
+
+  const hf = $('#heroFill'), hp = $('#heroPct'), xn = $('#xpNum'), st = $('#stars'), bc = $('#badgeCount');
+  if (hf) hf.style.width = overall + '%';
+  if (hp) hp.textContent = overall === 0 ? '尚未開始' : (allDone ? '破關！' : '必填完成 ' + overall + '%');
+  if (xn) xn.textContent = xp;
+  if (st) { st.innerHTML = [0, 1, 2].map(i => '<span class="' + (i < stars ? '' : 'off') + '">★</span>').join(''); st.setAttribute('aria-label', '星星 ' + stars + ' 顆'); }
+  if (bc) bc.textContent = earned.length + ' / ' + all.length;
+  document.querySelectorAll('#badgeRow .bdg').forEach(n => {
+    const id = n.getAttribute('data-id'), on = earned.indexOf(id) >= 0;
+    n.classList.toggle('locked', !on);
+    if (!silent && fresh.some(b => b.id === id)) { n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); }
+  });
+  saveOverall({ pct: overall, xp, max, done: partsDone, total: partsReq, stars, at: Date.now() });
+
+  const newClear = allDone && !state.celebrated;
+  if (silent) { if (allDone) state.celebrated = true; return; }
+  if (!allDone) state.celebrated = false;
+  newlyDone.forEach(p => toast('🎉 完成「' + partName(p) + '」！', 'win'));
+  fresh.forEach(b => toast(b.icon + ' 獲得徽章：' + b.name, 'gold'));
+  if (newlyDone.length || fresh.length) confetti(newClear ? 40 : 70);
+  if (newClear) { state.celebrated = true; scheduleSave(); setTimeout(() => showClear({ xp, stars }), 1200); }
+  else if (newlyDone.length || fresh.length) scheduleSave();
+}
+
+
+/* ---------- 「用 AI 試試」：把學習單材料和 prompt 一起複製 ---------- */
+// 材料來源：self＝這一堂，其他＝同一個瀏覽器裡別堂的 localStorage key（例如 smcourse-lesson2-v1）
+function otherState(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; } }
+function matValue(src, id) {
+  const s = src === 'self' ? state : otherState(src);
+  return valString(s && s.values && s.values[id]);
+}
+function fillTokens(text) {
+  return text.replace(/\{\{(\w+)(?:\|([^}]*))?\}\}/g, (m, id, fb) => matValue('self', id) || fb || '（未填）');
+}
+function buildPromptText(pr, withMaterials) {
+  let out = fillTokens(pr.body).trim();
+  const missing = [];
+  if (withMaterials && pr.materials && pr.materials.length) {
+    const parts = [];
+    pr.materials.forEach(m => {
+      const vals = m.ids.map((id, i) => { const v = matValue(m.src || 'self', id); return v ? ((m.lab && m.lab[i]) ? m.lab[i] + '：' + v : v) : ''; }).filter(Boolean);
+      if (!vals.length) { missing.push(m.label); return; }
+      const body = m.numbered ? vals.map((v, i) => (i + 1) + '. ' + v).join('\n') : vals.join('\n');
+      parts.push('## ' + m.label + '\n' + body);
+    });
+    out += '\n\n【我的材料】\n' + (parts.length ? parts.join('\n\n') : '（目前學習單裡還沒有填寫的材料）');
+  }
+  return { text: out, missing };
+}
+async function copyPrompt(pr, withMaterials) {
+  const r = buildPromptText(pr, withMaterials);
+  const tail = withMaterials && r.missing.length ? '　還沒有這些材料：' + r.missing.join('、') + '（AI 會先問你；別堂的內容要在同一個瀏覽器才讀得到）' : '';
+  try { await navigator.clipboard.writeText(r.text); setStatus('已複製「' + pr.title + '」，去貼到 AI 吧。' + tail); }
+  catch (e) { showExport(r.text, '無法自動複製，請把下面的文字全部選取後自己複製，再貼到 AI。'); }
+  state.ai = state.ai || {};
+  if (!state.ai[pr.title]) { state.ai[pr.title] = true; scheduleSave(); toast('🤖 AI 夥伴上線！', 'win'); }
+  updateProgress();
+}
+function renderPrompt(pr) {
+  const d = el('details', { class: 'card ai' });
+  d.append(el('summary', null, el('span', { text: pr.title }), el('span', { class: 'hint', text: pr.when || '' })));
+  const body = el('div', { class: 'body' });
+  if (pr.purpose) body.append(el('p', { class: 'intro', text: pr.purpose }));
+  if (pr.warn) body.append(el('p', { class: 'aiwarn', text: pr.warn }));
+  if (pr.steps) { const ol = el('ol', { class: 'steps' }); pr.steps.forEach(s => ol.append(el('li', { text: s }))); body.append(ol); }
+  body.append(el('p', { class: 'hint aihint', text: '先自己寫，再請 AI 看；它說的不一定對，你的感覺才是最後決定。貼給 AI 之前，先刪掉真名、公司、客戶或別人的個資。' }));
+  const row = el('div', { class: 'row' });
+  const hasMat = !!(pr.materials && pr.materials.length);
+  const b1 = el('button', { class: 'primary', type: 'button', text: hasMat ? '複製 prompt（已帶入我的內容）' : '複製 prompt' });
+  b1.addEventListener('click', () => copyPrompt(pr, true));
+  row.append(b1);
+  if (hasMat) {
+    const b2 = el('button', { type: 'button', text: '只複製 prompt（不含材料）' });
+    b2.addEventListener('click', () => copyPrompt(pr, false));
+    row.append(b2);
+  }
+  body.append(row);
+  const pv = el('details', { class: 'more' }, el('summary', { text: '看 prompt 全文' }));
+  const pre = el('pre', { class: 'promptpre' });
+  pv.addEventListener('toggle', () => { if (pv.open) pre.textContent = buildPromptText(pr, true).text; });
+  pv.append(pre); body.append(pv);
+  d.append(body);
+  return d;
+}
+
+function missionNode(p) {
+  const info = partInfo(p);
+  const m = p.tab.match(/^(\S+)\s+/), no = m ? m[1] : '';
+  const numbered = /^[①②③④⑤⑥⑦⑧⑨⑩]/.test(no);
+  const fbk = no === '💬';
+  return el('div', { class: 'mission' + (numbered ? '' : ' exp') + (fbk ? ' fbk' : ''), id: 'ms_' + p.id },
+    el('div', { class: 'mtop' }, el('span', { class: 'mno', text: info.list.length ? '任務 ' + no : (numbered ? '選填 ' + no : (fbk ? '課後回饋' : '體驗任務')) }), el('span', { class: 'mxp' }, el('b', { class: 'xpnow', text: '' }))),
+    el('div', { class: 'mbar' }, el('div', { class: 'mfill' })),
+    el('p', { class: 'mprog', text: '' }));
+}
+function coachNode(text) {
+  const f = el('div', { class: 'coach-face' }); f.innerHTML = MASCOT;
+  return el('div', { class: 'coach' }, f, el('div', { class: 'coach-say' }, el('b', { text: '關主說' }), el('span', { text })));
+}
+function renderPart(p) {
+  const panel = el('section', { class: 'panel', id: 'panel_' + p.id, role: 'tabpanel', 'aria-labelledby': 'tab_' + p.id });
+  panel.append(missionNode(p), el('span', { class: 'when', text: p.when }), el('h2', { text: p.title }), el('p', { class: 'intro', text: p.intro }));
+  if (p.tip && p.tip !== p.intro) panel.append(coachNode(p.tip));
+  if (p.tips) {
+    const ul = el('ul', { class: 'clean' }); p.tips.forEach(t => ul.append(el('li', { text: t })));
+    panel.append(el('div', { class: 'group note' }, el('h3', { text: p.tipsTitle || '怎麼找', 'data-ico': '💡' }), ul));
+  }
+  (p.cards || []).forEach(c => {
+    const box = el('div', { class: 'group note' }, el('h3', { text: c.title, 'data-ico': '📌' }));
+    if (c.intro) box.append(el('p', { class: 'gintro', text: c.intro }));
+    if (c.table) {
+      const t = el('table', { class: 'frame' });
+      c.table.forEach((row, i) => t.append(el('tr', null, ...row.map(x => el(i === 0 ? 'th' : 'td', { text: x })))));
+      box.append(el('div', { class: 'tablewrap' }, t));
+    }
+    if (c.items) { const ul = el('ul', { class: 'clean' }); c.items.forEach(t => ul.append(el('li', { text: t }))); box.append(ul); }
+    if (c.note) box.append(el('p', { class: 'hint', text: c.note }));
+    panel.append(box);
+  });
+  if (!p.promptsEnd) (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
+  const partHasReq = countedFields(p).length > 0;
+  (p.groups || []).forEach(g => {
+    const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
+    if (g.gintro) box.append(el('p', { class: 'gintro', text: g.gintro }));
+    const req = g.fields.filter(f => !f.optional), opt = g.fields.filter(f => f.optional);
+    if (!partHasReq || !opt.length) {
+      g.fields.forEach(f => box.append(renderField(f)));
+    } else {
+      req.forEach(f => box.append(renderField(f)));
+      const fold = el('details', { class: 'optfold' }, el('summary', { text: '＋ 選填（' + opt.length + ' 題），想寫再展開' }));
+      opt.forEach(f => fold.append(renderField(f)));
+      if (opt.some(f => isFilled(state.values[f.id]))) fold.setAttribute('open', '');
+      box.append(fold);
+    }
+    panel.append(box);
+  });
+  if (p.repeat) {
+    const r = p.repeat;
+    for (let n = 1; n <= r.count; n++) {
+      const full = n <= r.fullCount;
+      const d = el('details', { class: 'card' });
+      if (n === 1) d.setAttribute('open', '');
+      d.append(el('summary', null, el('span', { text: `${r.cardTitle} ${n}` }), el('span', { class: 'hint', text: full ? '完整拆解' : '基本資料即可' })));
+      const body = el('div', { class: 'body' });
+      const more = el('details', { class: 'more' }, el('summary', { text: '展開完整拆解欄位（選填）' }));
+      r.fields.forEach((f, i) => {
+        const node = renderField(f, `${p.id}_${n}_${f.id}`);
+        (full || i < r.basicFields ? body : more).append(node);
+      });
+      if (!full) body.append(more);
+      d.append(body); panel.append(d);
+    }
+  }
+  if (p.promptsEnd) (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
+  const ix = COURSE.parts.indexOf(p), nx = COURSE.parts[ix + 1];
+  const nb = el('div', { class: 'nextbar' });
+  if (nx) {
+    nb.append(el('p', { class: 'hint', text: '做不完也沒關係，進度會自動存起來。' }));
+    const go = el('button', { class: 'primary', type: 'button', text: '前往「' + partName(nx) + '」 ›' });
+    go.addEventListener('click', () => select(nx.id));
+    nb.append(go);
+  } else {
+    nb.append(el('p', { class: 'hint', text: '這一關的任務都看完了。' }));
+    const go = el('button', { class: 'primary', type: 'button', text: '去存檔、提交給 Jasmine ↓' });
+    go.addEventListener('click', () => { const w = $('#wrapup'); if (w) w.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    nb.append(go);
+  }
+  panel.append(nb);
+  return panel;
+}
+
+function build() {
+  renderNav();
+  const ti = COURSE.title.split('：');
+  if (ti.length === 2) { const h = $('#title'); h.replaceChildren(el('span', { class: 'lno', text: ti[0] }), ti[1]); }
+  else $('#title').textContent = COURSE.title;
+  $('#subtitle').textContent = COURSE.subtitle;
+  const ey = $('#eyebrow'); if (ey) ey.textContent = 'LEVEL ' + (COURSE.level || '') + (COURSE.world ? '　' + COURSE.world : '');
+  const hm = $('#heroMascot'); if (hm) hm.innerHTML = MASCOT;
+  const fm = $('#footMascot'); if (fm) fm.innerHTML = MASCOT;
+  const row = $('#badgeRow');
+  if (row) { row.replaceChildren(); lessonBadges().forEach(b => { const n = el('div', { class: 'bdg locked', 'data-id': b.id, title: b.name + '：' + b.desc, role: 'button', tabindex: '0' }, el('span', { class: 'ico', text: b.icon }), el('span', { class: 'nm', text: b.name })); const say = () => toast(b.icon + ' ' + b.name + '：' + b.desc + (n.classList.contains('locked') ? '（還沒解鎖）' : '（已獲得）'), n.classList.contains('locked') ? '' : 'gold'); n.addEventListener('click', say); n.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); say(); } }); row.append(n); }); }
+  const tabs = $('#tabs'), panels = $('#panels');
+  tabs.replaceChildren(); panels.replaceChildren();
+  COURSE.parts.forEach((p, i) => {
+    const m = p.tab.match(/^(\S+)\s+(.*)$/);
+    const b = el('button', { class: 'tab', id: 'tab_' + p.id, role: 'tab', 'aria-selected': 'false' },
+      el('span', { class: 'no', text: m ? m[1] : String(i + 1) }), el('span', { class: 'lb', text: m ? m[2] : p.tab }), el('span', { class: 'pct', text: '' }));
+    b.addEventListener('click', () => select(p.id));
+    tabs.append(b);
+    panels.append(renderPart(p));
+  });
+  select(COURSE.parts.some(p => p.id === state.tab) ? state.tab : COURSE.parts[0].id, true);
+  updateProgress(true);
+}
+function select(id, silent) {
+  state.tab = id;
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.id === 'tab_' + id ? 'true' : 'false'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel_' + id));
+  document.querySelectorAll('#panel_' + id + ' textarea').forEach(fit);
+  if (!silent) { scheduleSave(); window.scrollTo({ top: 0 }); }
+}
+
+/* ---------- 匯出 ---------- */
+function valText(f, v) {
+  const s = Array.isArray(v) ? v.join('、') : (v || '').toString().trim();
+  return `**${f.label}**\n\n${s || '（未填）'}`;
+}
+function toMarkdown() {
+  const d = new Date().toLocaleDateString('zh-TW');
+  let md = `# ${COURSE.title}：我的學習單\n\n> 匯出日期：${d}\n\n`;
+  COURSE.parts.forEach(p => {
+    md += `## ${p.title}\n\n`;
+    (p.groups || []).forEach(g => {
+      md += `### ${g.title}\n\n`;
+      g.fields.forEach(f => { md += valText(f, state.values[f.id]) + '\n\n'; });
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        md += `### ${p.repeat.cardTitle} ${n}\n\n`;
+        p.repeat.fields.forEach(f => { md += valText(f, state.values[`${p.id}_${n}_${f.id}`]) + '\n\n'; });
+      }
+    }
+  });
+  return md;
+}
+function stamp() { const d = new Date(); return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`; }
+
+function showExport(text, msg) {
+  $('#exportMsg').textContent = msg;
+  const ta = $('#exportText'); ta.value = text;
+  $('#exportBox').hidden = false;
+  ta.focus(); ta.select();
+}
+const inArtifact = !!(window.claude && window.claude.use);
+function saveViaLink(name, text) {
+  const type = name.endsWith('.json') ? 'application/json' : 'text/markdown';
+  const blob = new Blob([text], { type: type + ';charset=utf-8' });
+  const a = el('a', { href: URL.createObjectURL(blob), download: name });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function offerFile(name, text, okMsg) {
+  if (dlCap) {
+    try { await dlCap.save({ filename: name, data: text }); setStatus(okMsg); return; }
+    catch (e) {
+      if (e && e.code === 'declined') { setStatus('已取消下載'); return; }
+    }
+  } else if (!inArtifact) {
+    saveViaLink(name, text); setStatus(okMsg); return;
+  }
+  showExport(text, '這個環境無法直接下載，請把下面的文字全部複製，貼到自己的筆記或訊息裡保存。');
+}
+async function copyAll() {
+  const t = toMarkdown();
+  try { await navigator.clipboard.writeText(t); setStatus('已複製，可以貼到 Notion、LINE 或 Email'); }
+  catch (e) { showExport(t, '無法自動複製，請把下面的文字全部選取後自己複製。'); }
+}
+function askConfirm(msg, yesLabel, onYes) {
+  $('#confirmMsg').textContent = msg; $('#confirmYes').textContent = yesLabel;
+  pendingYes = onYes; $('#confirmBar').hidden = false; $('#confirmNo').focus();
+}
+
+/* ---------- 專屬連結與「提交給 Jasmine」 ---------- */
+// 網址帶 ?s=代碼 就代表這是 Jasmine 發的專屬連結。代碼存起來，之後在總覽、各堂之間跳轉都會帶著。
+const SUBMIT_URL = ((window.SMCOURSE_CONFIG || {}).submitUrl || '').trim();
+function readCode() {
+  let c = '';
+  try { c = new URLSearchParams(location.search).get('s') || ''; } catch (e) {}
+  if (/^[A-Za-z0-9]{4,32}$/.test(c)) { try { localStorage.setItem('smcourse-student', c); } catch (e) {} return c; }
+  try { c = localStorage.getItem('smcourse-student') || ''; } catch (e) { c = ''; }
+  return /^[A-Za-z0-9]{4,32}$/.test(c) ? c : '';
+}
+const STUDENT = SUBMIT_URL ? readCode() : '';
+function withCode(href) { return STUDENT ? href + (href.includes('?') ? '&' : '?') + 's=' + STUDENT : href; }
+function lessonNo() { const m = /lesson(\d+)/.exec(COURSE.key); return m ? Number(m[1]) : 0; }
+function valString(v) { return Array.isArray(v) ? v.join('、') : (v == null ? '' : String(v)).trim(); }
+function buildBlocks() {
+  const out = [];
+  COURSE.parts.forEach(p => {
+    out.push({ t: 'h2', x: p.title });
+    (p.groups || []).forEach(g => {
+      out.push({ t: 'h3', x: g.title });
+      g.fields.forEach(f => out.push({ t: 'q', l: f.label, v: valString(state.values[f.id]) }));
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        const fs = p.repeat.fields.map(f => ({ f, v: valString(state.values[`${p.id}_${n}_${f.id}`]) }));
+        if (!fs.some(x => x.v)) continue;
+        out.push({ t: 'h3', x: `${p.repeat.cardTitle} ${n}` });
+        fs.forEach(x => out.push({ t: 'q', l: x.f.label, v: x.v }));
+      }
+    }
+  });
+  return out;
+}
+function progressNumbers() {
+  let total = 0, done = 0;
+  COURSE.parts.forEach(p => { const l = countedFields(p); total += l.length; done += l.filter(x => isFilled(state.values[x.id])).length; });
+  return { total, done, pct: total ? Math.round(done / total * 100) : 0 };
+}
+let prevSubmit = null;
+function setSubmitInfo(t, bad) { $('#submitInfo').textContent = t; $('#submitBox').classList.toggle('bad', !!bad); }
+async function loadSubmitStatus() {
+  const q = new URLSearchParams({ action: 'status', s: STUDENT, lesson: String(lessonNo()) });
+  try {
+    const r = await (await fetch(SUBMIT_URL + '?' + q)).json();
+    if (!r.ok) { $('#submitWho').textContent = '這個連結的代碼不正確'; setSubmitInfo('請向 Jasmine 索取你的專屬連結。', true); $('#btnSubmit').disabled = true; return; }
+    $('#submitWho').textContent = r.name + '，這是你的專屬學習單';
+    prevSubmit = r.submitted;
+    setSubmitInfo(r.submitted
+      ? `這一堂你已在 ${r.submitted.last} 提交過（第 ${r.submitted.count} 次）。再提交一次只會更新同一份文件，Jasmine 看到的是最新版。`
+      : '填好之後按「提交給 Jasmine」。之後想修改，可以再提交一次，不會產生重複的文件。');
+  } catch (e) {
+    $('#submitWho').textContent = '專屬學習單';
+    setSubmitInfo('目前連不上 Jasmine 的接收端。你填的內容還在這台裝置上，等一下再按「提交給 Jasmine」試試。', true);
+  }
+}
+async function doSubmit() {
+  const n = progressNumbers();
+  const btn = $('#btnSubmit');
+  btn.disabled = true; setStatus('正在提交…');
+  try {
+    const body = { s: STUDENT, lesson: lessonNo(), title: COURSE.title, filled: n.done, total: n.total, pct: n.pct, blocks: buildBlocks() };
+    const r = await (await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })).json();
+    if (r.ok) {
+      setStatus(`已提交給 Jasmine（第 ${r.count} 次）　${r.at}`);
+      prevSubmit = { count: r.count, last: r.at, filled: n.done };
+      setSubmitInfo(`這一堂最近一次提交：${r.at}（第 ${r.count} 次）。再提交只會更新同一份文件。`);
+    } else {
+      const msg = { empty: '還沒有填任何必填欄位，所以沒有送出，免得蓋掉你之前提交的內容。', invalid: '這個連結的代碼不正確，請向 Jasmine 索取專屬連結。', busy: 'Jasmine 的接收端正忙，請稍後再按一次。' }[r.error] || '提交失敗，請稍後再試。你填的內容還在這台裝置上。';
+      setStatus(msg); setSubmitInfo(msg, true);
+    }
+  } catch (e) {
+    const msg = '提交失敗（網路或接收端連不上）。你填的內容還在這台裝置上，請稍後再試。';
+    setStatus(msg); setSubmitInfo(msg, true);
+  } finally { btn.disabled = false; }
+}
+function startSubmit() {
+  const n = progressNumbers();
+  if (n.done <= 0) { setStatus('還沒有填任何必填欄位，先填一些再提交。'); return; }
+  const pf = prevSubmit && prevSubmit.filled || 0;
+  if (pf >= 5 && n.done < pf * 0.6) {
+    askConfirm(`這次只填了 ${n.done} 題，你上次提交時是 ${pf} 題。提交會用現在的內容取代上次那一堂。如果你換了瀏覽器或裝置，請先按「匯入備份」還原再提交。確定要送出嗎？`, '確定送出', doSubmit);
+    return;
+  }
+  doSubmit();
+}
+function setupSubmit() {
+  if (!STUDENT) {
+    // 沒有專屬連結（例如試聽版）：不提交，只存檔
+    const wt = $('#wrapTitle'); if (wt) wt.textContent = '🎒 存檔';
+    const wh = document.querySelector('#wrapup > .hint'); if (wh) wh.textContent = '今天先到這裡也可以。想留一份，可以在這裡下載備份。';
+    document.querySelectorAll('.nextbar button').forEach(b => { if (/提交給 Jasmine/.test(b.textContent)) b.textContent = '去存檔 ↓'; });
+    document.querySelectorAll('.privacy li').forEach(li => { if (/提交給 Jasmine/.test(li.textContent)) li.textContent = '你填的內容不會送給任何人，只留在你這台裝置上。'; });
+    return;
+  }
+  $('#notice').innerHTML = '<span>你填的內容會先<strong>存在這台裝置的瀏覽器裡</strong>。按「提交給 Jasmine」才會送給 Jasmine；提交之後想改，可以再提交一次，Jasmine 看到的永遠是最新版。換裝置或清除瀏覽資料前，請先「下載備份」。</span>';
+  $('#submitBox').hidden = false;
+  $('#submitWho').textContent = '專屬學習單';
+  setSubmitInfo('正在確認你的專屬連結…');
+  $('#btnSubmit').addEventListener('click', startSubmit);
+  loadSubmitStatus();
+}
+
+/* ---------- 下載 PDF：直接產生 PDF 檔，檔名由頁面自己決定 ---------- */
+function pvField(label, v) {
+  const s = Array.isArray(v) ? v.join('、') : (v == null ? '' : String(v)).trim();
+  return el('div', { class: 'pv-f' }, el('div', { class: 'pv-l', text: label }), el('div', { class: s ? 'pv-v' : 'pv-v empty', text: s || '（未填）' }));
+}
+function buildPrintView(pv) {
+  pv.replaceChildren();
+  pv.append(el('h1', { text: COURSE.title }), el('p', { class: 'pv-sub', text: COURSE.subtitle + '　匯出日期：' + new Date().toLocaleDateString('zh-TW') }));
+  COURSE.parts.forEach(p => {
+    pv.append(el('h2', { text: p.title }));
+    (p.groups || []).forEach(g => {
+      pv.append(el('h3', { text: g.title }));
+      g.fields.forEach(f => pv.append(pvField(f.label, state.values[f.id])));
+    });
+    if (p.repeat) {
+      for (let n = 1; n <= p.repeat.count; n++) {
+        const fields = p.repeat.fields.map(f => ({ f, v: state.values[`${p.id}_${n}_${f.id}`] }));
+        if (!fields.some(x => isFilled(x.v))) continue;
+        pv.append(el('h3', { text: `${p.repeat.cardTitle} ${n}` }));
+        fields.forEach(x => pv.append(pvField(x.f.label, x.v)));
+      }
+    }
+  });
+}
+function lessonLabel() { return COURSE.title.split('：')[0].replace(/\s/g, ''); }
+function pdfName() { return lessonLabel() + '學習單-' + stamp() + '.pdf'; }
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (window.html2pdf) return resolve();
+    const s = el('script', { src });
+    s.onload = resolve; s.onerror = () => reject(new Error('script'));
+    document.head.append(s);
+  });
+}
+function startPrint(name, msg) {
+  buildPrintView($('#printView'));
+  const old = document.title;
+  document.title = name.replace(/\.pdf$/, '');
+  const restore = () => { document.title = old; window.removeEventListener('afterprint', restore); };
+  window.addEventListener('afterprint', restore);
+  setStatus(msg);
+  setTimeout(() => window.print(), 80);
+}
+function printFallback(name) {
+  $('#printName').textContent = '建議檔名：' + name;
+  $('#printGuide').hidden = false;
+  startPrint(name, '無法直接產生 PDF，改用列印：目的地選「另存為 PDF」');
+}
+async function downloadPdf() {
+  const name = pdfName();
+  const btn = $('#btnPdf');
+  btn.disabled = true; setStatus('正在產生 PDF，請稍候…');
+  const root = $('#pdfRoot');
+  try {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
+    buildPrintView(root);
+    await new Promise(r => requestAnimationFrame(() => setTimeout(r, 60)));
+    const h = Math.max(1, root.scrollHeight);
+    const scale = Math.max(1, Math.min(2, Math.sqrt(14e6 / (700 * h))));
+    await window.html2pdf().set({
+      margin: [12, 12, 12, 12], filename: name,
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale, useCORS: true, backgroundColor: '#ffffff', windowWidth: 716 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['.pv-f', 'h2', 'h3'] },
+    }).from(root).save();
+    setStatus('已下載：' + name);
+  } catch (e) {
+    printFallback(name);
+  } finally {
+    root.replaceChildren(); btn.disabled = false;
+  }
+}
+$('#btnPdf').addEventListener('click', downloadPdf);
+$('#btnPrint').addEventListener('click', () => {
+  $('#printName').textContent = '建議檔名：' + pdfName();
+  $('#printGuide').hidden = false;
+  $('#printGuide').scrollIntoView({ block: 'nearest' });
+});
+$('#btnPrintGo').addEventListener('click', () => startPrint(pdfName(), '在列印視窗：目的地選「另存為 PDF」，按儲存'));
+$('#printClose').addEventListener('click', () => { $('#printGuide').hidden = true; });
+if (inArtifact) { $('#btnPdf').hidden = true; $('#btnPrint').hidden = true; }
+
+$('#btnCopy').addEventListener('click', copyAll);
+$('#btnMd').addEventListener('click', () => offerFile(`${lessonLabel()}學習單-${stamp()}.md`, toMarkdown(), '已下載文字檔'));
+$('#btnJson').addEventListener('click', () => offerFile(`${lessonLabel()}備份-${stamp()}.json`, JSON.stringify({ key: COURSE.key, values: state.values }, null, 2), '已下載備份，之後可用「匯入備份」還原'));
+$('#btnImport').addEventListener('click', () => $('#fileIn').click());
+$('#fileIn').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const j = JSON.parse(rd.result);
+      if (j.key !== COURSE.key || typeof j.values !== 'object' || !j.values) throw 0;
+      askConfirm('匯入會取代目前畫面上的內容。', '確定匯入', () => { state.values = j.values; saveNow(); build(); setStatus('已匯入備份'); });
+    } catch (err) { setStatus('這不是這份學習單的備份檔'); }
+  };
+  rd.readAsText(f); e.target.value = '';
+});
+$('#btnReset').addEventListener('click', () => askConfirm('會清除所有已填內容，且無法復原。建議先按「下載備份」。', '確定清除', () => { state.values = {}; state.done = {}; state.cleared = false; state.celebrated = false; state.badges = {}; state.ai = {}; saveNow(); build(); setStatus('已清除'); }));
+$('#confirmYes').addEventListener('click', () => { $('#confirmBar').hidden = true; const f = pendingYes; pendingYes = null; if (f) f(); });
+$('#confirmNo').addEventListener('click', () => { $('#confirmBar').hidden = true; pendingYes = null; });
+$('#exportClose').addEventListener('click', () => { $('#exportBox').hidden = true; });
+
+function applyPrefill() {
+  state.pf = state.pf || {};
+  (COURSE.prefill || []).forEach(p => {
+    if (state.pf[p.to] || isFilled(state.values[p.to])) return;
+    try {
+      const s = JSON.parse(localStorage.getItem(p.from) || 'null');
+      const v = s && s.values && s.values[p.fromId];
+      if (v) { state.values[p.to] = v; state.pf[p.to] = true; }
+    } catch (e) {}
+  });
+}
+loadState();
+applyPrefill();
+build();
+setupSubmit();
+(function () {
+  ['confirmBar', 'printGuide', 'exportBox'].forEach(id => {
+    const n = document.getElementById(id); if (!n) return;
+    new MutationObserver(() => { if (!n.hidden) n.scrollIntoView({ behavior: 'smooth', block: 'center' }); }).observe(n, { attributes: true, attributeFilter: ['hidden'] });
+  });
+})();
+// 「更多」選單：按了任何選項或點選單外面就收起來
+(function () {
+  const d = $('#moreTools'); if (!d) return;
+  d.addEventListener('click', e => { if (e.target.closest('.menu button')) d.open = false; });
+  document.addEventListener('click', e => { if (d.open && !d.contains(e.target)) d.open = false; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { d.open = false; closeClear(); } });
+})();
+(async () => {
+  try { dlCap = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null; } catch (e) { dlCap = null; }
+})();
+</script>
