@@ -294,6 +294,37 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .clear-xp{display:inline-block;background:var(--gold-soft);color:var(--gold-ink);font-weight:900;padding:4px 18px;border-radius:999px;margin:4px 0 10px}
 .clear-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:10px 0}
 .clear-card .row{justify-content:center;margin-top:16px}
+
+/* ---- 點選卡片 / 即時預覽 ---- */
+.pickrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.pickhint{width:100%;font-size:.78rem;font-weight:700;color:var(--muted)}
+.pchip{font:inherit;display:inline-flex;align-items:center;gap:6px;border:2px solid var(--line);background:var(--field);border-radius:999px;padding:8px 16px;min-height:44px;cursor:pointer;font-weight:700;color:var(--ink,inherit);transition:transform .12s,border-color .15s,background .15s,box-shadow .15s}
+.pchip:hover{border-color:var(--accent);transform:translateY(-1px)}
+.pchip:active{transform:scale(.96)}
+.pchip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep);box-shadow:0 3px 0 var(--accent)}
+.pchip .pico,.choice .cico{font-size:1.15rem;line-height:1}
+.choice.withico{padding-left:10px}
+.choice.withico:has(input:checked) .cico{transform:scale(1.25)}
+.choice .cico{transition:transform .15s}
+.igprev{margin:14px 0 18px;border:2px dashed var(--accent);border-radius:18px;padding:14px;background:var(--accent-soft)}
+.igtag{font-size:.82rem;font-weight:800;color:var(--accent-deep);margin-bottom:10px}
+.igcard{background:#fff;color:#1b1b1f;border-radius:16px;padding:14px 16px;box-shadow:0 4px 14px rgba(0,0,0,.12);max-width:420px}
+.igcard.blank{opacity:.75}
+.igtop{display:flex;gap:12px;align-items:center}
+.igav{flex:none;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#f9ce34,#ee2a7b 60%,#6228d7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.7rem;font-weight:800}
+.igav.sm{width:24px;height:24px;font-size:.8rem}
+.ignm{font-weight:800;font-size:1.02rem;line-height:1.3;word-break:break-word}
+.ignm.sm{font-size:.85rem}
+.igid{font-size:.82rem;color:#777}
+.igbio{margin-top:10px;font-size:.92rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.igbio.empty{color:#aaa}
+.igchk{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.igchk .chip{font-size:.76rem;font-weight:700;border-radius:999px;padding:3px 10px}
+.igchk .ok{background:#e6f6ee;color:#1d7a52}
+.igchk .warn{background:#fff1e0;color:#a15a00}
+.igthumb{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+@media (prefers-color-scheme:dark){.igchk .ok{background:#18382b;color:#7fe0b3}.igchk .warn{background:#40300f;color:#ffc980}}
+@media print{.igprev,.pickrow{display:none!important}}
 @media print{.suggest{display:none!important}.toast,canvas#confetti,.clear,.badges{display:none!important}}
 @media (prefers-reduced-motion: reduce){.mascot,.bdg.pop .ico{animation:none}}
 .mission.exp .mno::before{content:"🤖"}
@@ -858,20 +889,20 @@ const COURSE = {
       ],
       groups: [
         { title: '內容配比', fields: [
-          { id: 'mix', type: 'radio', label: '我的起始配比（懂她：教她：我是誰）', options: ['4:4:2（預設）', '3:3:4（我是誰多一點）', '我自己調整'] },
+          { id: 'mix', type: 'radio', label: '我的起始配比（懂她：教她：我是誰）', icons: {'4:4:2（預設）':'⚖️','3:3:4（我是誰多一點）':'🙋','我自己調整':'🎛️'}, options: ['4:4:2（預設）', '3:3:4（我是誰多一點）', '我自己調整'] },
           { id: 'mix_why', optional: true, type: 'area', label: '如果自己調整，我調成多少？為什麼？' },
         ]},
         { title: '主平台（先選一個）', fields: [
           { id: 'pl1', optional: true, type: 'area', label: '她平常在哪裡找答案、滑什麼？' },
           { id: 'pl2', optional: true, type: 'area', label: '我能穩定做哪種形式？', hint: '露臉或不露臉、文字或影片、一次多久' },
           { id: 'pl3', optional: true, type: 'area', label: '對標帳號在哪裡做起來？' },
-          { id: 'pl_main', type: 'text', label: '我的主平台（先選一個）' },
+          { id: 'pl_main', type: 'text', label: '我的主平台（先選一個）', pick: [{label:'Threads',icon:'🧵'},{label:'Instagram',icon:'📸'},{label:'Facebook',icon:'👍'},{label:'YouTube',icon:'▶️'},{label:'小紅書',icon:'📕'},{label:'TikTok',icon:'🎵'}] },
           { id: 'pl_sub', optional: true, type: 'text', label: '副平台（最多一個，同一份內容轉貼）' },
         ]},
         { title: '每週頻率', fields: [
           { id: 'hours', optional: true, type: 'text', label: '每週可投入時數（保守版）', hint: '第 1 堂資源清單寫的；如果沒有自動帶入，請自己填' },
           { id: 'per_one', optional: true, type: 'text', label: '做一則大約要多久？', hint: '用「⑤ 3 行草稿」實測的時間，再加上修改與發布' },
-          { id: 'wk_min', type: 'text', label: '最低標準：每週最少幾則', hint: '你最忙的那一週也做得到的數字' },
+          { id: 'wk_min', type: 'text', label: '最低標準：每週最少幾則', hint: '你最忙的那一週也做得到的數字', pick: [{label:'1',icon:'🌱'},{label:'2',icon:'🌿'},{label:'3',icon:'🌳'}] },
           { id: 'wk_ideal', optional: true, type: 'text', label: '理想：每週幾則', hint: '做得順的時候' },
         ]},
       ],
@@ -928,7 +959,7 @@ const COURSE = {
           { id: 'w3', optional: true, type: 'area', label: '這週最卡的是什麼？' },
           { id: 'w4', optional: true, type: 'area', label: '這週有什麼讓你驚喜或有成就感的事？' },
           { id: 'w5', optional: true, type: 'area', label: '下週我要完成…' },
-          { id: 'w6', optional: true, type: 'scale', label: '心情溫度', hint: '1 很低，5 很好' },
+          { id: 'w6', optional: true, type: 'scale', faces: true, label: '心情溫度', hint: '點一個最像你這週的臉' },
           { id: 'w7', type: 'area', label: '想補充的', optional: true },
         ]},
       ],
@@ -984,7 +1015,7 @@ function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNo
 var progTimer;
 // soft = 正在打字：先不判定，等停下來（約 1.5 秒）或離開欄位才更新進度與慶祝，避免才打一個字就跳動畫
 function setVal(id, v, soft) {
-  state.values[id] = v; scheduleSave();
+  state.values[id] = v; scheduleSave(); if (typeof updatePreviews === 'function') updatePreviews();
   clearTimeout(progTimer);
   if (soft) progTimer = setTimeout(() => updateProgress(), 1500); else updateProgress();
 }
@@ -1008,6 +1039,7 @@ function normalizeCourse() {
   COURSE.parts.forEach(p => { if (/週日回報/.test(p.tab)) (p.groups || []).forEach(g => g.fields.forEach(f => { if (['w1', 'w3', 'w5'].indexOf(f.id) >= 0) f.show = true; })); });
 }
 
+var FACES = ['😣', '🙁', '😐', '🙂', '😄'];
 function el(tag, attrs, ...kids) {
   const e = document.createElement(tag);
   for (const k in (attrs || {})) {
@@ -1043,6 +1075,29 @@ function renderField(f, idOverride) {
     inp.addEventListener('blur', flushProgress);
     wrap.append(inp);
     if (f.type === 'area') setTimeout(() => fit(inp), 0);
+    if (f.pick && f.pick.length) {
+      const row = el('div', { class: 'pickrow' }, el('span', { class: 'pickhint', text: '👆 點一下帶入，可以再改' }));
+      const chips = [];
+      const cur = () => (f.type === 'area' ? (inp.value || '').split('\n').map(s => s.trim()) : [(inp.value || '').trim()]);
+      const sync = () => { const c = cur(); chips.forEach(([b, o]) => b.classList.toggle('on', c.indexOf(o) >= 0)); };
+      f.pick.forEach(o => {
+        const lab = typeof o === 'string' ? o : o.label, val = typeof o === 'string' ? o : (o.value || o.label);
+        const b = el('button', { type: 'button', class: 'pchip' });
+        if (o.icon) b.append(el('span', { class: 'pico', text: o.icon }));
+        b.append(lab);
+        b.addEventListener('click', () => {
+          if (f.type === 'area') {
+            let ls = (inp.value || '').split('\n').filter(s => s.trim() !== '');
+            if (ls.map(s => s.trim()).indexOf(val) >= 0) ls = ls.filter(s => s.trim() !== val); else ls.push(val);
+            inp.value = ls.join('\n'); fit(inp);
+          } else inp.value = ((inp.value || '').trim() === val) ? '' : val;
+          setVal(id, inp.value); sync();
+        });
+        chips.push([b, val]); row.append(b);
+      });
+      inp.addEventListener('input', sync); sync();
+      wrap.append(row);
+    }
     if (f.suggest && f.suggest.length) {
       const box = el('details', { class: 'suggest' }, el('summary', { text: '💡 提案' }));
       const list = el('div', { class: 'choices' });
@@ -1078,7 +1133,8 @@ function renderField(f, idOverride) {
       const r = el('input', { type: 'radio', name: 'f_' + id, value: o });
       r.checked = v === o;
       r.addEventListener('change', () => setVal(id, o));
-      box.append(el('label', { class: 'choice' }, r, o));
+      const ic = f.type === 'scale' ? (f.faces ? FACES[+o - 1] : '') : ((f.icons && f.icons[o]) || '');
+      box.append(el('label', { class: 'choice' + (ic ? ' withico' : '') }, r, ic ? el('span', { class: 'cico', text: ic }) : null, o));
     });
     fs.append(box); wrap.append(fs);
   } else if (f.type === 'check') {
@@ -1086,13 +1142,14 @@ function renderField(f, idOverride) {
     const box = el('div', { class: 'choices' });
     f.options.forEach(o => {
       const c = el('input', { type: 'checkbox', value: o });
+      const ic2 = (f.icons && f.icons[o]) || '';
       c.checked = Array.isArray(v) && v.includes(o);
       c.addEventListener('change', () => {
         const cur = new Set(state.values[id] || []);
         c.checked ? cur.add(o) : cur.delete(o);
         setVal(id, f.options.filter(x => cur.has(x)));
       });
-      box.append(el('label', { class: 'choice' }, c, o));
+      box.append(el('label', { class: 'choice' + (ic2 ? ' withico' : '') }, c, ic2 ? el('span', { class: 'cico', text: ic2 }) : null, o));
     });
     fs.append(box); wrap.append(fs);
   }
@@ -1127,6 +1184,48 @@ function syncMirrors() {
   document.querySelectorAll('textarea.mirror').forEach(t => {
     const v = state.values[t.getAttribute('data-src')] || '';
     if (document.activeElement !== t && t.value !== v) { t.value = v; fit(t); }
+  });
+}
+
+/* ---------- 即時預覽：IG／Threads 個人檔案（第 3 堂） ---------- */
+var BAD_WORDS = ['最', '第一', '唯一', '保證', '療效', '治好', '根治', '100%', '一定會', '絕對'];
+function renderIgPreview() {
+  const box = el('div', { class: 'igprev' });
+  box.append(el('div', { class: 'igtag', text: '👀 即時預覽：陌生人看到的樣子（你一邊寫，這裡一邊變）' }));
+  const card = el('div', { class: 'igcard' });
+  const top = el('div', { class: 'igtop' });
+  top.append(el('div', { class: 'igav', 'data-r': 'av' }));
+  const meta = el('div', { class: 'igmeta' }, el('div', { class: 'ignm', 'data-r': 'nm' }), el('div', { class: 'igid', 'data-r': 'id' }));
+  top.append(meta);
+  card.append(top, el('div', { class: 'igbio', 'data-r': 'bio' }), el('div', { class: 'igchk', 'data-r': 'chk' }));
+  const thumb = el('div', { class: 'igthumb' }, el('div', { class: 'igav sm', 'data-r': 'av2' }), el('span', { class: 'ignm sm', 'data-r': 'nm2' }), el('span', { class: 'hint', text: '← 縮到手機上拇指大，還認得出來嗎？' }));
+  box.append(card, thumb);
+  return box;
+}
+function updatePreviews() {
+  document.querySelectorAll('.igprev').forEach(box => {
+    const V = k => String(state.values[k] || '').trim();
+    const nm = V('nm_show'), id = V('id_pick');
+    const bio = [V('bio1'), V('bio2'), V('bio3')].filter(Boolean);
+    const avType = V('av_type');
+    const ico = { '露臉照': '📷', '半露臉／背影／剪影': '🌗', '插畫／手繪／物件': '🎨', '字標（名字或一個字）': '' }[avType];
+    const first = nm ? [...nm][0] : (id ? [...id][0] : '');
+    const avTxt = (avType && ico) ? ico : (first || '＋');
+    const set = (k, t) => box.querySelectorAll('[data-r="' + k + '"]').forEach(n => { n.textContent = t; });
+    set('av', avTxt); set('av2', avTxt);
+    set('nm', nm || '（還沒寫顯示名稱）'); set('nm2', nm || '名稱');
+    set('id', id ? '@' + id.replace(/^@/, '') : '@帳號 ID');
+    const bioEl = box.querySelector('[data-r="bio"]');
+    bioEl.textContent = bio.length ? bio.join('\n') : '（簡介還沒寫，寫在「簡介」那一頁）';
+    bioEl.classList.toggle('empty', !bio.length);
+    box.querySelector('.igcard').classList.toggle('blank', !nm && !bio.length);
+    const total = [...bio.join('')].length, lim = parseInt(V('limit'), 10) || 0;
+    const msgs = [];
+    if (bio.length) msgs.push('簡介共 ' + total + ' 字' + (lim ? '（你的目標 ' + lim + ' 字內' + (total > lim ? '，多了 ' + (total - lim) + ' 字' : '，OK') + '）' : '；好的簡介多半 50–90 字'));
+    const all = [nm, V('bio1'), V('bio2'), V('bio3')].join(' ');
+    const hit = BAD_WORDS.filter(w => all.indexOf(w) >= 0);
+    const chk = box.querySelector('[data-r="chk"]');
+    chk.replaceChildren(...msgs.map(t => el('span', { class: 'chip ok', text: '✓ ' + t })), ...(hit.length ? [el('span', { class: 'chip warn', text: '⚠ 有「' + hit.join('」「') + '」，要說得出依據，否則換掉' })] : []));
   });
 }
 function fit(t) { t.style.height = 'auto'; t.style.height = Math.max(84, t.scrollHeight + 2) + 'px'; }
@@ -1466,6 +1565,7 @@ function renderPart(p) {
       box.append(fold);
     }
     panel.append(box);
+    if (g.after === 'ig') panel.append(renderIgPreview());
   });
   if (p.repeat) {
     const r = p.repeat;
