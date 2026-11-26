@@ -480,6 +480,144 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .opt.coretag{background:var(--gold-soft);color:var(--gold-ink);font-weight:800}
 @media (max-width:520px){.corecard{padding:16px 14px}.core3 li{padding:8px 10px;gap:8px}}
 @media print{.corecard{display:none!important}}
+
+/* ================= ui2：乾淨版（規格：字級 24/18/16/14/12、圓角 16/12/圓形、框線 1px、無陰影） =================
+   只有 COURSE.ui2 = true 的那一堂會套用（body.ui2）。 */
+body.ui2{background-image:none}
+.ui2 .hero,.ui2 button,.ui2 .tab,.ui2 .group,.ui2 .corecard,.ui2 .core3 li,.ui2 .choice,.ui2 .pchip,.ui2 details.card,.ui2 .notice,.ui2 .wrapup,.ui2 .badges,.ui2 .mission,.ui2 .coach-say,.ui2 .submitbox,.ui2 .themebtn,.ui2 .bdg .ico,.ui2 details.tools>summary,.ui2 .igbtn,.ui2 input[type=text],.ui2 textarea{box-shadow:none!important}
+.ui2 button:active,.ui2 .tab:active{transform:none}
+/* 頂部：縮成標題＋進度條 */
+.ui2 .hero{display:block;padding:16px 18px;border-radius:16px}
+.ui2 .hero::before,.ui2 .hero::after,.ui2 .mascot,.ui2 .hero .rule,.ui2 .hero .eyebrow,.ui2 .stars{display:none}
+.ui2 .hero h1{font-size:24px;margin:0 0 2px}
+.ui2 .hero h1 .lno{font-size:14px;font-weight:600}
+.ui2 .hero p#subtitle{font-size:14px}
+.ui2 .saved{font-size:12px;margin-top:2px}
+.ui2 .herostats{margin-top:12px;display:block}
+.ui2 .heroprog{margin-top:0;font-size:12px}
+.ui2 .heroprog .track{height:8px}
+/* 按鈕：一種長相 */
+.ui2 button{border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:600;min-height:44px;padding:8px 16px}
+.ui2 button:hover{border-color:var(--accent)}
+.ui2 button.primary{background:var(--accent-deep);border-color:var(--accent-deep);color:var(--accent-ink)}
+.ui2 button.primary:hover{background:var(--accent);border-color:var(--accent)}
+.ui2 details.tools>summary{border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:600}
+/* 今天要做的 3 題 */
+.ui2 .corecard{margin:12px 0;padding:16px;border:1px solid var(--line);border-radius:16px}
+.ui2 .corecard h2{font-size:18px;font-weight:800}
+.ui2 .corecard .cnum{font-size:14px;font-weight:800;border-radius:999px}
+.ui2 .corecard .csub{font-size:14px;margin:4px 0 12px}
+.ui2 .core3 li{border:1px solid var(--line);border-radius:12px;padding:10px 12px;gap:12px}
+.ui2 .core3 .cn{width:28px;height:28px;font-size:14px}
+.ui2 .core3 .cq b{font-size:16px;font-weight:600}
+.ui2 .core3 .cq small{font-size:12px}
+.ui2 .core3 .cgo{min-height:40px;min-width:68px;border-radius:12px;border:1px solid var(--accent);font-size:14px;font-weight:600;padding:6px 12px}
+.ui2 .trackrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;border-top:1px solid var(--line);margin-top:16px;padding-top:16px}
+.ui2 .trackrow .tq{grid-column:1 / -1;font-size:14px;font-weight:600;color:var(--ink)}
+.ui2 .trackrow.ask{border:0;background:none;padding:16px 0 0;border-top:1px solid var(--gold);border-radius:0}
+.ui2 .trackrow.ask .tq{color:var(--gold-ink)}
+.ui2 .tbtn{border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:600;min-height:48px;padding:8px 12px;text-align:center;display:flex;align-items:center;justify-content:center}
+.ui2 .tbtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+@media (max-width:420px){.ui2 .trackrow{grid-template-columns:1fr}}
+/* 分頁：桌機＝等寬格子；手機＝第 N／M 頁＋左右箭頭 */
+.ui2 .tabs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(76px,1fr);gap:8px;padding:8px 0;margin:8px 0 0;overflow-x:auto;align-items:stretch}
+.ui2 .tab{min-width:0;max-width:none;width:auto;border:1px solid var(--line);border-radius:12px;padding:8px 6px;gap:4px;justify-content:flex-start;background:var(--card);transform:none}
+.ui2 .tab .no{width:24px;height:24px;font-size:12px;font-weight:800;border:1px solid var(--accent)}
+.ui2 .tab .lb{font-size:12px;font-weight:600;line-height:1.35;min-height:2.7em;display:flex;align-items:flex-start;justify-content:center}
+.ui2 .tab .pct{display:none}
+.ui2 .tab.done{border-color:var(--ok)}
+.ui2 .tab[aria-selected="true"]{border:2px solid var(--accent);padding:7px 5px;background:var(--accent-soft);transform:none}
+.ui2 .tab[aria-selected="true"] .lb{color:var(--accent-deep);font-weight:800}
+.pager{display:none}
+@media (max-width:600px){
+  .ui2 .tabs{display:none}
+  .ui2 .pager{display:flex;align-items:center;gap:8px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin:8px 0 0;padding:8px 0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .ui2 .pager button{flex:none;width:44px;padding:0;font-size:18px}
+  .ui2 .pager button[disabled]{opacity:.35}
+  .ui2 .pager .pg{flex:1;min-width:0;text-align:center;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:6px 10px;line-height:1.3}
+  .ui2 .pager .pg b{display:block;font-size:16px;font-weight:800}
+  .ui2 .pager .pg small{font-size:12px;color:var(--muted)}
+}
+/* 內容：一層卡片，欄位不再各自包框 */
+.ui2 .panel{padding-top:8px}
+.ui2 .panel h2{font-size:24px;font-weight:800;margin:4px 0 4px}
+.ui2 .intro{font-size:16px;margin:0 0 12px}
+.ui2 .when{font-size:12px;font-weight:600}
+.ui2 .mission{border:0;background:none;padding:0;margin:0 0 8px;border-radius:0}
+.ui2 .mission.done{background:none;border:0}
+.ui2 .mno{font-size:14px;font-weight:600}
+.ui2 .mxp{font-size:12px;font-weight:600}
+.ui2 .mbar{height:6px;margin:6px 0 0}
+.ui2 .group{border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.ui2 .group h3{font-size:18px;font-weight:800;gap:8px}
+.ui2 .group h3::before{width:24px;height:24px;font-size:12px;font-weight:800}
+.ui2 .group .gintro{font-size:14px}
+.ui2 .group.note{background:var(--gold-soft);border:1px solid var(--gold)}
+.ui2 .group.note h3::before{font-size:18px;width:auto;height:auto}
+.ui2 details.card{border:1px solid var(--line);border-radius:16px}
+.ui2 details.card.ai{border-color:var(--accent)}
+.ui2 .coach-say{border:1px solid var(--line);border-radius:12px;font-size:14px}
+.ui2 .coach-say::before{border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ui2 .coach-say b{font-size:12px}
+.ui2 .field{margin:16px 0 0}
+.ui2 .field>label,.ui2 .field>fieldset>legend{font-size:16px;font-weight:600;margin-bottom:8px}
+.ui2 .hint{font-size:14px}
+.ui2 .opt{font-size:12px;font-weight:600}
+.ui2 input[type=text],.ui2 textarea{border:1px solid var(--line);border-radius:12px;font-size:16px}
+.ui2 input[type=text]:focus,.ui2 textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.ui2 .field.filled>label::after,.ui2 .field.filled>fieldset>legend::after{width:16px;height:16px;font-size:12px;font-weight:800}
+/* 收合區：一行文字按鈕，不用虛線大框 */
+.ui2 .optfold{border:0;background:none;padding:0;margin-top:16px;border-radius:0}
+.ui2 .optfold>summary{display:inline-flex;align-items:center;min-height:40px;padding:6px 14px;border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:600;color:var(--accent-deep);background:var(--card)}
+.ui2 .optfold[open]>summary{border-color:var(--accent);margin-bottom:0}
+.ui2 .optfold[open]{border:0}
+.ui2 details.more{border-top:1px solid var(--line)}
+/* 選項卡：等寬格子（字短並排、字長一排一個），永遠不被拉長 */
+.ui2 .choices,.ui2 .pickrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px;align-items:stretch}
+.ui2 .choices.long{grid-template-columns:1fr}
+.ui2 .choices.scale{grid-template-columns:repeat(5,minmax(0,1fr))}
+.ui2 .pickrow{grid-template-columns:repeat(auto-fill,minmax(104px,1fr));margin-top:12px}
+.ui2 .pickhint{grid-column:1 / -1;font-size:12px;font-weight:600}
+.ui2 .choice,.ui2 .pchip{position:relative;justify-content:center;text-align:center;border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-height:48px;font-size:14px;font-weight:600;line-height:1.35;gap:6px}
+.ui2 .choice input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.ui2 .choice:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.ui2 .choice:has(input:checked),.ui2 .pchip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep);font-weight:800}
+.ui2 .choice:has(input:checked)::before,.ui2 .pchip.on::before{content:"✓";font-weight:800}
+.ui2 .choices.scale .choice{flex-direction:column;gap:2px;padding:8px 2px}
+.ui2 .choices.scale .choice::before{display:none}
+.ui2 .choices.scale .cico{font-size:24px}
+.ui2 .choice.withico:has(input:checked) .cico{transform:none}
+.ui2 .pchip:hover{transform:none}
+.ui2 .suggest .choices{display:flex;flex-direction:column;gap:6px}
+.ui2 .suggest .choice{justify-content:flex-start;text-align:left;padding:8px 12px}
+.ui2 .suggest .choice input{position:static;opacity:1;width:18px;height:18px;pointer-events:auto}
+.ui2 .suggest .choice:has(input:checked)::before{display:none}
+.ui2 .suggest>summary{font-size:12px;font-weight:600;border-radius:999px}
+/* IG 預覽 */
+.ui2 .igprev{border:1px solid var(--accent);border-radius:16px}
+.ui2 .igtag{font-size:12px;font-weight:600}
+.ui2 .igcard{border-radius:12px;box-shadow:none!important;border:1px solid rgba(0,0,0,.08)}
+.ui2 .ignm{font-size:16px;font-weight:800}
+.ui2 .ignm.sm{font-size:14px}
+.ui2 .igid,.ui2 .igchk .chip{font-size:12px;font-weight:600}
+.ui2 .igbio{font-size:14px}
+/* 下一頁、存檔區 */
+.ui2 .nextbar .hint{font-size:14px}
+@media (max-width:520px){.ui2 .nextbar{flex-direction:column;align-items:stretch}.ui2 .nextbar .hint{text-align:center}}
+.ui2 .wrapup{border:1px solid var(--line);border-radius:16px;margin-top:24px}
+.ui2 .wrapup h2{font-size:18px;font-weight:800}
+.ui2 .notice{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;font-size:14px}
+.ui2 .themebtn{border:1px solid var(--line)}
+.ui2 .promptpre{font-size:14px}
+.ui2 table.frame{font-size:14px}
+/* 收尾：把剩下的零碎字級、圓角拉進規格 */
+.ui2 .foot .copy,.ui2 #status{font-size:12px}
+.ui2 .privacy>summary,.ui2 .topnav a,.ui2 .privacy li{font-size:14px}
+.ui2 .igav{font-size:24px}
+.ui2 .igav.sm{font-size:12px}
+.ui2 .choice .cico,.ui2 .pchip .pico{font-size:18px}
+.ui2 details.tools .menu button{border-radius:12px}
+.ui2 .privacy ul{border-radius:12px}
 </style>
 </head>
 <body>
@@ -925,6 +1063,7 @@ const COURSE = {
 /* ---- 破關設定 ---- */
 COURSE.level = 3; COURSE.world = '第 1 個月・打地基';
 COURSE.coreShort = { tone_sample: '貼一則你平常傳給朋友的文字（或你發過的貼文）' };
+COURSE.ui2 = true;
 COURSE.core = { sell: ['nm_show', 'bio1', 'tone_sample'], share: ['nm_show', 'bio1', 'tone_sample'] };
 COURSE.clearMsg = '第 3 關完成了：顯示名稱、簡介第 1 行和你平常說話的樣子，都有第一版了。其他欄位想補再補。';
 const TIPS = {
@@ -944,6 +1083,7 @@ let saveTimer = null;
 let dlCap = null;
 let pendingYes = null;
 
+if (typeof COURSE !== 'undefined' && COURSE.ui2) document.body.classList.add('ui2');
 function loadState() {
   try { const s = localStorage.getItem(COURSE.key); if (s) state = Object.assign(state, JSON.parse(s)); } catch (e) {}
 }
@@ -1069,7 +1209,7 @@ function renderField(f, idOverride) {
   } else if (f.type === 'radio' || f.type === 'scale') {
     const opts = f.type === 'scale' ? ['1', '2', '3', '4', '5'] : f.options;
     const fs = el('fieldset', null, el('legend', null, labelNode(f, opt)));
-    const box = el('div', { class: 'choices' });
+    const box = el('div', { class: 'choices' + (f.type === 'scale' ? ' scale' : (opts.some(x => [...String(x)].length > 12) ? ' long' : '')) });
     opts.forEach(o => {
       const r = el('input', { type: 'radio', name: 'f_' + id, value: o });
       r.checked = v === o;
@@ -1080,7 +1220,7 @@ function renderField(f, idOverride) {
     fs.append(box); wrap.append(fs);
   } else if (f.type === 'check') {
     const fs = el('fieldset', null, el('legend', null, labelNode(f, opt)));
-    const box = el('div', { class: 'choices' });
+    const box = el('div', { class: 'choices' + (f.options.some(x => [...String(x)].length > 12) ? ' long' : '') });
     f.options.forEach(o => {
       const c = el('input', { type: 'checkbox', value: o });
       const ic2 = (f.icons && f.icons[o]) || '';
@@ -1304,7 +1444,7 @@ function updateProgress(silent) {
     if (info.done && !state.done[p.id]) { state.done[p.id] = true; if (info.list.length) newlyDone.push(p); }
     if (!info.done && state.done[p.id]) delete state.done[p.id];
   });
-  syncMirrors();
+  syncMirrors(); updatePager();
   renderCore();
   document.querySelectorAll('.field[data-id]').forEach(w => w.classList.toggle('filled', isFilled(state.values[w.getAttribute('data-id')])));
   const overall = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
@@ -1565,14 +1705,32 @@ function build() {
     tabs.append(b);
     panels.append(renderPart(p));
   });
+  buildPager();
   select(COURSE.parts.some(p => p.id === state.tab) ? state.tab : COURSE.parts[0].id, true);
-  updateProgress(true);
+  updateProgress(true); if (typeof updatePreviews === 'function') updatePreviews();
+}
+function buildPager() {
+  if (!COURSE.ui2) return;
+  let pg = $('#pager');
+  if (!pg) { pg = el('div', { class: 'pager', id: 'pager' }); const t = $('#tabs'); t.parentNode.insertBefore(pg, t); }
+  pg.replaceChildren();
+  const go = d => { const i = COURSE.parts.findIndex(x => x.id === state.tab) + d; if (COURSE.parts[i]) select(COURSE.parts[i].id); };
+  const prev = el('button', { type: 'button', id: 'pgPrev', 'aria-label': '上一頁', text: '‹' }), next = el('button', { type: 'button', id: 'pgNext', 'aria-label': '下一頁', text: '›' });
+  prev.addEventListener('click', () => go(-1)); next.addEventListener('click', () => go(1));
+  pg.append(prev, el('div', { class: 'pg', 'aria-live': 'polite' }, el('b', { id: 'pgName' }), el('small', { id: 'pgNo' })), next);
+}
+function updatePager() {
+  const pg = $('#pager'); if (!pg) return;
+  const i = COURSE.parts.findIndex(x => x.id === state.tab), p = COURSE.parts[i]; if (!p) return;
+  $('#pgName').textContent = p.tab; $('#pgNo').textContent = '第 ' + (i + 1) + ' / ' + COURSE.parts.length + ' 頁' + (state.done && state.done[p.id] ? '　✓ 完成' : '');
+  $('#pgPrev').disabled = i === 0; $('#pgNext').disabled = i === COURSE.parts.length - 1;
 }
 function select(id, silent) {
   state.tab = id;
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.id === 'tab_' + id ? 'true' : 'false'));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel_' + id));
   document.querySelectorAll('#panel_' + id + ' textarea').forEach(fit);
+  updatePager();
   if (!silent) { scheduleSave(); window.scrollTo({ top: 0 }); }
 }
 
