@@ -481,6 +481,22 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 @media (max-width:520px){.corecard{padding:16px 14px}.core3 li{padding:8px 10px;gap:8px}}
 @media print{.corecard{display:none!important}}
 
+/* ---- 封面縮圖預覽（第 5 堂） ---- */
+.cvprev{margin:16px 0;border:1px solid var(--accent);border-radius:16px;padding:16px;background:var(--accent-soft)}
+.cvrow{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap}
+.cvtile{display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#6a55c9,#c36ad0 70%,#f2b84b);color:#fff;font-weight:800;border-radius:12px;word-break:break-word;overflow:hidden;line-height:1.3}
+.cvtile.big{width:150px;aspect-ratio:3/4;font-size:24px;padding:12px}
+.cvtile.sm{width:60px;aspect-ratio:3/4;font-size:12px;padding:4px}
+.cvtile.empty{opacity:.55}
+.cvside{flex:1;min-width:150px;display:flex;flex-direction:column;gap:12px}
+.cvline small{display:block;font-size:12px;color:var(--muted)}
+.cvline b{font-size:16px;font-weight:600;word-break:break-word}
+.cvline b.empty{color:var(--muted)}
+.cvprev .igchk{margin-top:12px}
+.cvprev .igchk .ok{background:#e6f6ee;color:#1d7a52}
+.cvprev .igchk .warn{background:#fff1e0;color:#a15a00}
+@media (prefers-color-scheme:dark){.cvprev .igchk .ok{background:#18382b;color:#7fe0b3}.cvprev .igchk .warn{background:#40300f;color:#ffc980}}
+@media print{.cvprev{display:none!important}}
 /* ================= ui2：乾淨版（規格：字級 24/18/16/14/12、圓角 16/12/圓形、框線 1px、無陰影） =================
    只有 COURSE.ui2 = true 的那一堂會套用（body.ui2）。 */
 body.ui2{background-image:none}
@@ -1279,6 +1295,11 @@ function syncMirrors() {
 
 /* ---------- 即時預覽：IG／Threads 個人檔案（第 3 堂） ---------- */
 var BAD_WORDS = ['最', '第一', '唯一', '保證', '療效', '治好', '根治', '100%', '一定會', '絕對'];
+function badHits(text) {
+  // 先拿掉常見的正常用法（第一步、第一行、最後、最近…），再找極限詞
+  const t = String(text).replace(/第一(步|行|句|次|個|週|天|堂|支|篇|則|眼|關)/g, '').replace(/最(後|近|初|低|少|多|常|終)/g, '');
+  return BAD_WORDS.filter(w => t.indexOf(w) >= 0);
+}
 function renderIgPreview() {
   const box = el('div', { class: 'igprev' });
   box.append(el('div', { class: 'igtag', text: '👀 即時預覽：陌生人看到的樣子（你一邊寫，這裡一邊變）' }));
@@ -1292,7 +1313,36 @@ function renderIgPreview() {
   box.append(card, thumb);
   return box;
 }
+
+/* ---------- 即時預覽：封面縮圖與腳本長度（第 5 堂） ---------- */
+function renderCoverPreview() {
+  const box = el('div', { class: 'cvprev' });
+  box.append(el('div', { class: 'igtag', text: '👀 即時預覽：縮成縮圖的樣子（你一邊寫，這裡一邊變）' }));
+  const row = el('div', { class: 'cvrow' });
+  row.append(el('div', { class: 'cvtile big', 'data-r': 'cv' }), el('div', { class: 'cvtile sm', 'data-r': 'cv2' }));
+  const side = el('div', { class: 'cvside' }, el('div', { class: 'cvline' }, el('small', { text: '口說第一句' }), el('b', { 'data-r': 'hk' })), el('div', { class: 'cvline' }, el('small', { text: '貼文第一行' }), el('b', { 'data-r': 'fl' })));
+  row.append(side);
+  box.append(row, el('div', { class: 'igchk', 'data-r': 'chk' }));
+  return box;
+}
+function updateCoverPreviews() {
+  document.querySelectorAll('.cvprev').forEach(box => {
+    const V = k => String(state.values[k] || '').trim();
+    const cv = V('cover'), hk = V('hook'), fl = V('fl'), sc = V('script');
+    const set = (k, t, empty) => box.querySelectorAll('[data-r="' + k + '"]').forEach(n => { n.textContent = t || empty; n.classList.toggle('empty', !t); });
+    set('cv', cv, '封面字'); set('cv2', cv, '封面字'); set('hk', hk, '（還沒挑鉤子）'); set('fl', fl, '（還沒寫）');
+    const msgs = [], n = [...cv.replace(/\s/g, '')].length;
+    if (cv) msgs.push(el('span', { class: 'chip ' + (n > 12 ? 'warn' : 'ok'), text: (n > 12 ? '⚠ 封面字 ' + n + ' 個字，超過 12 字，試著刪到關鍵詞' : '✓ 封面字 ' + n + ' 個字') }));
+    const hn = [...hk.replace(/\s/g, '')].length;
+    if (hk) msgs.push(el('span', { class: 'chip ' + (hn > 20 ? 'warn' : 'ok'), text: (hn > 20 ? '⚠ 鉤子 ' + hn + ' 個字，超過 20 字' : '✓ 鉤子 ' + hn + ' 個字') }));
+    if (sc) { const sn = [...sc.replace(/\s/g, '')].length; msgs.push(el('span', { class: 'chip ' + (sn > 170 ? 'warn' : 'ok'), text: (sn > 170 ? '⚠ 腳本 ' + sn + ' 字，可能超過 30 秒，念一次計時' : '✓ 腳本 ' + sn + ' 字，約 ' + Math.round(sn / 5) + '–' + Math.round(sn / 4) + ' 秒（以念出來為準）') })); }
+    const hit = badHits([cv, hk, fl, sc].join(' '));
+    if (hit.length) msgs.push(el('span', { class: 'chip warn', text: '⚠ 有「' + hit.join('」「') + '」，要說得出依據，否則換掉' }));
+    box.querySelector('[data-r="chk"]').replaceChildren(...msgs);
+  });
+}
 function updatePreviews() {
+  updateCoverPreviews();
   document.querySelectorAll('.igprev').forEach(box => {
     const V = k => String(state.values[k] || '').trim();
     const nm = V('nm_show'), id = V('id_pick');
@@ -1313,7 +1363,7 @@ function updatePreviews() {
     const msgs = [];
     if (bio.length) msgs.push('簡介共 ' + total + ' 字' + (lim ? '（你的目標 ' + lim + ' 字內' + (total > lim ? '，多了 ' + (total - lim) + ' 字' : '，OK') + '）' : '；好的簡介多半 50–90 字'));
     const all = [nm, V('bio1'), V('bio2'), V('bio3')].join(' ');
-    const hit = BAD_WORDS.filter(w => all.indexOf(w) >= 0);
+    const hit = badHits(all);
     const chk = box.querySelector('[data-r="chk"]');
     chk.replaceChildren(...msgs.map(t => el('span', { class: 'chip ok', text: '✓ ' + t })), ...(hit.length ? [el('span', { class: 'chip warn', text: '⚠ 有「' + hit.join('」「') + '」，要說得出依據，否則換掉' })] : []));
   });
@@ -1656,6 +1706,7 @@ function renderPart(p) {
     }
     panel.append(box);
     if (g.after === 'ig') panel.append(renderIgPreview());
+    if (g.after === 'cover') panel.append(renderCoverPreview());
   });
   if (p.repeat) {
     const r = p.repeat;
@@ -1663,7 +1714,8 @@ function renderPart(p) {
       const full = n <= r.fullCount;
       const d = el('details', { class: 'card' });
       const anyF = r.fields.some(f => isFilled(state.values[`${p.id}_${n}_${f.id}`]));
-      if (hasCore ? (anyF || (n === 1 && partHasReq)) : n === 1) d.setAttribute('open', '');
+      const cardCore = hasCore && coreList().some(id => id.indexOf(p.id + '_' + n + '_') === 0);
+      if (hasCore ? (anyF || cardCore) : n === 1) d.setAttribute('open', '');
       d.append(el('summary', null, el('span', { text: `${r.cardTitle} ${n}` }), el('span', { class: 'hint', text: full ? '完整拆解' : '基本資料即可' })));
       const body = el('div', { class: 'body' });
       const more = el('details', { class: 'more' }, el('summary', { text: '展開完整拆解欄位（選填）' }));
