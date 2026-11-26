@@ -426,6 +426,29 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .grid9 .gcenter textarea{font-weight:800;text-align:center}
 @media (max-width:520px){.group.gridbox{padding:16px 10px}.grid9{gap:6px}.grid9 .field{padding:6px 6px 8px}.grid9 textarea{font-size:.82rem;min-height:104px}}
 @media print{.grid9 textarea{min-height:90px}}
+.corecard{margin:18px 0 8px;padding:20px 20px 18px;border:2px solid var(--stroke,var(--line));border-radius:24px;background:var(--card);box-shadow:0 5px 0 var(--stroke,var(--line))}
+.corecard .ctop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.corecard h2{margin:0;font-size:1.3rem;font-weight:900}
+.corecard .cnum{flex:none;padding:3px 12px;border-radius:999px;background:var(--gold-soft);color:var(--gold-ink);font-weight:900;font-size:.9rem}
+.corecard .csub{margin:6px 0 12px;color:var(--muted);font-size:.9rem}
+.core3{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.core3 li{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--field)}
+.core3 li.ok{border-color:var(--ok,#2fb68a);background:var(--ok-soft,#e6f7f1)}
+.core3 .cn{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent-deep,var(--accent));color:#fff;font-weight:900;font-size:.9rem}
+.core3 li.ok .cn{background:var(--ok,#2fb68a)}
+.core3 .cq{flex:1;display:flex;flex-direction:column;min-width:0}
+.core3 .cq b{font-size:.98rem;line-height:1.4}
+.core3 .cq small{color:var(--muted);font-size:.78rem}
+.core3 .cgo{flex:none;padding:6px 14px;border-radius:999px;border:1.5px solid var(--accent);background:transparent;color:var(--accent-deep);font-weight:800;font-size:.85rem;cursor:pointer}
+.trackrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.trackrow .tq{font-size:.88rem;color:var(--muted);flex:1 1 100%}
+.trackrow.ask{padding:12px;border:2px solid var(--gold);border-radius:14px;background:var(--gold-soft)}
+.trackrow.ask .tq{color:var(--gold-ink);font-weight:800}
+.tbtn{padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--field);font:inherit;font-size:.88rem;cursor:pointer;color:var(--ink)}
+.tbtn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep);font-weight:800}
+.opt.coretag{background:var(--gold-soft);color:var(--gold-ink);font-weight:800}
+@media (max-width:520px){.corecard{padding:16px 14px}.core3 li{padding:8px 10px;gap:8px}}
+@media print{.corecard{display:none!important}}
 </style>
 </head>
 <body>
@@ -437,7 +460,7 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
       <p class="eyebrow" id="eyebrow">自媒體陪跑　學習單</p>
       <h1 id="title"></h1>
       <p id="subtitle"></p>
-      <p class="rule">只有標「必填」的題目算破關；選填的不影響。沒破關也沒關係，進度會幫你留著。</p>
+      <p class="rule">每一堂只有標「必做」的 3 題算破關，其他欄位都是選填、收起來了。沒破關也沒關係，進度會幫你留著。</p>
     </div>
     <div class="mascot" id="heroMascot" aria-hidden="true"></div>
     <p class="saved" id="savedMini"></p>
@@ -451,6 +474,7 @@ canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
   </header>
   
 
+  <section class="corecard" id="coreCard" hidden aria-label="今天要做的題目"></section>
   <nav class="tabs" id="tabs" role="tablist" aria-label="學習單分頁"></nav>
   <main id="panels"></main>
 
@@ -724,7 +748,7 @@ const COURSE = {
           { id: 'limit', optional: true, type: 'text', label: '我想把簡介控制在幾個字內？', hint: '平台上限約 150 字，但好的簡介多半 50–90 字；不確定就先寫 60' },
         ]},
         { title: '主版', fields: [
-          { id: 'bio1', type: 'area', label: '第 1 行：我幫誰做什麼', hint: '帶一句受眾語言' },
+          { id: 'bio1', alt: { share: { label: '第 1 行：我在這裡記錄什麼', hint: '一句話讓人知道這裡有什麼' } }, type: 'area', label: '第 1 行：我幫誰做什麼', hint: '帶一句受眾語言' },
           { id: 'bio2', type: 'area', label: '第 2 行：為什麼可以信我', hint: '一個真實的經歷' },
           { id: 'bio3', type: 'area', label: '第 3 行：追蹤理由或下一步' },
           { id: 'bio_n', type: 'text', label: '總字數', optional: true },
@@ -784,8 +808,12 @@ const COURSE = {
 這份只是參考，請在最後加一句：「這份是依你現有的材料草擬的，你可以刪減、改寫，或之後材料更多再重新產生。」`,
         },
       ],
-      intro: '語氣是你說話的方式，不是你要變成的人。從你的語言庫和平常說話的方式找，不要套模板。念出來連自己都覺得彆扭，就是太用力了。',
+      intro: '語氣是你說話的方式，不是你要變成的人。從你的語言庫和平常說話的方式找，不要套模板。念出來連自己都覺得彆扭，就是太用力了。這一頁只要貼一則你平常的文字（最上面），下面的滑桿、我會／不會這樣說，都是進階，不填也可以。',
       groups: [
+        { title: '示範與樣本', fields: [
+          { id: 'tone_demo', optional: true, type: 'area', label: '用我的語氣，把簡介第 2 行改寫一次' },
+          { id: 'tone_sample', type: 'area', label: '我平常傳給朋友的一則訊息，或我貼過的一則貼文', hint: '之後給 AI 看，讓它知道你實際怎麼說話', optional: true },
+        ]},
         { title: '四條滑桿', fields: [
           { id: 'sl1', optional: true, type: 'radio', label: '像朋友 ←→ 像老師', options: ['偏像朋友', '中間', '偏像老師'] },
           { id: 'sl2', optional: true, type: 'radio', label: '溫柔 ←→ 直接', options: ['偏溫柔', '中間', '偏直接'] },
@@ -794,10 +822,6 @@ const COURSE = {
         ]},
         { title: '我會這樣說（5 個詞或句型）', gintro: '寫詞和句型，不要寫形容詞。從語言庫、平常說話挑。', fields: [1, 2, 3, 4, 5].map(n => ({ id: 'say' + n, type: 'text', label: `第 ${n} 個`, optional: n > 3 })) },
         { title: '我不會這樣說（5 個詞或句型）', gintro: '例如「賦能」「底層邏輯」「一定要」。', fields: [1, 2, 3, 4, 5].map(n => ({ id: 'no' + n, type: 'text', label: `第 ${n} 個`, optional: n > 3 })) },
-        { title: '示範與樣本', fields: [
-          { id: 'tone_demo', optional: true, type: 'area', label: '用我的語氣，把簡介第 2 行改寫一次' },
-          { id: 'tone_sample', type: 'area', label: '我平常傳給朋友的一則訊息，或我貼過的一則貼文', hint: '之後給 AI 看，讓它知道你實際怎麼說話', optional: true },
-        ]},
       ],
     },
     {
@@ -869,7 +893,9 @@ const COURSE = {
 
 /* ---- 破關設定 ---- */
 COURSE.level = 3; COURSE.world = '第 1 個月・打地基';
-COURSE.clearMsg = '第 3 關的必填任務都完成了：你的名稱、頭像、簡介和語氣都有第一版了。';
+COURSE.coreShort = { tone_sample: '貼一則你平常傳給朋友的文字（或你發過的貼文）' };
+COURSE.core = { sell: ['nm_show', 'bio1', 'tone_sample'], share: ['nm_show', 'bio1', 'tone_sample'] };
+COURSE.clearMsg = '第 3 關完成了：顯示名稱、簡介第 1 行和你平常說話的樣子，都有第一版了。其他欄位想補再補。';
 const TIPS = {
   r1: '今天不是從零開始，是把前兩週的材料放進一個 3 秒看得懂的地方。',
   r2: '先練陌生人的眼睛。看 5 秒，蓋起來，再說你看到什麼。',
@@ -906,6 +932,23 @@ function setVal(id, v, soft) {
 function flushProgress() { clearTimeout(progTimer); updateProgress(); }
 function isFilled(v) { return Array.isArray(v) ? v.length > 0 : (typeof v === 'boolean' ? v : !!(v && String(v).trim())); }
 
+
+/* ---------- 路線（有沒有想賣的服務或產品）與「每堂 3 題必做」 ---------- */
+// COURSE.core = { sell: [欄位 id…], share: [欄位 id…] }：只有這幾題算必做，其他全部是選填、預設收合。
+// 欄位可以有：track（'sell'｜'share'，只在那條路線顯示；已經填過的照常顯示）、alt（換路線時換標題）、show（選填但直接顯示）。
+var TRACK_KEY = 'smcourse-track';
+function curTrack() { try { return localStorage.getItem(TRACK_KEY) === 'share' ? 'share' : 'sell'; } catch (e) { return 'sell'; } }
+function trackChosen() { try { return !!localStorage.getItem(TRACK_KEY); } catch (e) { return false; } }
+function setTrack(t) { try { localStorage.setItem(TRACK_KEY, t); } catch (e) {} build(); }
+function fv(f) { const a = f.alt && f.alt[curTrack()]; return a ? Object.assign({}, f, a) : f; }
+function trackOk(f) { return !f.track || f.track === curTrack() || isFilled(state.values[f.id]); }
+function vis(fields) { return fields.filter(trackOk).map(fv); }
+function coreList() { return COURSE.core ? (COURSE.core[curTrack()] || COURSE.core.sell || []) : null; }
+function isOpt(f, id) { const c = coreList(); return c ? c.indexOf(id || f.id) < 0 : !!f.optional; }
+function normalizeCourse() {
+  COURSE.parts.forEach(p => { if (/週日回報/.test(p.tab)) (p.groups || []).forEach(g => g.fields.forEach(f => { if (['w1', 'w3', 'w5'].indexOf(f.id) >= 0) f.show = true; })); });
+}
+
 function el(tag, attrs, ...kids) {
   const e = document.createElement(tag);
   for (const k in (attrs || {})) {
@@ -917,20 +960,23 @@ function el(tag, attrs, ...kids) {
   return e;
 }
 
-function labelNode(f) {
+function labelNode(f, opt) {
   const frag = document.createDocumentFragment();
   frag.append(f.label);
-  if (f.optional) frag.append(el('span', { class: 'opt', text: '（選填）' }));
+  if (COURSE.core) { if (!opt) frag.append(el('span', { class: 'opt coretag', text: '必做' })); }
+  else if (opt) frag.append(el('span', { class: 'opt', text: '（選填）' }));
   if (f.hint) frag.append(' ', el('span', { class: 'hint', text: f.hint }));
   return frag;
 }
 
 function renderField(f, idOverride) {
+  f = fv(f);
   const id = idOverride || f.id;
+  const opt = isOpt(f, id);
   const wrap = el('div', { class: 'field', 'data-id': id });
   const v = state.values[id];
   if (f.type === 'text' || f.type === 'area') {
-    wrap.append(el('label', { for: 'f_' + id }, labelNode(f)));
+    wrap.append(el('label', { for: 'f_' + id }, labelNode(f, opt)));
     const inp = f.type === 'text' ? el('input', { type: 'text', id: 'f_' + id }) : el('textarea', { id: 'f_' + id });
     if (f.placeholder) inp.setAttribute('placeholder', f.placeholder);
     inp.value = v || '';
@@ -967,7 +1013,7 @@ function renderField(f, idOverride) {
     }
   } else if (f.type === 'radio' || f.type === 'scale') {
     const opts = f.type === 'scale' ? ['1', '2', '3', '4', '5'] : f.options;
-    const fs = el('fieldset', null, el('legend', null, labelNode(f)));
+    const fs = el('fieldset', null, el('legend', null, labelNode(f, opt)));
     const box = el('div', { class: 'choices' });
     opts.forEach(o => {
       const r = el('input', { type: 'radio', name: 'f_' + id, value: o });
@@ -977,7 +1023,7 @@ function renderField(f, idOverride) {
     });
     fs.append(box); wrap.append(fs);
   } else if (f.type === 'check') {
-    const fs = el('fieldset', null, el('legend', null, labelNode(f)));
+    const fs = el('fieldset', null, el('legend', null, labelNode(f, opt)));
     const box = el('div', { class: 'choices' });
     f.options.forEach(o => {
       const c = el('input', { type: 'checkbox', value: o });
@@ -998,7 +1044,7 @@ function renderGrid(g) {
   const grid = el('div', { class: 'grid9' });
   const cell = (f, i) => {
     const node = renderField(Object.assign({}, f, { hint: '', placeholder: f.ph || '' }));
-    node.classList.add('gcell'); if (!f.optional) node.classList.add('req');
+    node.classList.add('gcell'); if (!isOpt(f, f.id)) node.classList.add('req');
     return node;
   };
   const center = el('div', { class: 'field gcell gcenter' });
@@ -1012,8 +1058,9 @@ function renderGrid(g) {
   });
   ta.addEventListener('blur', flushProgress);
   center.append(ta);
-  g.fields.forEach((f, i) => { if (i === 4) grid.append(center); grid.append(cell(f, i)); });
-  if (g.fields.length <= 4) grid.append(center);
+  const gfs = vis(g.fields);
+  gfs.forEach((f, i) => { if (i === 4) grid.append(center); grid.append(cell(f, i)); });
+  if (gfs.length <= 4) grid.append(center);
   setTimeout(() => fit(ta), 0);
   return grid;
 }
@@ -1026,6 +1073,13 @@ function syncMirrors() {
 function fit(t) { t.style.height = 'auto'; t.style.height = Math.max(84, t.scrollHeight + 2) + 'px'; }
 
 function countedFields(part) {
+  const core = coreList();
+  if (core) {
+    const o = [];
+    (part.groups || []).forEach(g => vis(g.fields).forEach(f => { if (core.indexOf(f.id) >= 0) o.push({ id: f.id, f }); }));
+    if (part.repeat) { const r = part.repeat; for (let n = 1; n <= r.count; n++) r.fields.forEach(f0 => { const id = `${part.id}_${n}_${f0.id}`; if (core.indexOf(id) >= 0) o.push({ id, f: fv(f0) }); }); }
+    return o;
+  }
   const out = [];
   (part.groups || []).forEach(g => g.fields.forEach(f => { if (!f.optional) out.push({ id: f.id, f }); }));
   if (part.repeat) {
@@ -1144,14 +1198,15 @@ function updateProgress(silent) {
     const ms = $('#ms_' + p.id);
     if (ms) {
       ms.querySelector('.mfill').style.width = info.pct + '%';
-      ms.querySelector('.xpnow').textContent = info.list.length ? '必填 ' + info.filled + ' / ' + info.list.length : '';
+      ms.querySelector('.xpnow').textContent = info.list.length ? (COURSE.core ? '必做 ' : '必填 ') + info.filled + ' / ' + info.list.length : '';
       ms.classList.toggle('done', info.done);
-      ms.querySelector('.mprog').textContent = info.list.length ? (info.done ? '任務完成！' : '只算標「必填」的題目，選填的可以先跳過') : (info.done ? '已經試過了 ✓' : '選填，想寫再寫，不影響破關');
+      ms.querySelector('.mprog').textContent = info.list.length ? (info.done ? '任務完成！' : (COURSE.core ? '只有標「必做」的才算，其他想寫再寫' : '只算標「必填」的題目，選填的可以先跳過')) : (info.done ? '已經試過了 ✓' : '選填，想寫再寫，不影響破關');
     }
     if (info.done && !state.done[p.id]) { state.done[p.id] = true; if (info.list.length) newlyDone.push(p); }
     if (!info.done && state.done[p.id]) delete state.done[p.id];
   });
   syncMirrors();
+  renderCore();
   document.querySelectorAll('.field[data-id]').forEach(w => w.classList.toggle('filled', isFilled(state.values[w.getAttribute('data-id')])));
   const overall = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
   const allDone = partsReq > 0 && partsDone === partsReq;
@@ -1169,7 +1224,7 @@ function updateProgress(silent) {
 
   const hf = $('#heroFill'), hp = $('#heroPct'), xn = $('#xpNum'), st = $('#stars'), bc = $('#badgeCount');
   if (hf) hf.style.width = overall + '%';
-  if (hp) hp.textContent = overall === 0 ? '尚未開始' : (allDone ? '破關！' : '必填完成 ' + overall + '%');
+  if (hp) hp.textContent = overall === 0 ? '尚未開始' : (allDone ? '破關！' : (COURSE.core ? '必做完成 ' : '必填完成 ') + overall + '%');
   if (xn) xn.textContent = xp;
   if (st) { st.innerHTML = [0, 1, 2].map(i => '<span class="' + (i < stars ? '' : 'off') + '">★</span>').join(''); st.setAttribute('aria-label', '星星 ' + stars + ' 顆'); }
   if (bc) bc.textContent = earned.length + ' / ' + all.length;
@@ -1252,6 +1307,42 @@ function renderPrompt(pr) {
   return d;
 }
 
+
+function labelOfCore(x) {
+  const s = (COURSE.coreShort || {})[x.id];
+  return (s && !(x.f.alt && x.f.alt[curTrack()])) ? s : x.f.label;
+}
+function trackLabel(t) { return t === 'share' ? '沒有，我想記錄與分享' : '有，或之後想賣'; }
+function renderCore() {
+  const wrap = $('#coreCard'); if (!wrap) return;
+  wrap.replaceChildren();
+  if (!COURSE.core) { wrap.hidden = true; return; }
+  wrap.hidden = false;
+  const map = {};
+  COURSE.parts.forEach(p => countedFields(p).forEach(x => { map[x.id] = { p, x }; }));
+  const items = coreList().map(id => map[id]).filter(Boolean);
+  const done = items.filter(it => isFilled(state.values[it.x.id])).length;
+  const t = curTrack(), chosen = trackChosen();
+  const head = el('div', { class: 'ctop' }, el('h2', { text: '今天只要做這 ' + items.length + ' 題' }), el('span', { class: 'cnum', text: done + ' / ' + items.length }));
+  const list = el('ol', { class: 'core3' });
+  items.forEach((it, i) => {
+    const ok = isFilled(state.values[it.x.id]);
+    const go = el('button', { type: 'button', class: 'cgo', text: ok ? '看／改' : '去填' });
+    go.addEventListener('click', () => {
+      select(it.p.id);
+      setTimeout(() => { const n = document.getElementById('f_' + it.x.id); if (n) { n.scrollIntoView({ block: 'center', behavior: 'smooth' }); try { n.focus({ preventScroll: true }); } catch (e) {} } }, 60);
+    });
+    list.append(el('li', { class: ok ? 'ok' : '' }, el('span', { class: 'cn', text: ok ? '✓' : String(i + 1) }), el('span', { class: 'cq' }, el('b', { text: labelOfCore(it.x) }), el('small', { text: partName(it.p) })), go));
+  });
+  const row = el('div', { class: 'trackrow' + (chosen ? '' : ' ask') }, el('span', { class: 'tq', text: '你現在有想賣的服務或產品嗎？' }));
+  ['sell', 'share'].forEach(v => {
+    const b = el('button', { type: 'button', class: 'tbtn', 'aria-pressed': chosen && t === v ? 'true' : 'false', text: trackLabel(v) });
+    b.addEventListener('click', () => setTrack(v));
+    row.append(b);
+  });
+  wrap.append(head, el('p', { class: 'csub', text: '做完這幾題就破關。其他欄位都是選填，收起來了，想更完整再打開。' }), list, row);
+}
+
 function missionNode(p) {
   const info = partInfo(p);
   const m = p.tab.match(/^(\S+)\s+/), no = m ? m[1] : '';
@@ -1288,18 +1379,29 @@ function renderPart(p) {
   });
   if (!p.promptsEnd) (p.prompts || []).forEach(pr => panel.append(renderPrompt(pr)));
   const partHasReq = countedFields(p).length > 0;
+  const hasCore = !!COURSE.core;
   (p.groups || []).forEach(g => {
+    const gf = vis(g.fields);
+    if (!gf.length) return;
     const box = el('div', { class: 'group' }, el('h3', { text: g.title }));
     if (g.gintro) box.append(el('p', { class: 'gintro', text: g.gintro }));
-    const req = g.fields.filter(f => !f.optional), opt = g.fields.filter(f => f.optional);
+    const shownNow = f => !isOpt(f) || (hasCore && f.show);
+    const req = gf.filter(shownNow), opt = gf.filter(f => !shownNow(f));
     if (g.grid) {
       box.classList.add('gridbox');
-      box.append(renderGrid(g));
-    } else if (!partHasReq || !opt.length) {
-      g.fields.forEach(f => box.append(renderField(f)));
+      if (hasCore) {
+        const fold = el('details', { class: 'optfold' }, el('summary', { text: '＋ 打開九宮格，想做再填' }));
+        fold.append(renderGrid(g));
+        if (gf.some(f => isFilled(state.values[f.id]))) fold.setAttribute('open', '');
+        box.append(fold);
+      } else box.append(renderGrid(g));
+    } else if (!hasCore && (!partHasReq || !opt.length)) {
+      gf.forEach(f => box.append(renderField(f)));
+    } else if (!opt.length) {
+      req.forEach(f => box.append(renderField(f)));
     } else {
       req.forEach(f => box.append(renderField(f)));
-      const fold = el('details', { class: 'optfold' }, el('summary', { text: '＋ 選填（' + opt.length + ' 題），想寫再展開' }));
+      const fold = el('details', { class: 'optfold' }, el('summary', { text: hasCore ? (req.length ? '＋ 更多（' : '＋ 想更完整再填（') + opt.length + ' 題），不填也可以' : '＋ 選填（' + opt.length + ' 題），想寫再展開' }));
       opt.forEach(f => fold.append(renderField(f)));
       if (opt.some(f => isFilled(state.values[f.id]))) fold.setAttribute('open', '');
       box.append(fold);
@@ -1311,7 +1413,8 @@ function renderPart(p) {
     for (let n = 1; n <= r.count; n++) {
       const full = n <= r.fullCount;
       const d = el('details', { class: 'card' });
-      if (n === 1) d.setAttribute('open', '');
+      const anyF = r.fields.some(f => isFilled(state.values[`${p.id}_${n}_${f.id}`]));
+      if (hasCore ? (anyF || (n === 1 && partHasReq)) : n === 1) d.setAttribute('open', '');
       d.append(el('summary', null, el('span', { text: `${r.cardTitle} ${n}` }), el('span', { class: 'hint', text: full ? '完整拆解' : '基本資料即可' })));
       const body = el('div', { class: 'body' });
       const more = el('details', { class: 'more' }, el('summary', { text: '展開完整拆解欄位（選填）' }));
@@ -1385,12 +1488,12 @@ function toMarkdown() {
     md += `## ${p.title}\n\n`;
     (p.groups || []).forEach(g => {
       md += `### ${g.title}\n\n`;
-      g.fields.forEach(f => { md += valText(f, state.values[f.id]) + '\n\n'; });
+      vis(g.fields).forEach(f => { md += valText(f, state.values[f.id]) + '\n\n'; });
     });
     if (p.repeat) {
       for (let n = 1; n <= p.repeat.count; n++) {
         md += `### ${p.repeat.cardTitle} ${n}\n\n`;
-        p.repeat.fields.forEach(f => { md += valText(f, state.values[`${p.id}_${n}_${f.id}`]) + '\n\n'; });
+        p.repeat.fields.map(fv).forEach(f => { md += valText(f, state.values[`${p.id}_${n}_${f.id}`]) + '\n\n'; });
       }
     }
   });
@@ -1449,15 +1552,18 @@ function lessonNo() { const m = /lesson(\d+)/.exec(COURSE.key); return m ? Numbe
 function valString(v) { return Array.isArray(v) ? v.join('、') : (v == null ? '' : String(v)).trim(); }
 function buildBlocks() {
   const out = [];
-  COURSE.parts.forEach(p => {
+  COURSE.parts.forEach((p, pi) => {
     out.push({ t: 'h2', x: p.title });
+    if (pi === 0 && COURSE.core) { out.push({ t: 'h3', x: '我的路線' }); out.push({ t: 'q', l: '你現在有想賣的服務或產品嗎？', v: trackChosen() ? trackLabel(curTrack()) : '（還沒選，預設：有，或之後想賣）' }); }
     (p.groups || []).forEach(g => {
+      const gf = vis(g.fields);
+      if (!gf.length) return;
       out.push({ t: 'h3', x: g.title });
-      g.fields.forEach(f => out.push({ t: 'q', l: f.label, v: valString(state.values[f.id]) }));
+      gf.forEach(f => out.push({ t: 'q', l: f.label, v: valString(state.values[f.id]) }));
     });
     if (p.repeat) {
       for (let n = 1; n <= p.repeat.count; n++) {
-        const fs = p.repeat.fields.map(f => ({ f, v: valString(state.values[`${p.id}_${n}_${f.id}`]) }));
+        const fs = p.repeat.fields.map(f => ({ f: fv(f), v: valString(state.values[`${p.id}_${n}_${f.id}`]) }));
         if (!fs.some(x => x.v)) continue;
         out.push({ t: 'h3', x: `${p.repeat.cardTitle} ${n}` });
         fs.forEach(x => out.push({ t: 'q', l: x.f.label, v: x.v }));
@@ -1465,6 +1571,14 @@ function buildBlocks() {
     }
   });
   return out;
+}
+function allFilledCount() {
+  let c = 0;
+  COURSE.parts.forEach(p => {
+    (p.groups || []).forEach(g => g.fields.forEach(f => { if (isFilled(state.values[f.id])) c++; }));
+    if (p.repeat) for (let n = 1; n <= p.repeat.count; n++) p.repeat.fields.forEach(f => { if (isFilled(state.values[`${p.id}_${n}_${f.id}`])) c++; });
+  });
+  return c;
 }
 function progressNumbers() {
   let total = 0, done = 0;
@@ -1489,18 +1603,18 @@ async function loadSubmitStatus() {
   }
 }
 async function doSubmit() {
-  const n = progressNumbers();
+  const n = progressNumbers(), a = allFilledCount();
   const btn = $('#btnSubmit');
   btn.disabled = true; setStatus('正在提交…');
   try {
-    const body = { s: STUDENT, lesson: lessonNo(), title: COURSE.title, filled: n.done, total: n.total, pct: n.pct, blocks: buildBlocks() };
+    const body = { s: STUDENT, lesson: lessonNo(), title: COURSE.title, filled: a, total: n.total, pct: n.pct, blocks: buildBlocks() };
     const r = await (await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })).json();
     if (r.ok) {
       setStatus(`已提交給 Jasmine（第 ${r.count} 次）　${r.at}`);
-      prevSubmit = { count: r.count, last: r.at, filled: n.done };
+      prevSubmit = { count: r.count, last: r.at, filled: a };
       setSubmitInfo(`這一堂最近一次提交：${r.at}（第 ${r.count} 次）。再提交只會更新同一份文件。`);
     } else {
-      const msg = { empty: '還沒有填任何必填欄位，所以沒有送出，免得蓋掉你之前提交的內容。', invalid: '這個連結的代碼不正確，請向 Jasmine 索取專屬連結。', busy: 'Jasmine 的接收端正忙，請稍後再按一次。' }[r.error] || '提交失敗，請稍後再試。你填的內容還在這台裝置上。';
+      const msg = { empty: '還沒有填任何欄位，所以沒有送出，免得蓋掉你之前提交的內容。', invalid: '這個連結的代碼不正確，請向 Jasmine 索取專屬連結。', busy: 'Jasmine 的接收端正忙，請稍後再按一次。' }[r.error] || '提交失敗，請稍後再試。你填的內容還在這台裝置上。';
       setStatus(msg); setSubmitInfo(msg, true);
     }
   } catch (e) {
@@ -1509,11 +1623,11 @@ async function doSubmit() {
   } finally { btn.disabled = false; }
 }
 function startSubmit() {
-  const n = progressNumbers();
-  if (n.done <= 0) { setStatus('還沒有填任何必填欄位，先填一些再提交。'); return; }
+  const a = allFilledCount();
+  if (a <= 0) { setStatus('還沒有填任何欄位，先填一些再提交。'); return; }
   const pf = prevSubmit && prevSubmit.filled || 0;
-  if (pf >= 5 && n.done < pf * 0.6) {
-    askConfirm(`這次只填了 ${n.done} 題，你上次提交時是 ${pf} 題。提交會用現在的內容取代上次那一堂。如果你換了瀏覽器或裝置，請先按「匯入備份」還原再提交。確定要送出嗎？`, '確定送出', doSubmit);
+  if (pf >= 5 && a < pf * 0.6) {
+    askConfirm(`這次只填了 ${a} 題，你上次提交時是 ${pf} 題。提交會用現在的內容取代上次那一堂。如果你換了瀏覽器或裝置，請先按「匯入備份」還原再提交。確定要送出嗎？`, '確定送出', doSubmit);
     return;
   }
   doSubmit();
@@ -1547,11 +1661,11 @@ function buildPrintView(pv) {
     pv.append(el('h2', { text: p.title }));
     (p.groups || []).forEach(g => {
       pv.append(el('h3', { text: g.title }));
-      g.fields.forEach(f => pv.append(pvField(f.label, state.values[f.id])));
+      vis(g.fields).forEach(f => pv.append(pvField(f.label, state.values[f.id])));
     });
     if (p.repeat) {
       for (let n = 1; n <= p.repeat.count; n++) {
-        const fields = p.repeat.fields.map(f => ({ f, v: state.values[`${p.id}_${n}_${f.id}`] }));
+        const fields = p.repeat.fields.map(f => ({ f: fv(f), v: state.values[`${p.id}_${n}_${f.id}`] }));
         if (!fields.some(x => isFilled(x.v))) continue;
         pv.append(el('h3', { text: `${p.repeat.cardTitle} ${n}` }));
         fields.forEach(x => pv.append(pvField(x.f.label, x.v)));
@@ -1652,6 +1766,7 @@ function applyPrefill() {
 }
 loadState();
 applyPrefill();
+normalizeCourse();
 build();
 setupSubmit();
 (function () {
